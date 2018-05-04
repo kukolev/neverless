@@ -1,0 +1,10 @@
+Main workflow is here:
+
+    User            ->  sends dto of command to RestController
+    RestController  ->  sends dto of command to CommandService
+    CommandService  ->  converts dto of command to Command
+    CommandService  ->  executes method execute() of Command
+    Command         ->  process method onExecute(), generates events
+    CommandService  ->  call process() method in AiService
+    RestController  ->  call render() method in RenderService
+    RestController  ->  sends data to User
