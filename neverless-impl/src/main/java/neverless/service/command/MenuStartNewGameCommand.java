@@ -2,9 +2,9 @@ package neverless.service.command;
 
 import lombok.AllArgsConstructor;
 import neverless.domain.event.Event;
-import neverless.domain.game.mapobject.Player;
-import neverless.domain.repository.PlayerRepository;
-import neverless.loader.MapLoader;
+import neverless.domain.mapobject.Player;
+import neverless.repository.PlayerRepository;
+import neverless.game.GameLoader;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MenuStartNewGameCommand extends AbstractCommand {
 
-    private MapLoader loader;
+    private GameLoader loader;
     private PlayerRepository playerRepository;
 
     @Override

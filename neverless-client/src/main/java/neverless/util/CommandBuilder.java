@@ -1,7 +1,7 @@
 package neverless.util;
 
 import neverless.domain.Command;
-import neverless.dto.CommandDto;
+import neverless.dto.command.CommandDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

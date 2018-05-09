@@ -1,6 +1,6 @@
 package neverless.domain;
 
-import neverless.domain.command.CommandName;
+import neverless.dto.command.CommandName;
 
 import java.util.Arrays;
 

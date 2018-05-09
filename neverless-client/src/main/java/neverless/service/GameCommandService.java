@@ -1,6 +1,6 @@
 package neverless.service;
 
-import neverless.dto.CommandDto;
+import neverless.dto.command.CommandDto;
 import neverless.dto.ResponseDto;
 import neverless.domain.Command;
 import neverless.util.CommandBuilder;

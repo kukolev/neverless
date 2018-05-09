@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>neverless-model</module>
         <module>neverless-impl</module>
         <module>neverless-client</module>
         <module>neverless-api</module>

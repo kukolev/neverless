@@ -13,6 +13,6 @@ public class DialogScreenDataDto {
     /** Text of NPC's phrase */
     private String npcPhrase;
 
-    /** List of answers*/
+    /** List of player's answers */
     private List<String> answers = new ArrayList<>();
 }

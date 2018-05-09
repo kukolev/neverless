@@ -2,7 +2,7 @@ package neverless.service.command;
 
 import lombok.Setter;
 import neverless.domain.event.Event;
-import neverless.service.DialogService;
+import neverless.service.screendata.DialogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

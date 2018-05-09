@@ -4,9 +4,12 @@ import neverless.domain.Command;
 import neverless.dto.ResponseDto;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
+import neverless.dto.screendata.quest.QuestInfoDto;
+import neverless.dto.screendata.quest.QuestScreenDataDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static neverless.util.ConsoleCleaner.cleanConsole;
 
@@ -19,6 +22,7 @@ public class RenderService {
         renderLocalMap(responseDto);
         renderEvents(responseDto);
         renderDialog(responseDto);
+        renderQuestJournal(responseDto);
     }
 
     private void renderCommands() {
@@ -58,5 +62,20 @@ public class RenderService {
                 .forEach(evt -> {
                     System.out.println(" - " + evt.getType());
                 });
+    }
+
+    private void renderQuestJournal(ResponseDto responseDto) {
+        QuestScreenDataDto screenDataDto = responseDto.getQuestScreenDataDto();
+        renderQuestList("In Progress", screenDataDto.getInProgress());
+        renderQuestList("Done", screenDataDto.getDone());
+        renderQuestList("Failed", screenDataDto.getFailed());
+    }
+
+    private void renderQuestList(String status, List<QuestInfoDto> quests) {
+        System.out.println(status + " quests:");
+        quests.forEach(quest -> {
+            System.out.println(quest.getTitle());
+            quest.getJournal().forEach(str -> System.out.println("  - " + str));
+        });
     }
 }

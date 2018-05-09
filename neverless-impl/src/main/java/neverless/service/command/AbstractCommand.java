@@ -1,10 +1,10 @@
 package neverless.service.command;
 
-import neverless.domain.command.CommandName;
+import neverless.dto.command.CommandName;
 import neverless.domain.event.Event;
 import neverless.domain.event.EventFactory;
 import neverless.exception.InvalidCommandException;
-import neverless.service.EventService;
+import neverless.service.screendata.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

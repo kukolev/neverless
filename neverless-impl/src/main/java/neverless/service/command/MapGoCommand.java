@@ -1,9 +1,9 @@
 package neverless.service.command;
 
-import neverless.domain.constants.DirectionEnum;
+import neverless.dto.command.Direction;
 import neverless.domain.event.Event;
-import neverless.domain.game.mapobject.Player;
-import neverless.domain.repository.PlayerRepository;
+import neverless.domain.mapobject.Player;
+import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +18,7 @@ public class MapGoCommand extends AbstractCommand {
     @Autowired
     private PlayerRepository repository;
 
-    private DirectionEnum direction;
+    private Direction direction;
 
     @Override
     public Event onExecute() {
@@ -53,7 +53,7 @@ public class MapGoCommand extends AbstractCommand {
         // todo: implement validation
     }
 
-    public void setDirection(DirectionEnum direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 }

@@ -1,7 +1,7 @@
 package neverless.service;
 
-import neverless.domain.game.mapobject.npc.AbstractNpc;
-import neverless.domain.repository.MapObjectsRepository;
+import neverless.domain.mapobject.npc.AbstractNpc;
+import neverless.repository.MapObjectsRepository;
 import neverless.exception.InvalidCommandException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
