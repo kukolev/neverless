@@ -4,6 +4,7 @@ package neverless.game;
 import lombok.AllArgsConstructor;
 import neverless.domain.mapobject.building.AbstractBuilding;
 import neverless.domain.mapobject.monster.Goblin;
+import neverless.game.npc.OldMan;
 import neverless.domain.mapobject.road.Road;
 import neverless.domain.mapobject.tree.FirTree;
 import neverless.domain.mapobject.building.LargeVillageHouse;
@@ -11,7 +12,6 @@ import neverless.domain.mapobject.building.LittleVillageHouse;
 import neverless.domain.mapobject.building.LongVillageHouse;
 import neverless.repository.MapObjectsRepository;
 
-import neverless.game.npc.OldManBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -122,8 +122,9 @@ public class GameLoader {
     }
 
     private void createTreesNpc() {
-        OldManBuilder builder = new OldManBuilder();
-        builder.build(mapObjRepository);
+        OldMan oldMan = new OldMan();
+        oldMan.register(mapObjRepository);
+
     }
 
     private void createTreesMonster() {

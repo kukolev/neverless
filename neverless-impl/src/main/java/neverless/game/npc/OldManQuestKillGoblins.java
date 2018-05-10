@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.game.npc.OldManBuilder.OLDMAN_ASK_QUEST;
-import static neverless.game.npc.OldManBuilder.OLDMAN_CHEATED;
-import static neverless.game.npc.OldManBuilder.OLDMAN_UNIQUENAME;
+import static neverless.game.npc.OldMan.OLDMAN_ASK_QUEST;
+import static neverless.game.npc.OldMan.OLDMAN_CHEATED;
+import static neverless.game.npc.OldMan.OLDMAN_UNIQUENAME;
 
 @Service
 public class OldManQuestKillGoblins extends AbstractQuest {

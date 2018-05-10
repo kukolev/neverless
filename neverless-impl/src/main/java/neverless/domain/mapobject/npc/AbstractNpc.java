@@ -11,5 +11,14 @@ public abstract class AbstractNpc extends AbstractMapObject {
 
     @Setter
     @Getter
-    private Dialog dialog;
+    private Dialog dialog = new Dialog();
+
+    public AbstractNpc() {
+        initProperties();
+        initDialog(dialog);
+    }
+
+    protected abstract void initProperties();
+
+    protected abstract void initDialog(Dialog dialog);
 }
