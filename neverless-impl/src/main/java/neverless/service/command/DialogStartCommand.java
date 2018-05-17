@@ -9,7 +9,7 @@ import neverless.domain.mapobject.npc.AbstractNpc;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.service.screendata.DialogService;
-import neverless.service.NpcService;
+import neverless.service.MapObjectsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,7 +26,7 @@ public class DialogStartCommand extends AbstractCommand{
     @Autowired
     private DialogService dialogService;
     @Autowired
-    private NpcService npcService;
+    private MapObjectsHelper npcService;
 
     @Setter
     private Integer npcX;

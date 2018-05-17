@@ -19,4 +19,13 @@ public abstract class AbstractMapObject extends AbstractGameObject {
      public final void register(MapObjectsRepository repository) {
           repository.save(this);
      }
+
+     /**
+      * Returns true if terrain is passable.
+      *
+      * @return true/false.
+      */
+     public boolean isPassable() {
+          return false;
+     }
 }

@@ -1,5 +1,6 @@
 package neverless.service.command;
 
+import lombok.Getter;
 import lombok.Setter;
 import neverless.domain.event.Event;
 import neverless.service.screendata.DialogService;
@@ -15,8 +16,8 @@ public class DialogSelectPhraseCommand extends AbstractCommand {
     @Autowired
     private DialogService dialogService;
 
-
     @Setter
+    @Getter
     private Integer phraseNumber;
 
     @Override

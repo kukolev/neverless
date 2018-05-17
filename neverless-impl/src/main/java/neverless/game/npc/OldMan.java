@@ -54,6 +54,6 @@ public final class OldMan extends AbstractNpc {
         builder.create("Hello Again, what about my quest?", isSecondMeeting)
                 .addPlayerAnswer(1,"Hmm... no idea")
                 .addPlayerAnswer(1, "In progress")
-                .addPlayerAnswer(1, "Quest completed", ALWAYS_AVAILABLE, evtQuestDone);
+                .addPlayerAnswer(1, "(Cheat) Quest completed", ALWAYS_AVAILABLE, evtQuestDone);
     }
 }

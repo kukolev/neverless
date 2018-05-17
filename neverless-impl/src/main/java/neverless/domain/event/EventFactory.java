@@ -21,6 +21,10 @@ public class EventFactory {
         return new Event(EventType.EVENT_MAP_GO_RIGHT);
     }
 
+    public Event createMapImpassableEvent() {
+        return new Event(EventType.EVENT_MAP_IMPASSABLE);
+    }
+
     public final String EVENT_PARAM_PHRASE_NUMBER = "phraseNumber";
 
     public Event createDialogPhraseSelectedEvent(Integer phraseNumber) {
