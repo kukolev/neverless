@@ -15,15 +15,14 @@ import static neverless.Constants.PLAYER_ID;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class MapGoCommand extends AbstractCommand {
+public abstract class AbstractMapGoCommand extends AbstractCommand {
 
     @Autowired
     private PlayerRepository repository;
     @Autowired
     private MapObjectsHelper helper;
 
-    @Getter
-    private Direction direction;
+    protected Direction direction;
 
     @Override
     public Event onExecute() {
@@ -39,38 +38,16 @@ public class MapGoCommand extends AbstractCommand {
             case RIGHT: newX++; break;
         }
 
-        Event event = null;
-
         if (isNewCoordsAreValid(newX, newY)) {
-            player
-                    .setX(newX)
-                    .setY(newY);
-
-            switch (direction) {
-                case UP:
-                    event = eventFactory.createMapGoUpEvent();
-                    break;
-                case DOWN:
-                    event = eventFactory.createMapGoDownEvent();
-                    break;
-                case LEFT:
-                    event = eventFactory.createMapGoLeftEvent();
-                    break;
-                case RIGHT:
-                    event = eventFactory.createMapGoRightEvent();
-                    break;
-            }
+            player.setX(newX);
+            player.setY(newY);
+            return eventFactory.createMapGoEvent();
         } else {
-            event = eventFactory.createMapImpassableEvent();
+            return eventFactory.createMapImpassableEvent();
         }
-        return event;
     }
 
     private boolean isNewCoordsAreValid(int newX, int newY) {
         return helper.isPassable(newX, newY);
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 }

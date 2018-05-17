@@ -7,7 +7,7 @@ import java.util.Arrays;
 public enum Command {
 
     SERVER_GLOBAL_REFRESH(CommandType.GAME_COMMAND, CommandName.GLOBAL_REFRESH, "rfr"),
-    SERVER_GLOBAL_MENU_START_NEW_GAME(CommandType.GAME_COMMAND, CommandName.MAIN_MENU_START_NEW_GAME, "sng"),
+    SERVER_GLOBAL_MENU_START_NEW_GAME(CommandType.GAME_COMMAND, CommandName.MENU_START_NEW_GAME, "sng"),
     SERVER_LOCAL_MAP_GO_LEFT(CommandType.GAME_COMMAND, CommandName.LOCAL_MAP_GO_LEFT, "mgl"),
     SERVER_LOCAL_MAP_GO_RIGHT(CommandType.GAME_COMMAND, CommandName.LOCAL_MAP_GO_RIGHT, "mgr"),
     SERVER_LOCAL_MAP_GO_UP(CommandType.GAME_COMMAND, CommandName.LOCAL_MAP_GO_UP, "mgu"),

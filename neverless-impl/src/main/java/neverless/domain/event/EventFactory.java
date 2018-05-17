@@ -5,20 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventFactory {
 
-    public Event createMapGoDownEvent() {
-        return new Event(EventType.EVENT_MAP_GO_DOWN);
-    }
-
-    public Event createMapGoUpEvent() {
-        return new Event(EventType.EVENT_MAP_GO_UP);
-    }
-
-    public Event createMapGoLeftEvent() {
-        return new Event(EventType.EVENT_MAP_GO_LEFT);
-    }
-
-    public Event createMapGoRightEvent() {
-        return new Event(EventType.EVENT_MAP_GO_RIGHT);
+    public Event createMapGoEvent() {
+        return new Event(EventType.EVENT_MAP_GO);
     }
 
     public Event createMapImpassableEvent() {

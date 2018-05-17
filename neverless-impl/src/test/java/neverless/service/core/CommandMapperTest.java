@@ -4,9 +4,12 @@ import neverless.dto.command.CommandDto;
 import neverless.service.command.AbstractCommand;
 import neverless.service.command.DialogSelectPhraseCommand;
 import neverless.service.command.DialogStartCommand;
-import neverless.service.command.MapGoCommand;
+import neverless.service.command.MapGoDownCommand;
+import neverless.service.command.MapGoLeftCommand;
+import neverless.service.command.MapGoRightCommand;
+import neverless.service.command.MapGoUpCommand;
 import neverless.service.command.MenuStartNewGameCommand;
-import neverless.service.command.RefreshCommand;
+import neverless.service.command.GlobalRefreshCommand;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -17,10 +20,6 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static neverless.dto.command.Direction.DOWN;
-import static neverless.dto.command.Direction.LEFT;
-import static neverless.dto.command.Direction.RIGHT;
-import static neverless.dto.command.Direction.UP;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
@@ -55,48 +54,44 @@ public class CommandMapperTest {
     public void buildLocalMapGoUpTest() {
         CommandDto dto = new CommandDto()
                 .setName("LOCAL_MAP_GO_UP");
-        when(context.getBean(MapGoCommand.class)).thenReturn(new MapGoCommand());
+        when(context.getBean(MapGoUpCommand.class)).thenReturn(new MapGoUpCommand());
 
         AbstractCommand command = commandMapper.build(dto);
 
-        assertEquals(command.getClass(), MapGoCommand.class);
-        assertEquals(((MapGoCommand) command).getDirection() , UP);
+        assertEquals(command.getClass(), MapGoUpCommand.class);
     }
 
     @Test
     public void buildLocalMapGoDownTest() {
         CommandDto dto = new CommandDto()
                 .setName("LOCAL_MAP_GO_DOWN");
-        when(context.getBean(MapGoCommand.class)).thenReturn(new MapGoCommand());
+        when(context.getBean(MapGoDownCommand.class)).thenReturn(new MapGoDownCommand());
 
         AbstractCommand command = commandMapper.build(dto);
 
-        assertEquals(command.getClass(), MapGoCommand.class);
-        assertEquals(((MapGoCommand) command).getDirection() , DOWN);
+        assertEquals(command.getClass(), MapGoDownCommand.class);
     }
 
     @Test
     public void buildLocalMapGoLeftTest() {
         CommandDto dto = new CommandDto()
                 .setName("LOCAL_MAP_GO_LEFT");
-        when(context.getBean(MapGoCommand.class)).thenReturn(new MapGoCommand());
+        when(context.getBean(MapGoLeftCommand.class)).thenReturn(new MapGoLeftCommand());
 
         AbstractCommand command = commandMapper.build(dto);
 
-        assertEquals(command.getClass(), MapGoCommand.class);
-        assertEquals(((MapGoCommand) command).getDirection() , LEFT);
+        assertEquals(command.getClass(), MapGoLeftCommand.class);
     }
 
     @Test
     public void buildLocalMapGoRightTest() {
         CommandDto dto = new CommandDto()
                 .setName("LOCAL_MAP_GO_RIGHT");
-        when(context.getBean(MapGoCommand.class)).thenReturn(new MapGoCommand());
+        when(context.getBean(MapGoRightCommand.class)).thenReturn(new MapGoRightCommand());
 
         AbstractCommand command = commandMapper.build(dto);
 
-        assertEquals(command.getClass(), MapGoCommand.class);
-        assertEquals(((MapGoCommand) command).getDirection() , RIGHT);
+        assertEquals(command.getClass(), MapGoRightCommand.class);
     }
 
     @Test
@@ -117,7 +112,7 @@ public class CommandMapperTest {
     @Test
     public void buildMainMenuStartNewGameTest() {
         CommandDto dto = new CommandDto()
-                .setName("MAIN_MENU_START_NEW_GAME");
+                .setName("MENU_START_NEW_GAME");
         when(context.getBean(MenuStartNewGameCommand.class)).thenReturn(new MenuStartNewGameCommand(null, null));
 
         AbstractCommand command = commandMapper.build(dto);
@@ -129,10 +124,10 @@ public class CommandMapperTest {
     public void builGlobalRefreshTest() {
         CommandDto dto = new CommandDto()
                 .setName("GLOBAL_REFRESH");
-        when(context.getBean(RefreshCommand.class)).thenReturn(new RefreshCommand());
+        when(context.getBean(GlobalRefreshCommand.class)).thenReturn(new GlobalRefreshCommand());
 
         AbstractCommand command = commandMapper.build(dto);
 
-        assertEquals(command.getClass(), RefreshCommand.class);
+        assertEquals(command.getClass(), GlobalRefreshCommand.class);
     }
 }
