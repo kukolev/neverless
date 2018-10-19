@@ -62,6 +62,9 @@ public class RenderService {
                 .forEach(evt -> {
                     System.out.println(" - " + evt.getType());
                 });
+        if (responseDto.getEventsScreenDataDto().getEvents().isEmpty()) {
+            System.out.println("--no events--");
+        }
     }
 
     private void renderQuestJournal(ResponseDto responseDto) {
@@ -77,5 +80,8 @@ public class RenderService {
             System.out.println(quest.getTitle());
             quest.getJournal().forEach(str -> System.out.println("  - " + str));
         });
+        if (quests.isEmpty()) {
+            System.out.println("--empty--");
+        }
     }
 }

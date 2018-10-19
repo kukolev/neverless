@@ -11,7 +11,7 @@ public enum CommandMapping {
     SERVER_GLOBAL_MENU_START_NEW_GAME( new StartNewGameCommandReader(), "sng"),
     SERVER_LOCAL_MAP_GO_LEFT( new MapGoLeftCommandReader(), "mgl"),
     SERVER_LOCAL_MAP_GO_RIGHT( new MapGoRightCommandReader(), "mgr"),
-    SERVER_LOCAL_MAP_GO_UP( new MapGoRightCommandReader(), "mgu"),
+    SERVER_LOCAL_MAP_GO_UP( new MapGoUpCommandReader(), "mgu"),
     SERVER_LOCAL_MAP_GO_DOWN( new MapGoDownCommandReader(), "mgd"),
     SERVER_LOCAL_START_DIALOG(new DialogStartCommandReader(), "sdlg"),
     SERVER_DIALOG_SELECT_PHRASE(new DialogSelectPhraseCommandReader(), "say"),
