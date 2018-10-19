@@ -1,27 +1,23 @@
 package neverless.service.bot;
 
-import neverless.domain.Command;
-import neverless.service.CommandRouter;
+import neverless.domain.CommandMapping;
+import neverless.service.CommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 @Service
 public class ClientBot {
 
     @Autowired
-    private CommandRouter router;
+    private CommandService commandService;
     @Autowired
     private ResourcePatternResolver resourceResolver;
     @Value("${script}")
@@ -39,28 +35,28 @@ public class ClientBot {
     }
 
     public void sendCommand(String textCommand) {
-        List<String> words = Arrays.asList(textCommand.split(" "));
-        String CommandName = words.get(0);
-        List<String> vals;
-        if (words.size() > 1) {
-            vals = words.subList(1, words.size());
-        } else {
-            vals = new ArrayList<>();
-        }
-
-        Command command = Command.findByShortName(CommandName);
-
-        Map<String, String> bundle = new HashMap<>();
-        String[] params = command.getParams();
-        for (int i = 0; i < vals.size(); i++) {
-            bundle.put(params[i], vals.get(i));
-        }
-        router.route(command, bundle);
-
-        try {
-            Thread.currentThread().sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        List<String> words = Arrays.asList(textCommand.split(" "));
+//        String CommandName = words.get(0);
+//        List<String> vals;
+//        if (words.size() > 1) {
+//            vals = words.subList(1, words.size());
+//        } else {
+//            vals = new ArrayList<>();
+//        }
+//
+//        CommandMapping commandMapping = CommandMapping.findByShortName(CommandName);
+//
+//        Map<String, String> bundle = new HashMap<>();
+//        String[] params = commandMapping.getParams();
+//        for (int i = 0; i < vals.size(); i++) {
+//            bundle.put(params[i], vals.get(i));
+//        }
+//        commandService.execute(commandMapping, bundle);
+//
+//        try {
+//            Thread.currentThread().sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

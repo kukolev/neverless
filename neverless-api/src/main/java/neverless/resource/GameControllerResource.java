@@ -1,20 +1,35 @@
 package neverless.resource;
 
-import neverless.dto.command.CommandDto;
 import neverless.dto.ResponseDto;
 
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/commands")
 public interface GameControllerResource {
 
-    @RequestMapping(value = "/command", method = RequestMethod.POST,  consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto postCommand(@RequestBody CommandDto commandDto);
+    @GetMapping(value = "/")
+    ResponseDto getState();
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseDto getState();
+    @PostMapping(value = "/start_new_game")
+    ResponseDto cmdStartNewGame();
+
+    @PostMapping(value = "/map_go_down")
+    ResponseDto cmdMoveDown();
+
+    @PostMapping(value = "/map_go_up")
+    ResponseDto cmdMoveUp();
+
+    @PostMapping(value = "/map_go_left")
+    ResponseDto cmdMoveLeft();
+
+    @PostMapping(value = "/map_go_right")
+    ResponseDto cmdMoveRight();
+
+    @PostMapping(value = "/dialog_start/npcX/{npcX}/npcY/{npcY}")
+    ResponseDto cmdDialogStart(@PathVariable Integer npcX,
+                               @PathVariable Integer npcY);
+
+    @PostMapping(value = "/dialog_select_phrase/phraseNumber/{phraseNumber}")
+    ResponseDto cmdDialogSelectPhrase(@PathVariable Integer phraseId);
 }

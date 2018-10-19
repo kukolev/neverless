@@ -1,8 +1,6 @@
 package neverless.service.command;
 
-import lombok.Getter;
-import lombok.Setter;
-import neverless.domain.event.Event;
+import neverless.domain.DialogSelectPhraseParams;
 import neverless.service.screendata.DialogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -11,18 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DialogSelectPhraseCommand extends AbstractCommand {
+public class DialogSelectPhraseCommand extends AbstractCommand<DialogSelectPhraseParams> {
 
     @Autowired
     private DialogService dialogService;
 
-    @Setter
-    @Getter
-    private Integer phraseNumber;
-
     @Override
-    public Event onExecute() {
-        dialogService.selectPhrase(phraseNumber);
-        return eventFactory.createDialogPhraseSelectedEvent(phraseNumber);
+    public void execute(DialogSelectPhraseParams params) {
+        dialogService.selectPhrase(params.getPhraseNumber());
+        registerEvent(eventFactory.createDialogPhraseSelectedEvent(params.getPhraseNumber()));
     }
 }

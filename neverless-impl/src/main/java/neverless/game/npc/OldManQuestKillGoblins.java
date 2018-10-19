@@ -42,13 +42,15 @@ public class OldManQuestKillGoblins extends AbstractQuest {
                 1,
                 "I should go to the river, find goblins and kill'em all!",
                 QuestState.ACCEPTED,
-                () -> getParamBool(OLDMAN_UNIQUENAME, OLDMAN_ASK_QUEST), stepQuestUnknown);
+                () -> getParamBool(OLDMAN_UNIQUENAME, OLDMAN_ASK_QUEST),
+                stepQuestUnknown);
 
         QuestStep stepQuestDone = QuestStep.build(
                 2,
                 "Yes, I cheated Old dumb! It was so easy... ",
                 QuestState.DONE,
-                () -> getParamBool(OLDMAN_UNIQUENAME, OLDMAN_CHEATED), stepQuestAccepted);
+                () -> getParamBool(OLDMAN_UNIQUENAME, OLDMAN_CHEATED),
+                stepQuestAccepted);
 
         List<QuestStep> steps = new ArrayList<>();
         steps.add(stepQuestAccepted);

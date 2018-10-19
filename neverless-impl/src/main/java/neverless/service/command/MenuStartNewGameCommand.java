@@ -1,6 +1,7 @@
 package neverless.service.command;
 
 import lombok.AllArgsConstructor;
+import neverless.domain.EmptyParams;
 import neverless.domain.event.Event;
 import neverless.domain.mapobject.Player;
 import neverless.repository.PlayerRepository;
@@ -11,14 +12,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class MenuStartNewGameCommand extends AbstractCommand {
+public class MenuStartNewGameCommand extends AbstractCommand<EmptyParams> {
 
     private GameLoader loader;
     private PlayerRepository playerRepository;
 
     @Override
-    public Event onExecute() {
+    public void execute(EmptyParams params) {
 
         loader.createLandscape();
         Player player = new Player();
@@ -26,7 +26,5 @@ public class MenuStartNewGameCommand extends AbstractCommand {
         player.setX(50)
                 .setY(50);
         playerRepository.save(player);
-
-        return null;
     }
 }

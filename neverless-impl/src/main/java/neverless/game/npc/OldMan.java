@@ -31,10 +31,10 @@ public final class OldMan extends AbstractNpc {
     }
 
     @Override
-    protected void initDialog(Dialog dialog) {        // Events
+    protected void initDialog(Dialog dialog) {
+        // Events
         AbstractDialogEvent evtQuestGiven = () -> this.setParam(OLDMAN_ASK_QUEST, true);
         AbstractDialogEvent evtQuestDone = () -> this.setParam(OLDMAN_CHEATED, true);
-
 
         // Predicates
         NpcStartingPhrasePredicate isFirstMeeting = () -> !this.getParamBool(OLDMAN_ASK_QUEST);
@@ -42,8 +42,8 @@ public final class OldMan extends AbstractNpc {
 
         DialogBuilder builder = new DialogBuilder(dialog);
         builder.create("Hello, adventurer!", isFirstMeeting)
-                .addPlayerAnswer(1,"Hello, Old Man, can you give me some job?")
-                .addNpcAnswer(2,"Of course! Kill all goblins near the river")
+                .addPlayerAnswer(1, "Hello, Old Man, can you give me some job?")
+                .addNpcAnswer(2, "Of course! Kill all goblins near the river")
                 .addPlayerAnswer(3, "Okey!", ALWAYS_AVAILABLE, evtQuestGiven)
                 .addPlayerAnswer(3, "No, it's not for me")
                 .addPlayerAnswer(1, "Go away, old dumb!")
@@ -52,7 +52,7 @@ public final class OldMan extends AbstractNpc {
                 .addPlayerAnswer(3, "No.");
 
         builder.create("Hello Again, what about my quest?", isSecondMeeting)
-                .addPlayerAnswer(1,"Hmm... no idea")
+                .addPlayerAnswer(1, "Hmm... no idea")
                 .addPlayerAnswer(1, "In progress")
                 .addPlayerAnswer(1, "(Cheat) Quest completed", ALWAYS_AVAILABLE, evtQuestDone);
     }

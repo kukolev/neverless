@@ -14,7 +14,7 @@ public class Event {
 
     private HashMap<String, Object> params = new HashMap<>();
 
-    Event(EventType type) {
+    public Event(EventType type) {
         this.type = type;
     }
 

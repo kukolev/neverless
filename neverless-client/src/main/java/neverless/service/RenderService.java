@@ -1,6 +1,6 @@
 package neverless.service;
 
-import neverless.domain.Command;
+import neverless.domain.CommandMapping;
 import neverless.dto.ResponseDto;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
@@ -27,8 +27,8 @@ public class RenderService {
 
     private void renderCommands() {
         System.out.println("Available commands: ");
-        Arrays.stream(Command.values())
-                .map(Command::getShortName)
+        Arrays.stream(CommandMapping.values())
+                .map(CommandMapping::getShortName)
                 .forEach(s ->  System.out.print(" [" + s + "]"));
         System.out.println();
     }

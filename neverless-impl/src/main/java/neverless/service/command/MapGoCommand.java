@@ -1,37 +1,33 @@
 package neverless.service.command;
 
-import lombok.Getter;
-import neverless.dto.command.Direction;
+import neverless.domain.EmptyParams;
+import neverless.domain.MapGoParams;
+import neverless.domain.event.EventType;
 import neverless.domain.event.Event;
 import neverless.domain.mapobject.Player;
 import neverless.repository.PlayerRepository;
 import neverless.service.MapObjectsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static neverless.Constants.PLAYER_ID;
 
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public abstract class AbstractMapGoCommand extends AbstractCommand {
+public class MapGoCommand extends AbstractCommand<MapGoParams> {
 
     @Autowired
     private PlayerRepository repository;
     @Autowired
     private MapObjectsHelper helper;
 
-    protected Direction direction;
-
     @Override
-    public Event onExecute() {
+    public void execute (MapGoParams params) {
         Player player = repository.get(PLAYER_ID);
 
         int newX = player.getX();
         int newY = player.getY();
 
-        switch (direction) {
+        switch (params.getDirection()) {
             case UP: newY--; break;
             case DOWN: newY++; break;
             case LEFT: newX--; break;
@@ -41,9 +37,10 @@ public abstract class AbstractMapGoCommand extends AbstractCommand {
         if (isNewCoordsAreValid(newX, newY)) {
             player.setX(newX);
             player.setY(newY);
-            return eventFactory.createMapGoEvent();
+
+            registerEvent(new Event(EventType.EVENT_MAP_GO));
         } else {
-            return eventFactory.createMapImpassableEvent();
+            registerEvent(new Event(EventType.EVENT_MAP_IMPASSABLE));
         }
     }
 

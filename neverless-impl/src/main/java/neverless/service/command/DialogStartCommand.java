@@ -1,7 +1,6 @@
 package neverless.service.command;
 
-import lombok.Setter;
-import neverless.domain.event.Event;
+import neverless.domain.DialogStartParams;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.mapobject.Player;
@@ -11,13 +10,10 @@ import neverless.repository.PlayerRepository;
 import neverless.service.screendata.DialogService;
 import neverless.service.MapObjectsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DialogStartCommand extends AbstractCommand{
+public class DialogStartCommand extends AbstractCommand<DialogStartParams>{
 
     @Autowired
     private MapObjectsRepository mapObjectsRepository;
@@ -28,15 +24,10 @@ public class DialogStartCommand extends AbstractCommand{
     @Autowired
     private MapObjectsHelper npcService;
 
-    @Setter
-    private Integer npcX;
-    @Setter
-    private Integer npcY;
-
     @Override
-    public Event onExecute(){
+    public void execute(DialogStartParams params){
         // find NPC
-        AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY);
+        AbstractNpc npc = npcService.getNpcAtPosition(params.getNpcX(), params.getNpcY());
 
         // get NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -49,6 +40,6 @@ public class DialogStartCommand extends AbstractCommand{
         player.setDialog(dialog);
         player.setNpcPhrase(npcPhrase);
 
-        return eventFactory.createDialogStartedEvent(npc.getUniqueName());
+        registerEvent(eventFactory.createDialogStartedEvent(npc.getUniqueName()));
     }
 }

@@ -1,8 +1,8 @@
 Main workflow is here:
 
-    User            ->  sends dto of command to RestController
-    RestController  ->  sends dto of command to CommandService
-    CommandService  ->  converts dto of command to Command
+    User            ->  sends dto of commandMapping to RestController
+    RestController  ->  sends dto of commandMapping to CommandService
+    CommandService  ->  converts dto of commandMapping to Command
     CommandService  ->  executes method execute() of Command
     Command         ->  process method onExecute(), generates events
     CommandService  ->  call process() method in AiService

@@ -1,6 +1,7 @@
 package neverless.service;
 
 import neverless.domain.Command;
+import neverless.domain.CommandMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +12,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static neverless.util.ConsoleCleaner.cleanConsole;
-
 @Service
 public class ClientCore {
 
     private static String EXIT_COMMAND = "exit";
 
     @Autowired
-    private CommandRouter router;
+    private CommandService commandService;
 
     public void run() throws IOException {
         String shortCommandName = "";
@@ -28,27 +27,16 @@ public class ClientCore {
             System.out.print(">> ");
             shortCommandName = br.readLine();
 
-            Command command = Command.findByShortName(shortCommandName);
-            if (command == null) {
-                System.out.println("Command not found, try again");
+            CommandMapping commandMapping = CommandMapping.findByShortName(shortCommandName);
+            System.out.println("Game CommandMapping = " + commandMapping.getShortName());
+            if (commandMapping == null) {
+                System.out.println("CommandMapping not found, try again");
                 continue;
             }
-
-            Map<String, String> bundle = new HashMap<>();
-            if (command.getParams() != null) {
-                Arrays.stream(command.getParams())
-                        .forEach(param -> {
-                            System.out.println(">> " + param + " == ");
-                            try {
-                                String paramVal = br.readLine();
-                                bundle.put(param, paramVal);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-
+            if (commandMapping == CommandMapping.CLIENT_EXIT) {
+                System.exit(0);
             }
-            router.route(command, bundle);
+            commandService.execute(commandMapping);
         }
         System.exit(0);
     }

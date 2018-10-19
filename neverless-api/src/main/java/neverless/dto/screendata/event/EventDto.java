@@ -7,6 +7,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class EventDto {
 
-    private String number;
     private String type;
 }
