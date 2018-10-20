@@ -6,9 +6,9 @@ import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.event.AbstractDialogEvent;
 import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
 import neverless.domain.mapobject.npc.AbstractNpc;
-import neverless.util.logger.DialogBuilder;
+import neverless.util.DialogBuilder;
 
-import static neverless.util.logger.DialogBuilder.ALWAYS_AVAILABLE;
+import static neverless.util.DialogBuilder.ALWAYS_AVAILABLE;
 
 
 @Data

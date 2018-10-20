@@ -1,6 +1,6 @@
 package neverless.service.screendata;
 
-import neverless.domain.event.Event;
+import neverless.domain.event.AbstractEvent;
 import neverless.dto.screendata.event.EventDto;
 import neverless.dto.screendata.event.EventsScreenDataDto;
 import neverless.service.core.EventContext;
@@ -18,7 +18,7 @@ public class EventService {
 
     public EventsScreenDataDto getEventScreenData() {
         EventsScreenDataDto eventsScreenDataDto = new EventsScreenDataDto();
-        List<Event> events = eventContext.getEvents();
+        List<AbstractEvent> events = eventContext.getEvents();
         List<EventDto> eventDtos = events.stream()
                 .map(this::mapEventToDto)
                 .collect(Collectors.toList());
@@ -26,7 +26,7 @@ public class EventService {
         return eventsScreenDataDto;
     }
 
-    private EventDto mapEventToDto(Event event) {
+    private EventDto mapEventToDto(AbstractEvent event) {
         return new EventDto()
                 .setType(event.getType().name());
     }

@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.event.EventsScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
+import neverless.dto.screendata.inventory.InventoryScreenDataDto;
 import neverless.dto.screendata.quest.QuestScreenDataDto;
 
 @Data
@@ -15,4 +16,5 @@ public class ResponseDto {
     private DialogScreenDataDto dialogScreenDataDto;
     private EventsScreenDataDto eventsScreenDataDto;
     private QuestScreenDataDto questScreenDataDto;
+    private InventoryScreenDataDto inventoryScreenDataDto;
 }

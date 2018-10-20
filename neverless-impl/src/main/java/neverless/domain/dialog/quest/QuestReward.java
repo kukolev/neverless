@@ -2,7 +2,7 @@ package neverless.domain.dialog.quest;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.item.Item;
+import neverless.domain.item.AbstractItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,5 +13,5 @@ public class QuestReward {
 
     private Integer reward;
     private Integer experience;
-    private List<Item> rewardItems = new ArrayList<>();
+    private List<AbstractItem> rewardItems = new ArrayList<>();
 }

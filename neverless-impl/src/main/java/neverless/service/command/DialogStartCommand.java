@@ -1,6 +1,5 @@
 package neverless.service.command;
 
-import neverless.domain.DialogStartParams;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.mapobject.Player;
@@ -40,6 +39,6 @@ public class DialogStartCommand extends AbstractCommand<DialogStartParams>{
         player.setDialog(dialog);
         player.setNpcPhrase(npcPhrase);
 
-        registerEvent(eventFactory.createDialogStartedEvent(npc.getUniqueName()));
+        registerEvent(eventFactory.createDialogStartEvent(npc.getUniqueName()));
     }
 }

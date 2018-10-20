@@ -1,13 +1,9 @@
 package neverless.service.core;
 
 import lombok.AllArgsConstructor;
-import neverless.domain.*;
 import neverless.dto.command.Direction;
 import neverless.service.command.*;
-import neverless.service.screendata.DialogService;
-import neverless.service.screendata.EventService;
-import neverless.service.screendata.LocalMapService;
-import neverless.service.screendata.QuestService;
+import neverless.service.screendata.*;
 import neverless.service.ai.AiService;
 import neverless.dto.ResponseDto;
 import org.springframework.stereotype.Service;
@@ -21,6 +17,7 @@ public class CommandRouterService {
     private AiService aiService;
     private QuestService questService;
     private EventService eventService;
+    private InventoryService inventoryService;
 
     private MapGoCommand goDownCommand;
     private MapGoCommand goUpCommand;
@@ -30,7 +27,7 @@ public class CommandRouterService {
     private DialogStartCommand dialogStartCommand;
     private DialogSelectPhraseCommand dialogSelectPhraseCommand;
 
-    private MenuStartNewGameCommand startNewGameCommand;
+    private StartNewGameCommand startNewGameCommand;
 
     private static final EmptyParams EMPTY_PARAMS = new EmptyParams();
 
@@ -39,7 +36,8 @@ public class CommandRouterService {
                 .setLocalMapScreenData(localMapService.getScreenData())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())
-                .setEventsScreenDataDto(eventService.getEventScreenData());
+                .setEventsScreenDataDto(eventService.getEventScreenData())
+                .setInventoryScreenDataDto(inventoryService.getScreenData());
     }
 
     private void execute(AbstractCommand command, AbstractCommandParams params) {

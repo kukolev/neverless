@@ -1,7 +1,7 @@
 package neverless.service.core;
 
 import lombok.Getter;
-import neverless.domain.event.Event;
+import neverless.domain.event.AbstractEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -16,5 +16,5 @@ import java.util.List;
 public class EventContext {
 
     @Getter
-    private List<Event> events = new ArrayList<>();
+    private List<AbstractEvent> events = new ArrayList<>();
 }

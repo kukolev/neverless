@@ -1,7 +1,7 @@
 package neverless.service.ai;
 
 import lombok.AllArgsConstructor;
-import neverless.domain.event.Event;
+import neverless.domain.event.AbstractEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AiService {
 
-    public void handleEvents(List<Event> events) {
+    public void handleEvents(List<AbstractEvent> events) {
         // todo: implement reaction on executed command
     }
 }

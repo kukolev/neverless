@@ -4,7 +4,6 @@ package neverless.service.screendata;
 import neverless.domain.mapobject.tree.FirTree;
 import neverless.dto.screendata.LocalMapScreenDataDto;
 import neverless.game.GameLoader;
-import neverless.service.screendata.LocalMapService;
 import neverless.domain.mapobject.AbstractMapObject;
 import neverless.domain.mapobject.Player;
 import neverless.repository.MapObjectsRepository;
@@ -49,8 +48,8 @@ public class LocalMapServiceTest {
         PlayerRepository playerRepository = new PlayerRepository();
         playerRepository.save(createTestPlayer(60, 50));
         MapObjectsRepository mapObjRepository = new MapObjectsRepository();
-        GameLoader dataLoader = new GameLoader(mapObjRepository);
-        dataLoader.createLandscape();
+        GameLoader dataLoader = new GameLoader(mapObjRepository, playerRepository);
+        dataLoader.createNewGame();
         LocalMapService localMapService = new LocalMapService(playerRepository, mapObjRepository);
         LocalMapScreenDataDto localMapScreenData = localMapService.getScreenData();
         System.out.println(localMapScreenData);

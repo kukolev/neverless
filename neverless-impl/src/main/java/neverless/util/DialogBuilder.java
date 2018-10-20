@@ -1,4 +1,4 @@
-package neverless.util.logger;
+package neverless.util;
 
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;

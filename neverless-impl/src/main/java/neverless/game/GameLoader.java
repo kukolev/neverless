@@ -2,6 +2,8 @@ package neverless.game;
 
 
 import lombok.AllArgsConstructor;
+import neverless.domain.item.weapon.Sword;
+import neverless.domain.mapobject.Player;
 import neverless.domain.mapobject.building.AbstractBuilding;
 import neverless.domain.mapobject.monster.Goblin;
 import neverless.game.npc.OldMan;
@@ -12,6 +14,7 @@ import neverless.domain.mapobject.building.LittleVillageHouse;
 import neverless.domain.mapobject.building.LongVillageHouse;
 import neverless.repository.MapObjectsRepository;
 
+import neverless.repository.PlayerRepository;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,8 +22,10 @@ import org.springframework.stereotype.Component;
 public class GameLoader {
 
     private MapObjectsRepository mapObjRepository;
+    private PlayerRepository playerRepository;
 
-    public void createLandscape() {
+    public void createNewGame() {
+        createPlayer();
         createHouse2x2();
         createHouse4x5();
         createHouse3x7();
@@ -30,6 +35,22 @@ public class GameLoader {
         createTreesRight();
         createTreesNpc();
         createTreesMonster();
+    }
+
+    private void createPlayer() {
+        Player player = new Player();
+        player.setUniqueName("Vova");
+        player.setX(50)
+                .setY(50);
+
+        Sword sword = new Sword();
+        sword.setUniqueName("MEGA_SWORD");
+        sword.setPower(100);
+        sword.setTitle("Mega Sword of Ultra Power");
+
+        player.getInventory().getEquipment().setRightHand(sword);
+
+        playerRepository.save(player);
     }
 
     private void createHouse2x2() {

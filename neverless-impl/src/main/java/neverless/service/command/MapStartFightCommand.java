@@ -1,10 +1,6 @@
 package neverless.service.command;
 
 import lombok.Getter;
-import neverless.domain.EmptyParams;
-import neverless.domain.event.Event;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.event.Event;
+import neverless.domain.event.AbstractEvent;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ import static neverless.Constants.CURRENT_SESSION_ID;
 @Repository
 public class EventRepository {
 
-    private Map<String, List<Event>> map = new ConcurrentHashMap<>();
+    private Map<String, List<AbstractEvent>> map = new ConcurrentHashMap<>();
 
-    public void put(Event event) {
-        List<Event> eventList = map.get(getSessionID());
+    public void put(AbstractEvent event) {
+        List<AbstractEvent> eventList = map.get(getSessionID());
         if (eventList == null) {
             eventList = new ArrayList<>();
             map.put(getSessionID(), eventList);
@@ -24,8 +24,8 @@ public class EventRepository {
         eventList.add(event);
     }
 
-    public List<Event> get() {
-        List<Event> eventList = map.get(getSessionID());
+    public List<AbstractEvent> get() {
+        List<AbstractEvent> eventList = map.get(getSessionID());
         if (eventList == null) {
             return new ArrayList<>();
         }

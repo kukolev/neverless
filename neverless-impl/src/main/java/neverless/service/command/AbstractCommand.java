@@ -1,9 +1,8 @@
 package neverless.service.command;
 
 import lombok.Getter;
-import neverless.domain.AbstractCommandParams;
-import neverless.domain.event.Event;
-import neverless.domain.event.EventFactory;
+import neverless.domain.event.AbstractEvent;
+import neverless.util.EventFactory;
 import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ public abstract class AbstractCommand<T extends AbstractCommandParams> {
     @Autowired
     private EventContext eventContext;
     @Getter
-    private List<Event> events = new ArrayList<>();
+    private List<AbstractEvent> events = new ArrayList<>();
 
     /**
      * Executes command. Registers event, raised in concrete subclass Command (should be overloaded).
@@ -32,7 +31,7 @@ public abstract class AbstractCommand<T extends AbstractCommandParams> {
      *
      * @param event
      */
-    protected void registerEvent(Event event) {
+    protected void registerEvent(AbstractEvent event) {
         eventContext.getEvents().add(event);
     }
 }

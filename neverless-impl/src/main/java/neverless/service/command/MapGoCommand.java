@@ -1,12 +1,9 @@
 package neverless.service.command;
 
-import neverless.domain.EmptyParams;
-import neverless.domain.MapGoParams;
-import neverless.domain.event.EventType;
-import neverless.domain.event.Event;
 import neverless.domain.mapobject.Player;
 import neverless.repository.PlayerRepository;
 import neverless.service.MapObjectsHelper;
+import neverless.util.EventFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +16,8 @@ public class MapGoCommand extends AbstractCommand<MapGoParams> {
     private PlayerRepository repository;
     @Autowired
     private MapObjectsHelper helper;
+    @Autowired
+    private EventFactory eventFactory;
 
     @Override
     public void execute (MapGoParams params) {
@@ -38,9 +37,9 @@ public class MapGoCommand extends AbstractCommand<MapGoParams> {
             player.setX(newX);
             player.setY(newY);
 
-            registerEvent(new Event(EventType.EVENT_MAP_GO));
+            registerEvent(eventFactory.createMapGoEvent(params.getDirection()));
         } else {
-            registerEvent(new Event(EventType.EVENT_MAP_IMPASSABLE));
+            registerEvent(eventFactory.createMapGoImpossibleEvent());
         }
     }
 
