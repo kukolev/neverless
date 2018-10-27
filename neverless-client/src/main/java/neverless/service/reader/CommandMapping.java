@@ -1,6 +1,5 @@
-package neverless.domain;
+package neverless.service.reader;
 
-import neverless.service.reader.CommandReader;
 import neverless.service.reader.impl.*;
 
 import java.util.Arrays;
@@ -16,8 +15,16 @@ public enum CommandMapping {
     SERVER_LOCAL_START_DIALOG(new DialogStartCommandReader(), "sdlg"),
     SERVER_DIALOG_SELECT_PHRASE(new DialogSelectPhraseCommandReader(), "say"),
 
-    CLIENT_VERSION( null, "clver"),
-    CLIENT_EXIT(null, "exit");
+    CLIENT_EXIT(null, "exit"),
+    CLIENT_VIEW_LOCAL_MAP(null, "1"),
+    CLIENT_VIEW_INVENTORY(null, "2"),
+    CLIENT_VIEW_JOURNAL(null, "3"),
+    CLIENT_VIEW_DIALOG(null, "8"),
+    CLIENT_VIEW_EVENTS(null, "9"),
+    CLIENT_VIEW_MANUAL(null, "0");
+
+
+
 
     CommandMapping(CommandReader reader, String shortName) {
         this.reader = reader;

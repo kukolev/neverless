@@ -2,6 +2,7 @@ package neverless.domain.event;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.dto.screendata.event.EventType;
 
 @Data
 @Accessors(chain = true)
@@ -10,7 +11,7 @@ public class DialogSelectPhraseEvent extends AbstractEvent {
     private Integer phraseNumber;
 
     @Override
-    public EventType getType() {
-        return EventType.DIALOG_PHRASE_SELECTED_EVENT;
+    public EventType getEventType() {
+        return EventType.DIALOG_SELECT_PHRASE_EVENT;
     }
 }

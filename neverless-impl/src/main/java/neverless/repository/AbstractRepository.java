@@ -29,6 +29,7 @@ public abstract class AbstractRepository<V extends AbstractGameObject> {
     }
 
     private String getCurrentSessionId() {
+        // todo: instead constant we should return id of player has been logon.
         return CURRENT_SESSION_ID;
     }
 }

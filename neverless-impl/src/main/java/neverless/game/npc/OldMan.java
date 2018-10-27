@@ -22,11 +22,7 @@ public final class OldMan extends AbstractNpc {
 
     @Override
     protected void initProperties() {
-        setX(51);
-        setY(51);
         setUniqueName(OLDMAN_UNIQUENAME);
-        setHeight(1);
-        setWidth(1);
         setSignature(OLDMAN_SIGNATURE);
     }
 

@@ -1,12 +1,13 @@
 package neverless.service.screendata;
 
-import lombok.AllArgsConstructor;
-
 import neverless.domain.mapobject.AbstractMapObject;
 import neverless.domain.mapobject.Player;
+import neverless.dto.command.Direction;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.LocalMapScreenDataDto;
+import neverless.util.EventFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,11 +21,37 @@ import static neverless.Constants.LOCAL_MAP_WIDTH;
 import static neverless.Constants.PLAYER_ID;
 
 @Service
-@AllArgsConstructor
-public class LocalMapService {
+public class LocalMapService extends AbstractService {
 
+    @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
     private MapObjectsRepository mapObjRepository;
+    @Autowired
+    private EventFactory eventFactory;
+
+    public void mapGo(Direction direction) {
+        Player player = playerRepository.get(PLAYER_ID);
+
+        int newX = player.getX();
+        int newY = player.getY();
+
+        switch (direction) {
+            case UP: newY--; break;
+            case DOWN: newY++; break;
+            case LEFT: newX--; break;
+            case RIGHT: newX++; break;
+        }
+
+        if (isPassable(newX, newY)) {
+            player.setX(newX);
+            player.setY(newY);
+
+            registerEvent(eventFactory.createMapGoEvent(direction));
+        } else {
+            registerEvent(eventFactory.createMapGoImpossibleEvent());
+        }
+    }
 
     public LocalMapScreenDataDto getScreenData() {
         LocalMapScreenDataDto localMapScreenDataDto = createCleanMap();
@@ -74,5 +101,18 @@ public class LocalMapService {
                 localMapScreenDataDto.setCell(i, j, "~");
             }
         return localMapScreenDataDto;
+    }
+
+    private boolean isPassable(int x, int y) {
+        AbstractMapObject mapObject = getMapObjectAtPosition(x, y);
+        return (mapObject == null || mapObject.isPassable());
+    }
+
+    private AbstractMapObject getMapObjectAtPosition(int x, int y) {
+        return mapObjRepository.findAll()
+                .stream()
+                .filter(object -> (object.getX() == x) && (object.getY() == y))
+                .findFirst()
+                .orElse(null);
     }
 }

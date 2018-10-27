@@ -1,9 +1,11 @@
 package neverless.domain.event;
 
+import neverless.dto.screendata.event.EventType;
+
 public class MapGoImpossibleEvent extends AbstractEvent {
 
     @Override
-    public EventType getType() {
-        return EventType.MAP_GO_IMPASSABLE_EVENT;
+    public EventType getEventType() {
+        return EventType.MAP_GO_IMPOSSIBLE_EVENT;
     }
 }

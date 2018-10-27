@@ -5,7 +5,6 @@ import neverless.game.npc.OldManQuestKillGoblins;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -26,5 +25,12 @@ public class QuestContainer {
 
     public List<AbstractQuest> findAll() {
         return questList;
+    }
+
+    public AbstractQuest finaById(String questId) {
+        return questList.stream()
+                .filter(q -> q.getQuestId().equals(questId))
+                .findFirst()
+                .get();
     }
 }

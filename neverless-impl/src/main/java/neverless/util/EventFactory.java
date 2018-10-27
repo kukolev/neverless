@@ -17,16 +17,13 @@ public class EventFactory {
     }
 
     public AbstractEvent createDialogSelectPhraseEvent(Integer phraseNumber) {
-        AbstractEvent event = new DialogSelectPhraseEvent()
+
+        return new DialogSelectPhraseEvent()
                 .setPhraseNumber(phraseNumber);
-        return event;
     }
 
-    public final String EVENT_PARAM_NPC_NAME = "npcName";
-
-    public AbstractEvent createDialogStartEvent(String npcName) {
-        AbstractEvent event = new DialogStartEvent()
+    public AbstractEvent createDialogStartEvent(String npcName, Integer npcX, Integer npcY) {
+        return new DialogStartEvent()
                 .setNpcName(npcName);
-        return event;
     }
 }

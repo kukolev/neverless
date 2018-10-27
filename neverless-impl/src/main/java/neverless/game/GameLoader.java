@@ -144,6 +144,10 @@ public class GameLoader {
 
     private void createTreesNpc() {
         OldMan oldMan = new OldMan();
+        oldMan
+            .setX(51)
+            .setY(51);
+
         oldMan.register(mapObjRepository);
 
     }

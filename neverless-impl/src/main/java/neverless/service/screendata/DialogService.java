@@ -1,23 +1,50 @@
 package neverless.service.screendata;
 
-import lombok.AllArgsConstructor;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.dialog.PlayerPhrase;
 import neverless.domain.mapobject.Player;
+import neverless.domain.mapobject.npc.AbstractNpc;
+import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.DialogScreenDataDto;
+import neverless.util.EventFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-public class DialogService {
+public class DialogService extends AbstractService {
 
+    @Autowired
+    private MapObjectsRepository mapObjectsRepository;
+    @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private NpcService npcService;
+    @Autowired
+    private EventFactory eventFactory;
 
-    public NpcPhrase getStartPhrase(Dialog dialog) {
+    public void dialogStart(int npcX, int npcY) {
+        // find NPC
+        AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY);
+
+        // get NPC's dialog
+        Dialog dialog = npc.getDialog();
+
+        // search for NPC's phrase (use predicates)
+        NpcPhrase npcPhrase = getStartPhrase(dialog);
+
+        // set data to Player
+        Player player = playerRepository.get();
+        player.setDialog(dialog);
+        player.setNpcPhrase(npcPhrase);
+
+        registerEvent(eventFactory.createDialogStartEvent(npc.getUniqueName(), npcX, npcY));
+    }
+
+    private NpcPhrase getStartPhrase(Dialog dialog) {
         // todo: throw real exception
         return dialog.getRootNpcPhrases()
                 .stream()
@@ -55,5 +82,6 @@ public class DialogService {
             player.setDialog(null);
             player.setNpcPhrase(null);
         }
+        registerEvent(eventFactory.createDialogSelectPhraseEvent(phraseNumber));
     }
 }

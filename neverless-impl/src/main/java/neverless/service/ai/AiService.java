@@ -1,16 +1,16 @@
 package neverless.service.ai;
 
-import lombok.AllArgsConstructor;
-import neverless.domain.event.AbstractEvent;
+import neverless.service.core.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-@AllArgsConstructor
 public class AiService {
 
-    public void handleEvents(List<AbstractEvent> events) {
+    @Autowired
+    private RequestContext requestContext;
+
+    public void handleEvents() {
         // todo: implement reaction on executed command
     }
 }

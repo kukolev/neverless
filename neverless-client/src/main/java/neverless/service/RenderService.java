@@ -1,12 +1,15 @@
 package neverless.service;
 
-import neverless.domain.CommandMapping;
+import lombok.Getter;
+import lombok.Setter;
+import neverless.service.reader.CommandMapping;
 import neverless.dto.ResponseDto;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
 import neverless.dto.screendata.quest.QuestInfoDto;
 import neverless.dto.screendata.quest.QuestScreenDataDto;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,16 +19,43 @@ import static neverless.util.ConsoleCleaner.cleanConsole;
 @Service
 public class RenderService {
 
-    public void render(ResponseDto responseDto) {
+    @Getter
+    private ResponseDto curResponse;
+    @Setter
+    private Screen screen;
+
+    public void render() {
         cleanConsole();
         renderCommands();
-        renderLocalMap(responseDto);
-        renderEvents(responseDto);
-        renderDialog(responseDto);
-        renderQuestJournal(responseDto);
+        switch (screen) {
+            case LOCAL_MAP: renderLocalMap(); break;
+            case DIALOG: renderDialog(); break;
+            case JOURNAL: renderQuestJournal(); break;
+            case EVENTS: renderEvents(); break;
+            case INVENTORY: renderInventory(); break;
+            case MANUAL: renderManual(); break;
+        }
+    }
+
+    public void setCurResponse(ResponseDto responseDto) {
+        this.curResponse = responseDto;
+        detectScreen();
+    }
+
+    private void detectScreen() {
+        if (StringUtils.isEmpty(curResponse.getDialogScreenDataDto().getNpcPhrase())) {
+            screen = Screen.LOCAL_MAP;
+        } else {
+            screen = Screen.DIALOG;
+        }
     }
 
     private void renderCommands() {
+        System.out.println("[1 - Local map]  [2 - Inventory]  [3 - Journal]  [8 - Dialog]  [9 - Events]  [0 - Manual]");
+        System.out.println();
+    }
+
+    private void renderManual() {
         System.out.println("Available commands: ");
         Arrays.stream(CommandMapping.values())
                 .map(CommandMapping::getShortName)
@@ -33,8 +63,8 @@ public class RenderService {
         System.out.println();
     }
 
-    private void renderLocalMap(ResponseDto responseDto) {
-        LocalMapScreenDataDto data = responseDto.getLocalMapScreenData();
+    private void renderLocalMap() {
+        LocalMapScreenDataDto data = curResponse.getLocalMapScreenData();
         int width = data.getWidth();
         int height = data.getHeight();
         for (int i = 0; i < height; i++) {
@@ -45,8 +75,8 @@ public class RenderService {
         }
     }
 
-    private void renderDialog(ResponseDto responseDto) {
-        DialogScreenDataDto dialogScreenDataDto = responseDto.getDialogScreenDataDto();
+    private void renderDialog() {
+        DialogScreenDataDto dialogScreenDataDto = curResponse.getDialogScreenDataDto();
         if (dialogScreenDataDto != null) {
             System.out.println("NPC:\n  " + dialogScreenDataDto.getNpcPhrase());
             System.out.println("You:");
@@ -56,19 +86,19 @@ public class RenderService {
         }
     }
 
-    private void renderEvents(ResponseDto responseDto) {
+    private void renderEvents() {
         System.out.println("Raised events:");
-        responseDto.getEventsScreenDataDto().getEvents()
+        curResponse.getEventsScreenDataDto().getEvents()
                 .forEach(evt -> {
-                    System.out.println(" - " + evt.getType());
+                    System.out.println(evt);
                 });
-        if (responseDto.getEventsScreenDataDto().getEvents().isEmpty()) {
+        if (curResponse.getEventsScreenDataDto().getEvents().isEmpty()) {
             System.out.println("--no events--");
         }
     }
 
-    private void renderQuestJournal(ResponseDto responseDto) {
-        QuestScreenDataDto screenDataDto = responseDto.getQuestScreenDataDto();
+    private void renderQuestJournal() {
+        QuestScreenDataDto screenDataDto = curResponse.getQuestScreenDataDto();
         renderQuestList("In Progress", screenDataDto.getInProgress());
         renderQuestList("Done", screenDataDto.getDone());
         renderQuestList("Failed", screenDataDto.getFailed());
@@ -83,5 +113,9 @@ public class RenderService {
         if (quests.isEmpty()) {
             System.out.println("--empty--");
         }
+    }
+
+    private void renderInventory() {
+        // todo: implement
     }
 }

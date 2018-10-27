@@ -1,35 +1,31 @@
 package neverless.service.core;
 
-import lombok.AllArgsConstructor;
 import neverless.dto.command.Direction;
-import neverless.service.command.*;
 import neverless.service.screendata.*;
 import neverless.service.ai.AiService;
 import neverless.dto.ResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class CommandRouterService {
 
+    @Autowired
     private LocalMapService localMapService;
+    @Autowired
     private DialogService dialogService;
+    @Autowired
     private AiService aiService;
+    @Autowired
     private QuestService questService;
+    @Autowired
     private EventService eventService;
+    @Autowired
     private InventoryService inventoryService;
-
-    private MapGoCommand goDownCommand;
-    private MapGoCommand goUpCommand;
-    private MapGoCommand goLeftCommand;
-    private MapGoCommand goRightCommand;
-
-    private DialogStartCommand dialogStartCommand;
-    private DialogSelectPhraseCommand dialogSelectPhraseCommand;
-
-    private StartNewGameCommand startNewGameCommand;
-
-    private static final EmptyParams EMPTY_PARAMS = new EmptyParams();
+    @Autowired
+    private NewGameService newGameService;
+    @Autowired
+    private RequestContext requestContext;
 
     public ResponseDto getState() {
         return new ResponseDto()
@@ -40,53 +36,82 @@ public class CommandRouterService {
                 .setInventoryScreenDataDto(inventoryService.getScreenData());
     }
 
-    private void execute(AbstractCommand command, AbstractCommandParams params) {
-        command.execute(params);
-        aiService.handleEvents(command.getEvents());
-    }
-
-    private void execute(AbstractCommand command) {
-        execute(command, EMPTY_PARAMS);
-    }
+    // todo: DRY
 
     public void cmdStartNewGame() {
-        execute(startNewGameCommand);
+        //requestContext.initQuestStates();
+        newGameService.startNewGame();
+        //aiService.handleEvents();
+        //questService.generateQuestEvents();
     }
 
     public void cmdMoveDown() {
-        MapGoParams params = new MapGoParams()
-                .setDirection(Direction.DOWN);
-        execute(goDownCommand, params);
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.DOWN);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdMoveUp() {
-        MapGoParams params = new MapGoParams()
-                .setDirection(Direction.UP);
-        execute(goUpCommand, params);
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.UP);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdMoveLeft() {
-        MapGoParams params = new MapGoParams()
-                .setDirection(Direction.LEFT);
-        execute(goLeftCommand, params);
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.LEFT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdMoveRight() {
-        MapGoParams params = new MapGoParams()
-                .setDirection(Direction.RIGHT);
-        execute(goRightCommand, params);
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.RIGHT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdDialogStart(Integer npcX, Integer npcY) {
-        DialogStartParams params = new DialogStartParams()
-                .setNpcX(npcX)
-                .setNpcY(npcY);
-        execute(dialogStartCommand, params);
+        requestContext.initQuestStates();
+        dialogService.dialogStart(npcX, npcY);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdDialogSelectPhrase(Integer phraseNumber) {
-        DialogSelectPhraseParams params = new DialogSelectPhraseParams()
-                .setPhraseNumber(phraseNumber);
-        execute(dialogSelectPhraseCommand, params);
+        requestContext.initQuestStates();
+        dialogService.selectPhrase(phraseNumber);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdInventoryClearRightHand() {
+        requestContext.initQuestStates();
+        inventoryService.clearRightHand();
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdInventoryClearLeftHand() {
+        requestContext.initQuestStates();
+        inventoryService.clearLeftHand();
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdInventoryEquipRightHand(Integer weaponId) {
+        requestContext.initQuestStates();
+        inventoryService.equipRightHand(weaponId);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdInventoryEquipLeftHand(Integer weaponId) {
+        requestContext.initQuestStates();
+        inventoryService.equipLeftHand(weaponId);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 }

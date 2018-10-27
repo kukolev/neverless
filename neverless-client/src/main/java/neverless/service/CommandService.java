@@ -1,7 +1,7 @@
 package neverless.service;
 
 import neverless.dto.ResponseDto;
-import neverless.domain.CommandMapping;
+import neverless.service.reader.CommandMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,8 @@ public class CommandService {
                 ResponseEntity<ResponseDto> response = commandMapping.getReader().read(restTemplate);
                 tryCounter = 100;
                 if (response.getStatusCode().equals(HttpStatus.OK)) {
-                    renderService.render(response.getBody());
+                    renderService.setCurResponse(response.getBody());
+                    renderService.render();
                 }
             } catch (Exception e) {
                 System.out.println(e);

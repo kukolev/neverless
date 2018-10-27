@@ -8,28 +8,40 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/commands")
 public interface GameControllerResource {
 
-    @GetMapping(value = "/")
+    @GetMapping("/")
     ResponseDto getState();
 
-    @PostMapping(value = "/start_new_game")
+    @PostMapping("/start_new_game")
     ResponseDto cmdStartNewGame();
 
-    @PostMapping(value = "/map_go_down")
+    @PostMapping("/map_go_down")
     ResponseDto cmdMoveDown();
 
-    @PostMapping(value = "/map_go_up")
+    @PostMapping("/map_go_up")
     ResponseDto cmdMoveUp();
 
-    @PostMapping(value = "/map_go_left")
+    @PostMapping("/map_go_left")
     ResponseDto cmdMoveLeft();
 
-    @PostMapping(value = "/map_go_right")
+    @PostMapping("/map_go_right")
     ResponseDto cmdMoveRight();
 
-    @PostMapping(value = "/dialog_start/npcX/{npcX}/npcY/{npcY}")
+    @PostMapping("/dialog_start/npcX/{npcX}/npcY/{npcY}")
     ResponseDto cmdDialogStart(@PathVariable Integer npcX,
                                @PathVariable Integer npcY);
 
-    @PostMapping(value = "/dialog_select_phrase/phraseNumber/{phraseNumber}")
+    @PostMapping("/dialog_select_phrase/phraseNumber/{phraseNumber}")
     ResponseDto cmdDialogSelectPhrase(@PathVariable Integer phraseId);
+
+    @PostMapping("/inventory_clear_right_hand")
+    ResponseDto cmdInventoryClearRightHand();
+
+    @PostMapping("/inventory_clear_left_hand")
+    ResponseDto cmdInventoryClearLeftHand();
+
+    @PostMapping("/inventory_equip_right_hand/weaponId/{weaponId}")
+    ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer weaponId);
+
+    @PostMapping("/inventory_equip_left_hand/weaponId/{weaponId}")
+    ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer weaponId);
 }

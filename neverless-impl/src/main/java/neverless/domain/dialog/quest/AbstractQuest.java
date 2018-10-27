@@ -5,6 +5,7 @@ import neverless.repository.MapObjectsRepository;
 import neverless.dto.screendata.quest.QuestState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +21,18 @@ public abstract class AbstractQuest {
 
     public abstract List<QuestStep> getSteps();
 
+    /**
+     * Returns a unique quest identifier. Identifier is class canonical name.
+     * Identifier should not be persisted and should be used only in runtime.
+     */
+    public final String getQuestId() {
+        return this.getClass().getCanonicalName();
+    }
+
+    /**
+     * Calculates and returns list that represents quest journal.
+     * Journal is a function of quest-state.
+     */
     public final List<String> getJournal() {
         List<String> journal = new ArrayList<>();
 
@@ -33,6 +46,9 @@ public abstract class AbstractQuest {
         return journal;
     }
 
+    /**
+     * Calculates and returns current state of the quest
+     */
     public final QuestState getState() {
         QuestStep currentStep =  getSteps().stream()
                 .sorted(Comparator.comparingInt(step -> -step.getStepOrder()))
@@ -47,18 +63,29 @@ public abstract class AbstractQuest {
 
     public abstract QuestReward getReward();
 
-    public Boolean getParamBool(String objName, String paramName) {
+    protected final Boolean getParamBool(String objName, String paramName) {
         AbstractMapObject object = repository.get(objName);
         return object.getParamBool(paramName);
     }
 
-    public Integer getParamInt(String objName, String paramName) {
+    public final Integer getParamInt(String objName, String paramName) {
         AbstractMapObject object = repository.get(objName);
         return object.getParamInt(paramName);
     }
 
-    public String getParamStr(String objName, String paramName) {
+    public final String getParamStr(String objName, String paramName) {
         AbstractMapObject object = repository.get(objName);
         return object.getParamStr(paramName);
+    }
+
+    /**
+     * Calculates and returns md5 hash of full quest journal.
+     * It is needed for trigger journal updating and events raising.
+     */
+    public String getJournalHash() {
+        StringBuilder stringBuilder = new StringBuilder();
+        this.getJournal()
+                .forEach(s -> stringBuilder.append(s));
+        return DigestUtils.md5Hex(stringBuilder.toString());
     }
 }

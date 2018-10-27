@@ -63,4 +63,32 @@ public class GameControllerResourceImpl implements GameControllerResource {
         commandRouterService.cmdDialogSelectPhrase(phraseNumber);
         return commandRouterService.getState();
     }
+
+    @Override
+    @PostMapping("/inventory_clear_right_hand")
+    public ResponseDto cmdInventoryClearRightHand() {
+        commandRouterService.cmdInventoryClearRightHand();
+        return commandRouterService.getState();
+    }
+
+    @Override
+    @PostMapping("/inventory_clear_left_hand")
+    public ResponseDto cmdInventoryClearLeftHand() {
+        commandRouterService.cmdInventoryClearLeftHand();
+        return commandRouterService.getState();
+    }
+
+    @Override
+    @PostMapping("/inventory_equip_right_hand/weaponId/{weaponId}")
+    public ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer weaponId) {
+        commandRouterService.cmdInventoryEquipRightHand(weaponId);
+        return commandRouterService.getState();
+    }
+
+    @Override
+    @PostMapping("/inventory_equip_left_hand/weaponId/{weaponId}")
+    public ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer weaponId) {
+        commandRouterService.cmdInventoryEquipLeftHand(weaponId);
+        return commandRouterService.getState();
+    }
 }
