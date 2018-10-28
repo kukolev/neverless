@@ -5,5 +5,5 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class AbstractMeleeWeapon extends AbstractWeapon {
+public class AbstractMeleeWeapon extends AbstractHandEquipment {
 }

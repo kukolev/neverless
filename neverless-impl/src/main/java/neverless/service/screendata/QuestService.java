@@ -1,10 +1,10 @@
 package neverless.service.screendata;
 
 import neverless.domain.dialog.quest.AbstractQuest;
-import neverless.domain.event.JournalUpdateEvent;
 import neverless.game.quest.QuestContainer;
 import neverless.dto.screendata.quest.QuestInfoDto;
 import neverless.dto.screendata.quest.QuestScreenDataDto;
+import neverless.service.core.EventContext;
 import neverless.service.core.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,8 @@ public class QuestService extends AbstractService {
     private QuestContainer repository;
     @Autowired
     private RequestContext requestContext;
+    @Autowired
+    private EventContext eventContext;
 
     public QuestScreenDataDto getScreenData() {
         QuestScreenDataDto screenDataDto = new QuestScreenDataDto();
@@ -30,10 +32,9 @@ public class QuestService extends AbstractService {
         requestContext.findUpdatedQuests()
                 .forEach(id -> {
                     AbstractQuest quest = repository.finaById(id);
-                    JournalUpdateEvent event = new JournalUpdateEvent()
-                            .setQuestTitle(quest.getTitle())
-                            .setState(quest.getState());
-                    registerEvent(event);
+                    eventContext.addJournalUpdateEvent(
+                            quest.getTitle(),
+                            quest.getState());
                 });
     }
 

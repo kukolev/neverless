@@ -39,9 +39,9 @@ public interface GameControllerResource {
     @PostMapping("/inventory_clear_left_hand")
     ResponseDto cmdInventoryClearLeftHand();
 
-    @PostMapping("/inventory_equip_right_hand/weaponId/{weaponId}")
-    ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer weaponId);
+    @PostMapping("/inventory_equip_right_hand/itemId/{itemId}")
+    ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer itemId);
 
-    @PostMapping("/inventory_equip_left_hand/weaponId/{weaponId}")
-    ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer weaponId);
+    @PostMapping("/inventory_equip_left_hand/itemId/{itemId}")
+    ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId);
 }

@@ -6,7 +6,7 @@ import neverless.dto.command.Direction;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.LocalMapScreenDataDto;
-import neverless.util.EventFactory;
+import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class LocalMapService extends AbstractService {
     @Autowired
     private MapObjectsRepository mapObjRepository;
     @Autowired
-    private EventFactory eventFactory;
+    private EventContext eventContext;
 
     public void mapGo(Direction direction) {
         Player player = playerRepository.get(PLAYER_ID);
@@ -47,9 +47,9 @@ public class LocalMapService extends AbstractService {
             player.setX(newX);
             player.setY(newY);
 
-            registerEvent(eventFactory.createMapGoEvent(direction));
+            eventContext.addMapGoEvent(direction);
         } else {
-            registerEvent(eventFactory.createMapGoImpossibleEvent());
+            eventContext.addMapGoImpossibleEvent();
         }
     }
 

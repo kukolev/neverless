@@ -8,7 +8,7 @@ import neverless.domain.mapobject.npc.AbstractNpc;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.DialogScreenDataDto;
-import neverless.util.EventFactory;
+import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class DialogService extends AbstractService {
     @Autowired
     private NpcService npcService;
     @Autowired
-    private EventFactory eventFactory;
+    private EventContext eventContext;
 
     public void dialogStart(int npcX, int npcY) {
         // find NPC
@@ -41,7 +41,7 @@ public class DialogService extends AbstractService {
         player.setDialog(dialog);
         player.setNpcPhrase(npcPhrase);
 
-        registerEvent(eventFactory.createDialogStartEvent(npc.getUniqueName(), npcX, npcY));
+        eventContext.addDialogStartEvent(npc.getUniqueName(), npcX, npcY);
     }
 
     private NpcPhrase getStartPhrase(Dialog dialog) {
@@ -82,6 +82,6 @@ public class DialogService extends AbstractService {
             player.setDialog(null);
             player.setNpcPhrase(null);
         }
-        registerEvent(eventFactory.createDialogSelectPhraseEvent(phraseNumber));
+        eventContext.addDialogSelectPhraseEvent(phraseNumber);
     }
 }

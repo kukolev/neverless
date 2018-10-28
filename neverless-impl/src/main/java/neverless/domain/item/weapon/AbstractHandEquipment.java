@@ -6,7 +6,7 @@ import neverless.domain.item.AbstractItem;
 
 @Data
 @Accessors(chain = true)
-public abstract class AbstractWeapon extends AbstractItem {
+public abstract class AbstractHandEquipment extends AbstractItem {
 
     private String title;
     private Integer power;

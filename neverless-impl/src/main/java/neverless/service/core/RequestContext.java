@@ -22,9 +22,6 @@ public class RequestContext {
 
     @Autowired
     private QuestContainer questContainer;
-
-    @Getter
-    private List<AbstractEvent> events = new ArrayList<>();
     @Getter
     private Map<String, String> questStates = new HashMap<>();
 

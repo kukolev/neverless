@@ -8,11 +8,9 @@ import neverless.domain.mapobject.AbstractMapObject;
 import neverless.domain.mapobject.Player;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
-import neverless.util.EventFactory;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -29,8 +27,6 @@ public class LocalMapServiceTest {
     private PlayerRepository playerRepository;
     @Mock
     private MapObjectsRepository mapObjRepository;
-    @Mock
-    private EventFactory eventFactory;
     @InjectMocks
     private LocalMapService localMapService;
 

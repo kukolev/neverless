@@ -101,16 +101,16 @@ public class CommandRouterService {
         questService.generateQuestEvents();
     }
 
-    public void cmdInventoryEquipRightHand(Integer weaponId) {
+    public void cmdInventoryEquipRightHand(Integer itemId) {
         requestContext.initQuestStates();
-        inventoryService.equipRightHand(weaponId);
+        inventoryService.equipRightHand(itemId);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
-    public void cmdInventoryEquipLeftHand(Integer weaponId) {
+    public void cmdInventoryEquipLeftHand(Integer itemId) {
         requestContext.initQuestStates();
-        inventoryService.equipLeftHand(weaponId);
+        inventoryService.equipLeftHand(itemId);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }

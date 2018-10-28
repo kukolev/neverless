@@ -2,7 +2,7 @@ package neverless.domain.inventory;
 
 import lombok.Data;
 import neverless.domain.item.AbstractItem;
-import neverless.domain.item.weapon.AbstractWeapon;
+import neverless.domain.item.weapon.AbstractHandEquipment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class Bag {
         items.remove(item);
     }
 
-    public AbstractWeapon getWeaponByNumber(Integer itemNo) {
-        return (AbstractWeapon) items.get(itemNo);
+    public AbstractHandEquipment getWeaponByNumber(Integer itemNo) {
+        return (AbstractHandEquipment) items.get(itemNo);
     }
 }

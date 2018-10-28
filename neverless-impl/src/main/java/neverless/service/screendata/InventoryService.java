@@ -2,12 +2,13 @@ package neverless.service.screendata;
 
 import neverless.domain.inventory.Inventory;
 import neverless.domain.item.civil.AbstractCivilItem;
-import neverless.domain.item.weapon.AbstractWeapon;
+import neverless.domain.item.weapon.AbstractHandEquipment;
 import neverless.domain.mapobject.Player;
 import neverless.dto.screendata.inventory.InventoryScreenDataDto;
 import neverless.dto.screendata.inventory.ItemDto;
 import neverless.dto.screendata.inventory.WeaponDto;
 import neverless.repository.PlayerRepository;
+import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class InventoryService extends AbstractService {
 
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private EventContext eventContext;
+
 
     /**
      * Equips weapon in right hand.
@@ -30,9 +34,10 @@ public class InventoryService extends AbstractService {
     public void equipRightHand(Integer itemNo) {
         clearRightHand();
         Inventory inventory = loadInventory();
-        AbstractWeapon newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
+        AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
         inventory.getEquipment().setRightHand(newWeapon);
         inventory.getBag().remove(newWeapon);
+        eventContext.addInventoryRightHandEquipEvent();
     }
 
     /**
@@ -44,9 +49,10 @@ public class InventoryService extends AbstractService {
     public void equipLeftHand(Integer itemNo) {
         clearLeftHand();
         Inventory inventory = loadInventory();
-        AbstractWeapon newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
+        AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
         inventory.getEquipment().setLeftHand(newWeapon);
         inventory.getBag().remove(newWeapon);
+        eventContext.addInventoryLeftHandEquipEvent();
     }
 
     /**
@@ -54,7 +60,7 @@ public class InventoryService extends AbstractService {
      */
     public void clearRightHand() {
         Inventory inventory = loadInventory();
-        AbstractWeapon curWeapon = inventory.getEquipment().getRightHand();
+        AbstractHandEquipment curWeapon = inventory.getEquipment().getRightHand();
         if (curWeapon != null) {
             inventory.getBag().addLast(curWeapon);
         }
@@ -66,7 +72,7 @@ public class InventoryService extends AbstractService {
      */
     public void clearLeftHand() {
         Inventory inventory = loadInventory();
-        AbstractWeapon curWeapon = inventory.getEquipment().getLeftHand();
+        AbstractHandEquipment curWeapon = inventory.getEquipment().getLeftHand();
         if (curWeapon != null) {
             inventory.getBag().addLast(curWeapon);
         }
@@ -95,8 +101,8 @@ public class InventoryService extends AbstractService {
                         ItemDto dto = mapItemToDto((AbstractCivilItem) item);
                         itemsDto.put(index, dto);
                     }
-                    if (item instanceof AbstractWeapon) {
-                        WeaponDto dto = mapWeaponToDto((AbstractWeapon) item);
+                    if (item instanceof AbstractHandEquipment) {
+                        WeaponDto dto = mapWeaponToDto((AbstractHandEquipment) item);
                         weaponsDto.put(index, dto);
                     }
                 });
@@ -110,7 +116,7 @@ public class InventoryService extends AbstractService {
      * Maps and returns DTO for weapon.
      * @param weapon    weapon that should be mapped to DTO.
      */
-    private WeaponDto mapWeaponToDto(AbstractWeapon weapon) {
+    private WeaponDto mapWeaponToDto(AbstractHandEquipment weapon) {
         if (weapon == null) return new WeaponDto();
         return new WeaponDto()
                 .setTitle(weapon.getTitle())

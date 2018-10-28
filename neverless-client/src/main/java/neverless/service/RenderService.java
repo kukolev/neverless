@@ -116,6 +116,6 @@ public class RenderService {
     }
 
     private void renderInventory() {
-        // todo: implement
+        System.out.println(curResponse.getInventoryScreenDataDto());
     }
 }

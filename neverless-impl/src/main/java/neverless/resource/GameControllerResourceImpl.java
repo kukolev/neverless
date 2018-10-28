@@ -79,16 +79,16 @@ public class GameControllerResourceImpl implements GameControllerResource {
     }
 
     @Override
-    @PostMapping("/inventory_equip_right_hand/weaponId/{weaponId}")
-    public ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer weaponId) {
-        commandRouterService.cmdInventoryEquipRightHand(weaponId);
+    @PostMapping("/inventory_equip_right_hand/itemId/{itemId}")
+    public ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer itemId) {
+        commandRouterService.cmdInventoryEquipRightHand(itemId);
         return commandRouterService.getState();
     }
 
     @Override
-    @PostMapping("/inventory_equip_left_hand/weaponId/{weaponId}")
-    public ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer weaponId) {
-        commandRouterService.cmdInventoryEquipLeftHand(weaponId);
+    @PostMapping("/inventory_equip_left_hand/itemId/{itemId}")
+    public ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId) {
+        commandRouterService.cmdInventoryEquipLeftHand(itemId);
         return commandRouterService.getState();
     }
 }
