@@ -52,4 +52,8 @@ public class EventContext {
     public void addInventoryLeftHandEquipEvent() {
         events.add(new InventoryLeftHandEquipEvent());
     }
+
+    public void addPortalEnterEvent(String location) {
+        events.add(new PortalEnterEvent());
+    }
 }

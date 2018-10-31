@@ -3,17 +3,15 @@ package neverless.domain.event;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.dto.screendata.event.EventType;
-import neverless.dto.screendata.quest.QuestState;
+
+import static neverless.dto.screendata.event.EventType.PORTAL_ENTER_EVENT;
 
 @Data
 @Accessors(chain = true)
-public class JournalUpdateEvent extends AbstractEvent {
-
-    private String questTitle;
-    private QuestState state;
+public class PortalEnterEvent extends AbstractEvent {
 
     @Override
     public EventType getEventType() {
-        return EventType.JOURNAL_UPDATED_EVENT;
+        return PORTAL_ENTER_EVENT;
     }
 }

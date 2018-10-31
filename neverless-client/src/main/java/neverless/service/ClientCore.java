@@ -26,11 +26,11 @@ public class ClientCore {
             shortCommandName = br.readLine();
 
             CommandMapping commandMapping = CommandMapping.findByShortName(shortCommandName);
-            System.out.println("Game CommandMapping = " + commandMapping.getShortName());
             if (commandMapping == null) {
                 System.out.println("CommandMapping not found, try again");
                 continue;
             }
+            System.out.println("Game CommandMapping = " + commandMapping.getShortName());
 
             switch (commandMapping) {
                 case CLIENT_EXIT: System.exit(0);

@@ -36,14 +36,6 @@ public class LocalMapServiceTest {
     }
 
     @Test
-    public void test() {
-        when(playerRepository.get(eq("Vova"))).thenReturn(createTestPlayer(100, 100));
-        when(mapObjRepository.findAll()).thenReturn(createTestMapObjects());
-        LocalMapScreenDataDto localMapScreenData = localMapService.getScreenData();
-        System.out.println(localMapScreenData);
-    }
-
-    @Test
     public void testRenderInitialMap() throws Exception {
         PlayerRepository playerRepository = new PlayerRepository();
         playerRepository.save(createTestPlayer(60, 50));

@@ -24,7 +24,7 @@ public abstract class AbstractRepository<V extends AbstractGameObject> {
         map.put(key, value);
     }
 
-    public List<V> findAll() {
+    public List<V> findAllObjects() {
         return new ArrayList<>(map.values());
     }
 

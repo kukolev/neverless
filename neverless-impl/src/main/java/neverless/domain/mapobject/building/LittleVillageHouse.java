@@ -1,5 +1,10 @@
 package neverless.domain.mapobject.building;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
 public final class LittleVillageHouse extends AbstractBuilding {
 
     public LittleVillageHouse() {

@@ -12,8 +12,8 @@ public class NpcService extends AbstractService {
     @Autowired
     private MapObjectsRepository mapObjectsRepository;
 
-    public AbstractNpc getNpcAtPosition(int npcX, int npcY) {
-        AbstractMapObject object = mapObjectsRepository.findAll()
+    public AbstractNpc getNpcAtPosition(int npcX, int npcY, String location) {
+        AbstractMapObject object = mapObjectsRepository.findAllByLocation(location)
                 .stream()
                 .filter(o -> o.getX() == npcX && o.getY() == npcY)
                 .findFirst()

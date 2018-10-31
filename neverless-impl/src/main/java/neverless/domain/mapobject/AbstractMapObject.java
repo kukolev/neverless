@@ -14,6 +14,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
      private int width = 1;
      private int height = 1;
      private int zOrder = 1;
+     private String location;
      private String signature;
 
      public final void register(MapObjectsRepository repository) {

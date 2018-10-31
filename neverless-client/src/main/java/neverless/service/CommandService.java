@@ -18,20 +18,14 @@ public class CommandService {
 
     public void execute(CommandMapping commandMapping) {
 
-        // todo: handle http status instead this try ... catch
-        int tryCounter = 0;
-        while(tryCounter < 100) {
-            try {
-                ResponseEntity<ResponseDto> response = commandMapping.getReader().read(restTemplate);
-                tryCounter = 100;
-                if (response.getStatusCode().equals(HttpStatus.OK)) {
-                    renderService.setCurResponse(response.getBody());
-                    renderService.render();
-                }
-            } catch (Exception e) {
-                System.out.println(e);
+        try {
+            ResponseEntity<ResponseDto> response = commandMapping.getReader().read(restTemplate);
+            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                renderService.setCurResponse(response.getBody());
+                renderService.render();
             }
-            tryCounter++;
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 }

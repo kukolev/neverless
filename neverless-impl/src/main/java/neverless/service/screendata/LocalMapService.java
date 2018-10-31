@@ -2,6 +2,7 @@ package neverless.service.screendata;
 
 import neverless.domain.mapobject.AbstractMapObject;
 import neverless.domain.mapobject.Player;
+import neverless.domain.mapobject.portal.AbstractPortal;
 import neverless.dto.command.Direction;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
@@ -42,15 +43,40 @@ public class LocalMapService extends AbstractService {
             case LEFT: newX--; break;
             case RIGHT: newX++; break;
         }
+        mapGo(newX, newY, direction);
+    }
 
-        if (isPassable(newX, newY)) {
-            player.setX(newX);
-            player.setY(newY);
+    private void mapGo(int x, int y, Direction direction) {
+        Player player = playerRepository.get(PLAYER_ID);
 
-            eventContext.addMapGoEvent(direction);
+        if (isPassable(x, y, player.getLocation())) {
+            if (isPortal(x, y, player.getLocation())) {
+                doPortalEnter(player, x, y);
+            } else {
+                doMoving(player, x, y, direction);
+            }
         } else {
-            eventContext.addMapGoImpossibleEvent();
+            doImpossibleMove();
         }
+    }
+
+    private void doMoving(Player player, int x, int y, Direction direction) {
+        player.setX(x);
+        player.setY(y);
+        eventContext.addMapGoEvent(direction);
+    }
+
+    private void doImpossibleMove() {
+        eventContext.addMapGoImpossibleEvent();
+    }
+
+    private void doPortalEnter(Player player, int x, int y) {
+        AbstractPortal portal = (AbstractPortal) getMapObjectAtPosition(x, y, player.getLocation());
+        player
+                .setLocation(portal.getDestination())
+                .setX(portal.getDestX())
+                .setY(portal.getDestY());
+        eventContext.addPortalEnterEvent(portal.getDestination());
     }
 
     public LocalMapScreenDataDto getScreenData() {
@@ -62,7 +88,7 @@ public class LocalMapService extends AbstractService {
         final int screenX1 = player.getX() - LOCAL_MAP_PLAYER_X;
         final int screenY1 = player.getY() - LOCAL_MAP_PLAYER_Y;
 
-        List<AbstractMapObject> objects = getObjectsForRender();
+        List<AbstractMapObject> objects = getObjectsForRender(player.getLocation());
         objects.stream()
                 .sorted(Comparator.comparingInt(AbstractMapObject::getZOrder))
                 .forEach(obj -> {
@@ -84,9 +110,9 @@ public class LocalMapService extends AbstractService {
         return localMapScreenDataDto;
     }
 
-    private List<AbstractMapObject> getObjectsForRender() {
+    private List<AbstractMapObject> getObjectsForRender(String location) {
         List<AbstractMapObject> result = new ArrayList<>();
-        List<AbstractMapObject> mapObjects = mapObjRepository.findAll();
+        List<AbstractMapObject> mapObjects = mapObjRepository.findAllByLocation(location);
 
         // TODO: Add real filtration for objects which should render
         result.addAll(mapObjects);
@@ -103,13 +129,18 @@ public class LocalMapService extends AbstractService {
         return localMapScreenDataDto;
     }
 
-    private boolean isPassable(int x, int y) {
-        AbstractMapObject mapObject = getMapObjectAtPosition(x, y);
+    private boolean isPassable(int x, int y, String location) {
+        AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
         return (mapObject == null || mapObject.isPassable());
     }
 
-    private AbstractMapObject getMapObjectAtPosition(int x, int y) {
-        return mapObjRepository.findAll()
+    private boolean isPortal(int x, int y, String location) {
+        AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
+        return mapObject instanceof AbstractPortal;
+    }
+
+    private AbstractMapObject getMapObjectAtPosition(int x, int y, String location) {
+        return mapObjRepository.findAllByLocation(location)
                 .stream()
                 .filter(object -> (object.getX() == x) && (object.getY() == y))
                 .findFirst()

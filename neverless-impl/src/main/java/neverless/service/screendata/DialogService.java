@@ -27,8 +27,10 @@ public class DialogService extends AbstractService {
     private EventContext eventContext;
 
     public void dialogStart(int npcX, int npcY) {
+        Player player = playerRepository.get();
+
         // find NPC
-        AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY);
+        AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
 
         // get NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -37,7 +39,6 @@ public class DialogService extends AbstractService {
         NpcPhrase npcPhrase = getStartPhrase(dialog);
 
         // set data to Player
-        Player player = playerRepository.get();
         player.setDialog(dialog);
         player.setNpcPhrase(npcPhrase);
 
