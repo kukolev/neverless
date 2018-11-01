@@ -13,6 +13,11 @@ public class AbstractPortal extends AbstractMapObject {
     private Integer destY;
 
     @Override
+    public String getSignature() {
+        return "PORTAL_";
+    }
+
+    @Override
     public boolean isPassable() {
         return true;
     }

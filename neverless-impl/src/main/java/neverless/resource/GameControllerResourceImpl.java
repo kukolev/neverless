@@ -27,6 +27,12 @@ public class GameControllerResourceImpl implements GameControllerResource {
     }
 
     @Override
+    public ResponseDto cmdWait() {
+        commandRouterService.cmdWait();
+        return commandRouterService.getState();
+    }
+
+    @Override
     public ResponseDto cmdMoveDown() {
         commandRouterService.cmdMoveDown();
         return commandRouterService.getState();

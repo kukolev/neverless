@@ -7,9 +7,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public final class FirTree extends AbstractTree {
 
-    public FirTree() {
-        setWidth(1);
-        setHeight(1);
-        setSignature("FIRTREE_");
+    @Override
+    public String getSignature() {
+        return "FIRTREE_";
     }
 }

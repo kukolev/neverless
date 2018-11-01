@@ -8,9 +8,11 @@ import lombok.experimental.Accessors;
 public final class Road extends AbstractRoad {
 
     public Road() {
-        setHeight(1);
-        setWidth(1);
         setZOrder(0);
-        setSignature("ROAD_");
+    }
+
+    @Override
+    public String getSignature() {
+        return "ROAD_";
     }
 }

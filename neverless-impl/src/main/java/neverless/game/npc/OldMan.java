@@ -23,7 +23,11 @@ public final class OldMan extends AbstractNpc {
     @Override
     protected void initProperties() {
         setUniqueName(OLDMAN_UNIQUENAME);
-        setSignature(OLDMAN_SIGNATURE);
+    }
+
+    @Override
+    public String getSignature() {
+        return OLDMAN_SIGNATURE;
     }
 
     @Override

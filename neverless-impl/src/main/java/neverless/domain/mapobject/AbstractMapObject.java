@@ -11,11 +11,19 @@ public abstract class AbstractMapObject extends AbstractGameObject {
 
      private int x;
      private int y;
-     private int width = 1;
-     private int height = 1;
+
      private int zOrder = 1;
      private String location;
-     private String signature;
+
+     public int getWidth() {
+          return 1;
+     }
+
+     public int getHeight() {
+         return 1;
+     }
+
+     public abstract String getSignature();
 
      public final void register(MapObjectsRepository repository) {
           repository.save(this);

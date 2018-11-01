@@ -7,7 +7,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public final class StoneWall extends AbstractWall {
 
-    public StoneWall() {
-        setSignature("STONE_WALL_");
+    @Override
+    public String getSignature() {
+        return "STONE_WALL_";
     }
 }

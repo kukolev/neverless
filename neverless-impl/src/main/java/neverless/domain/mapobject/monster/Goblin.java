@@ -8,9 +8,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public final class Goblin extends AbstractMonster {
 
-    public Goblin() {
-        setHeight(1);
-        setWidth(1);
-        setSignature("GOBLIN_");
+    @Override
+    public String getSignature() {
+        return "GOBLIN_";
     }
 }

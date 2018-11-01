@@ -51,8 +51,6 @@ public class LocalMapServiceTest {
         FirTree tree = new FirTree();
         tree.setX(96);
         tree.setY(96);
-        tree.setHeight(2);
-        tree.setWidth(2);
 
         result.add(tree);
         return result;

@@ -14,6 +14,10 @@ public interface GameControllerResource {
     @PostMapping("/start_new_game")
     ResponseDto cmdStartNewGame();
 
+    @PostMapping("/wait")
+    ResponseDto cmdWait();
+
+
     @PostMapping("/map_go_down")
     ResponseDto cmdMoveDown();
 

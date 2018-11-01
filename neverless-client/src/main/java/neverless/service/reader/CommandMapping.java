@@ -8,6 +8,7 @@ public enum CommandMapping {
 
     SERVER_GLOBAL_REFRESH( null, "rfr"),
     SERVER_GLOBAL_MENU_START_NEW_GAME( new StartNewGameCommandReader(), "sng"),
+    SERVER_GLOBAL_WAIT(new WaitCommandReader(), "wait"),
 
     SERVER_LOCAL_MAP_GO_LEFT( new MapGoLeftCommandReader(), "mgl"),
     SERVER_LOCAL_MAP_GO_RIGHT( new MapGoRightCommandReader(), "mgr"),

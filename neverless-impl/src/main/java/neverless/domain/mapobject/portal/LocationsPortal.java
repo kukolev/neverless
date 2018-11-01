@@ -7,9 +7,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class LocationsPortal extends AbstractPortal{
 
-    public LocationsPortal() {
-        setHeight(1);
-        setWidth(1);
-        setSignature("DOOR_DUNGEON");
+    @Override
+    public String getSignature() {
+        return "DOOR_DUNGEON";
     }
 }

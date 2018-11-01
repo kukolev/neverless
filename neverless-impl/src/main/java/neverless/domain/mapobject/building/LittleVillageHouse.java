@@ -7,10 +7,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public final class LittleVillageHouse extends AbstractBuilding {
 
-    public LittleVillageHouse() {
-        super();
-        setHeight(2);
-        setWidth(2);
-        setSignature("BUILDING_001_");
+    @Override
+    public String getSignature() {
+        return "BUILDING_001_";
+    }
+
+    @Override
+    public int getWidth() {
+        return 2;
+    }
+
+    @Override
+    public int getHeight() {
+        return 2;
     }
 }

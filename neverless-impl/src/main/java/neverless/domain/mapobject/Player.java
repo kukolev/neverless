@@ -16,9 +16,8 @@ public class Player extends AbstractMapObject {
 
     private Inventory inventory = new Inventory();
 
-    public Player() {
-        setWidth(1);
-        setHeight(1);
-        setSignature("PLAYER_");
+    @Override
+    public String getSignature() {
+        return "PLAYER_";
     }
 }

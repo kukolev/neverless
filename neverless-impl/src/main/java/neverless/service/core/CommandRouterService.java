@@ -39,10 +39,13 @@ public class CommandRouterService {
     // todo: DRY
 
     public void cmdStartNewGame() {
-        //requestContext.initQuestStates();
         newGameService.startNewGame();
-        //aiService.handleEvents();
-        //questService.generateQuestEvents();
+    }
+
+    public void cmdWait() {
+        requestContext.initQuestStates();
+        aiService.handleEvents();
+        questService.generateQuestEvents();
     }
 
     public void cmdMoveDown() {
