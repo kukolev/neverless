@@ -1,3 +1,19 @@
 spring:
   aop:
     proxy-target-class: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/neverless?currentSchema=game
+    username: postgres
+    password: 1
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      show-sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false

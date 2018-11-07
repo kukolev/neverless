@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameControllerResourceImpl implements GameControllerResource {
 
     private CommandRouterService commandRouterService;
-    private LocalMapService localMapService;
 
     @Override
     public ResponseDto getState() {

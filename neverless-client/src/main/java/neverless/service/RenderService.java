@@ -34,6 +34,7 @@ public class RenderService {
             case EVENTS: renderEvents(); break;
             case INVENTORY: renderInventory(); break;
             case MANUAL: renderManual(); break;
+            case RESPONSE: renderResponse(); break;
         }
     }
 
@@ -51,7 +52,7 @@ public class RenderService {
     }
 
     private void renderCommands() {
-        System.out.println("[1 - Local map]  [2 - Inventory]  [3 - Journal]  [8 - Dialog]  [9 - Events]  [0 - Manual]");
+        System.out.println("[1 - Local map]  [2 - Inventory]  [3 - Journal]  [7 - Dialog]  [8 - Events]  [9 - Manual]  [0 - Last Response]");
         System.out.println();
     }
 
@@ -113,6 +114,10 @@ public class RenderService {
         if (quests.isEmpty()) {
             System.out.println("--empty--");
         }
+    }
+
+    private void renderResponse() {
+        System.out.println(curResponse);
     }
 
     private void renderInventory() {

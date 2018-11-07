@@ -3,6 +3,7 @@ package neverless.domain.dialog.quest;
 import neverless.domain.mapobject.AbstractMapObject;
 import neverless.repository.MapObjectsRepository;
 import neverless.dto.screendata.quest.QuestState;
+import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -16,6 +17,8 @@ public abstract class AbstractQuest {
 
     @Autowired
     private MapObjectsRepository repository;
+    @Autowired
+    private SessionUtil sessionUtil;
 
     public abstract String getTitle();
 
@@ -64,17 +67,17 @@ public abstract class AbstractQuest {
     public abstract QuestReward getReward();
 
     protected final Boolean getParamBool(String objName, String paramName) {
-        AbstractMapObject object = repository.get(objName);
+        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
         return object.getParamBool(paramName);
     }
 
     public final Integer getParamInt(String objName, String paramName) {
-        AbstractMapObject object = repository.get(objName);
+        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
         return object.getParamInt(paramName);
     }
 
     public final String getParamStr(String objName, String paramName) {
-        AbstractMapObject object = repository.get(objName);
+        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
         return object.getParamStr(paramName);
     }
 

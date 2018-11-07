@@ -1,13 +1,19 @@
 package neverless.service.core;
 
+import neverless.domain.mapobject.Player;
 import neverless.dto.command.Direction;
+import neverless.repository.PlayerRepository;
 import neverless.service.screendata.*;
 import neverless.service.ai.AiService;
 import neverless.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class CommandRouterService {
 
     @Autowired
@@ -26,14 +32,24 @@ public class CommandRouterService {
     private NewGameService newGameService;
     @Autowired
     private RequestContext requestContext;
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @PostConstruct
+    public void init() {
+   //     cmdStartNewGame();
+    }
 
     public ResponseDto getState() {
+        Player player = playerRepository.get();
+
         return new ResponseDto()
                 .setLocalMapScreenData(localMapService.getScreenData())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())
                 .setEventsScreenDataDto(eventService.getEventScreenData())
-                .setInventoryScreenDataDto(inventoryService.getScreenData());
+                .setInventoryScreenDataDto(inventoryService.getScreenData())
+                .setTurnNumber(player.incAndGetTurnNumber());
     }
 
     // todo: DRY

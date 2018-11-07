@@ -9,5 +9,6 @@ public enum Screen {
     FIGHT,
     JOURNAL,
     EVENTS,
-    MANUAL
+    MANUAL,
+    RESPONSE
 }

@@ -11,6 +11,7 @@ import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +23,7 @@ import static neverless.Constants.LOCAL_MAP_WIDTH;
 import static neverless.Constants.PLAYER_ID;
 
 @Service
+@Transactional
 public class LocalMapService extends AbstractService {
 
     @Autowired
@@ -32,7 +34,7 @@ public class LocalMapService extends AbstractService {
     private EventContext eventContext;
 
     public void mapGo(Direction direction) {
-        Player player = playerRepository.get(PLAYER_ID);
+        Player player = playerRepository.get();
 
         int newX = player.getX();
         int newY = player.getY();
@@ -47,17 +49,17 @@ public class LocalMapService extends AbstractService {
     }
 
     private void mapGo(int x, int y, Direction direction) {
-        Player player = playerRepository.get(PLAYER_ID);
+        Player player = playerRepository.get();
 
-        if (isPassable(x, y, player.getLocation())) {
-            if (isPortal(x, y, player.getLocation())) {
-                doPortalEnter(player, x, y);
-            } else {
-                doMoving(player, x, y, direction);
-            }
-        } else {
-            doImpossibleMove();
+        if (isPortal(x, y, player.getLocation())) {
+            doPortalEnter(player, x, y);
+            return;
         }
+        if (isPassable(x, y, player.getLocation())) {
+            doMoving(player, x, y, direction);
+            return;
+        }
+        doImpossibleMove();
     }
 
     private void doMoving(Player player, int x, int y, Direction direction) {
@@ -81,7 +83,7 @@ public class LocalMapService extends AbstractService {
 
     public LocalMapScreenDataDto getScreenData() {
         LocalMapScreenDataDto localMapScreenDataDto = createCleanMap();
-        Player player = playerRepository.get(PLAYER_ID);
+        Player player = playerRepository.get();
         if (player == null) {
             return localMapScreenDataDto;
         }
@@ -129,9 +131,12 @@ public class LocalMapService extends AbstractService {
         return localMapScreenDataDto;
     }
 
-    private boolean isPassable(int x, int y, String location) {
+    public boolean isPassable(int x, int y, String location) {
+        Player player = playerRepository.get();
+        boolean isPlayer = player.getX().equals(x) && player.getY().equals(y);
         AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
-        return (mapObject == null || mapObject.isPassable());
+
+        return (!isPlayer) && (mapObject == null || mapObject.isPassable());
     }
 
     private boolean isPortal(int x, int y, String location) {

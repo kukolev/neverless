@@ -6,18 +6,31 @@ import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.inventory.Inventory;
 
+import javax.persistence.*;
+
 @Data
 @Accessors(chain = true)
+@Entity
 public class Player extends AbstractMapObject {
 
-    // Dialog state
+    @Transient
     private Dialog dialog;
+
+    @Transient
     private NpcPhrase npcPhrase;
 
-    private Inventory inventory = new Inventory();
+    @OneToOne
+    private Inventory inventory;
+
+    @Column
+    private Integer turnNumber = 0;
 
     @Override
     public String getSignature() {
         return "PLAYER_";
+    }
+
+    public int incAndGetTurnNumber() {
+        return ++turnNumber;
     }
 }

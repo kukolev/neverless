@@ -3,7 +3,7 @@ package neverless.domain.mapobject.monster;
 public class GoblinFactory extends AbstractEnemyFactory {
 
     @Override
-    public AbstractMonster create() {
+    public AbstractEnemy create() {
         return new Goblin();
     }
 }

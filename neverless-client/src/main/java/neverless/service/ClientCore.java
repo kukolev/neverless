@@ -40,6 +40,7 @@ public class ClientCore {
                 case CLIENT_VIEW_DIALOG: render(Screen.DIALOG); break;
                 case CLIENT_VIEW_EVENTS: render(Screen.EVENTS); break;
                 case CLIENT_VIEW_MANUAL: render(Screen.MANUAL); break;
+                case CLIENT_VIEW_RESPONSE: render(Screen.RESPONSE); break;
                 default: commandService.execute(commandMapping);
             }
         }

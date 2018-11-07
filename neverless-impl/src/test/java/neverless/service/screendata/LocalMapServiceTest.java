@@ -8,6 +8,7 @@ import neverless.domain.mapobject.AbstractMapObject;
 import neverless.domain.mapobject.Player;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
+import neverless.repository.RespawnPointRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -27,23 +28,16 @@ public class LocalMapServiceTest {
     private PlayerRepository playerRepository;
     @Mock
     private MapObjectsRepository mapObjRepository;
+    @Mock
+    private RespawnPointRepository respawnPointRepository;
     @InjectMocks
     private LocalMapService localMapService;
+    @InjectMocks
+    private GameLoader dataLoader;
 
     @BeforeClass
     public void setup() {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void testRenderInitialMap() throws Exception {
-        PlayerRepository playerRepository = new PlayerRepository();
-        playerRepository.save(createTestPlayer(60, 50));
-        MapObjectsRepository mapObjRepository = new MapObjectsRepository();
-        GameLoader dataLoader = new GameLoader(mapObjRepository, playerRepository);
-        dataLoader.createNewGame();
-        LocalMapScreenDataDto localMapScreenData = localMapService.getScreenData();
-        System.out.println(localMapScreenData);
     }
 
     private List<AbstractMapObject> createTestMapObjects() {

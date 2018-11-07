@@ -2,8 +2,9 @@ package neverless.service.core;
 
 import lombok.Getter;
 import neverless.domain.dialog.quest.AbstractQuest;
-import neverless.domain.event.AbstractEvent;
+import neverless.domain.mapobject.Player;
 import neverless.game.quest.QuestContainer;
+import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -21,11 +22,13 @@ import java.util.Map;
 public class RequestContext {
 
     @Autowired
+    private PlayerRepository playerRepository;
+    @Autowired
     private QuestContainer questContainer;
     @Getter
     private Map<String, String> questStates = new HashMap<>();
 
-    public void initQuestStates() {
+    void initQuestStates() {
         questContainer.findAll()
                 .forEach(q -> questStates.put(q.getQuestId(), q.getJournalHash()));
     }
@@ -41,5 +44,10 @@ public class RequestContext {
             }
         });
         return ids;
+    }
+
+    public int getTurnNumber() {
+        Player player = playerRepository.get();
+        return player.getTurnNumber();
     }
 }

@@ -1,35 +1,30 @@
 package neverless.repository;
 
 import neverless.domain.AbstractGameObject;
+import neverless.domain.GameObjectId;
+import neverless.repository.util.InjectionUtil;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static neverless.Constants.CURRENT_SESSION_ID;
 
 @Repository
-public abstract class AbstractRepository<V extends AbstractGameObject> {
-    private Map<String, V> map = new ConcurrentHashMap<>();
+public interface AbstractRepository<V extends AbstractGameObject> extends JpaRepository<V, GameObjectId>, InjectionUtil {
 
-    public V get(String uniqueName) {
-        String key = getCurrentSessionId() + "_" +  uniqueName;
-        return map.get(key);
+    default V simpleGet(String uniqueName) {
+        return getOne(new GameObjectId(uniqueName, getSessionUtil().getCurrentSessionId()));
     }
 
-    public void save(V value) {
-        String key = getCurrentSessionId() + "_" + value.getUniqueName();
-        map.put(key, value);
+    default V simpleSave(V value) {
+        if (value.getId().getSession() == null) {
+            value.getId().setSession(getSessionUtil().getCurrentSessionId());
+        }
+
+        return save(value);
     }
 
-    public List<V> findAllObjects() {
-        return new ArrayList<>(map.values());
-    }
-
-    private String getCurrentSessionId() {
-        // todo: instead constant we should return id of player has been logon.
-        return CURRENT_SESSION_ID;
+    default List<V> findAllObjects() {
+        return findAll();
     }
 }

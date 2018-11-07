@@ -3,10 +3,13 @@ package neverless.domain.mapobject.monster;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Entity;
+
 
 @Data
 @Accessors(chain = true)
-public final class Goblin extends AbstractMonster {
+@Entity
+public final class Goblin extends AbstractEnemy {
 
     @Override
     public String getSignature() {

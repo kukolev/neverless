@@ -8,11 +8,14 @@ import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
 import neverless.domain.mapobject.npc.AbstractNpc;
 import neverless.util.DialogBuilder;
 
+import javax.persistence.Entity;
+
 import static neverless.util.DialogBuilder.ALWAYS_AVAILABLE;
 
 
 @Data
 @Accessors(chain = true)
+@Entity
 public final class OldMan extends AbstractNpc {
 
     public static final String OLDMAN_UNIQUENAME = "Old Man";

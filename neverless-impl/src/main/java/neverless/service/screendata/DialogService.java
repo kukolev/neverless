@@ -12,9 +12,11 @@ import neverless.service.core.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class DialogService extends AbstractService {
 
     @Autowired
@@ -32,7 +34,7 @@ public class DialogService extends AbstractService {
         // find NPC
         AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
 
-        // get NPC's dialog
+        // simpleGet NPC's dialog
         Dialog dialog = npc.getDialog();
 
         // search for NPC's phrase (use predicates)
@@ -42,7 +44,7 @@ public class DialogService extends AbstractService {
         player.setDialog(dialog);
         player.setNpcPhrase(npcPhrase);
 
-        eventContext.addDialogStartEvent(npc.getUniqueName(), npcX, npcY);
+        eventContext.addDialogStartEvent(npc.getId().getUniqueName(), npcX, npcY);
     }
 
     private NpcPhrase getStartPhrase(Dialog dialog) {

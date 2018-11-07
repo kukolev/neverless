@@ -6,11 +6,16 @@ import lombok.experimental.Accessors;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.mapobject.AbstractMapObject;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
 @Accessors(chain = true)
+@Entity
 public abstract class AbstractNpc extends AbstractMapObject {
 
     @Setter
     @Getter
+    @Transient
     private Dialog dialog = new Dialog();
 
     public AbstractNpc() {

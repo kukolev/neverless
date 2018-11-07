@@ -3,15 +3,26 @@ package neverless.domain;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
 @Accessors(chain = true)
-public class AbstractGameObject {
+@Entity
+public abstract class AbstractGameObject implements Serializable {
 
-    private Map<String, Object> params = new HashMap<>();
-    private String uniqueName;
+    @ElementCollection(targetClass=String.class)
+    @Column
+    private Map<String, String> params = new HashMap<>();
+
+    @EmbeddedId
+    private GameObjectId id = new GameObjectId(null, null);
+
+    public void setUniqueName(String uniqueName) {
+        id.setUniqueName(uniqueName);
+    }
 
     public String getParamStr(String key) {
         Object val = params.get(key);
@@ -38,6 +49,6 @@ public class AbstractGameObject {
     }
 
     public void setParam(String key, Object val) {
-        params.put(key, val);
+        params.put(key, val.toString());
     }
 }

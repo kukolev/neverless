@@ -1,5 +1,6 @@
 package neverless.service.reader;
 
+// todo: .* should be changed to list particular of classes
 import neverless.service.reader.impl.*;
 
 import java.util.Arrays;
@@ -25,9 +26,11 @@ public enum CommandMapping {
     CLIENT_VIEW_LOCAL_MAP(null, "1"),
     CLIENT_VIEW_INVENTORY(null, "2"),
     CLIENT_VIEW_JOURNAL(null, "3"),
-    CLIENT_VIEW_DIALOG(null, "8"),
-    CLIENT_VIEW_EVENTS(null, "9"),
-    CLIENT_VIEW_MANUAL(null, "0");
+    CLIENT_VIEW_DIALOG(null, "7"),
+    CLIENT_VIEW_EVENTS(null, "8"),
+    CLIENT_VIEW_MANUAL(null, "9"),
+    CLIENT_VIEW_RESPONSE(null, "0");
+
 
     CommandMapping(CommandReader reader, String shortName) {
         this.reader = reader;
