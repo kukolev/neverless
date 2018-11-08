@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)

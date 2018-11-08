@@ -1,7 +1,17 @@
 package neverless.service.reader;
 
-// todo: .* should be changed to list particular of classes
-import neverless.service.reader.impl.*;
+import neverless.service.reader.impl.DialogSelectPhraseCommandReader;
+import neverless.service.reader.impl.DialogStartCommandReader;
+import neverless.service.reader.impl.InventoryClearLeftHandCommandReader;
+import neverless.service.reader.impl.InventoryClearRightHandCommandReader;
+import neverless.service.reader.impl.InventoryEquipLeftHandCommandReader;
+import neverless.service.reader.impl.InventoryEquipRightHandCommandReader;
+import neverless.service.reader.impl.MapGoDownCommandReader;
+import neverless.service.reader.impl.MapGoLeftCommandReader;
+import neverless.service.reader.impl.MapGoRightCommandReader;
+import neverless.service.reader.impl.MapGoUpCommandReader;
+import neverless.service.reader.impl.StartNewGameCommandReader;
+import neverless.service.reader.impl.WaitCommandReader;
 
 import java.util.Arrays;
 

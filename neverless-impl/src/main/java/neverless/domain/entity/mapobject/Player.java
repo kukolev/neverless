@@ -2,11 +2,11 @@ package neverless.domain.entity.mapobject;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.dialog.Dialog;
-import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.entity.inventory.Inventory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)

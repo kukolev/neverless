@@ -1,7 +1,15 @@
 package neverless.service.core;
 
 import lombok.Getter;
-import neverless.domain.event.*;
+import neverless.domain.event.AbstractEvent;
+import neverless.domain.event.DialogSelectPhraseEvent;
+import neverless.domain.event.DialogStartEvent;
+import neverless.domain.event.InventoryLeftHandEquipEvent;
+import neverless.domain.event.InventoryRightHandEquipEvent;
+import neverless.domain.event.JournalUpdateEvent;
+import neverless.domain.event.MapGoEvent;
+import neverless.domain.event.MapGoImpossibleEvent;
+import neverless.domain.event.PortalEnterEvent;
 import neverless.dto.command.Direction;
 import neverless.dto.screendata.quest.QuestState;
 import org.springframework.context.annotation.Scope;

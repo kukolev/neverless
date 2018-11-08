@@ -1,6 +1,5 @@
 package neverless.game;
 
-
 import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
@@ -19,8 +18,14 @@ import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.domain.entity.mapobject.building.LittleVillageHouse;
 import neverless.domain.entity.mapobject.building.LongVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
-import neverless.repository.*;
 
+import neverless.repository.BagRepository;
+import neverless.repository.EquipmentRepository;
+import neverless.repository.InventoryRepository;
+import neverless.repository.ItemRepository;
+import neverless.repository.MapObjectsRepository;
+import neverless.repository.PlayerRepository;
+import neverless.repository.RespawnPointRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

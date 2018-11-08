@@ -1,6 +1,9 @@
 package neverless.util;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class CoordinateUtils {
 

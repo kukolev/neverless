@@ -3,7 +3,9 @@ package neverless.domain.entity.inventory;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)

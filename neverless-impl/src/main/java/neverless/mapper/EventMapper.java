@@ -2,7 +2,7 @@ package neverless.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import neverless.domain.event.*;
+import neverless.domain.event.AbstractEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
