@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.mapobject.respawn.AbstractRespawnPoint;
+import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.repository.util.InjectionUtil;
 import org.springframework.stereotype.Repository;
 

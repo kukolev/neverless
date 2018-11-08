@@ -1,8 +1,8 @@
 package neverless.service.screendata;
 
-import neverless.domain.mapobject.AbstractMapObject;
-import neverless.domain.mapobject.Player;
-import neverless.domain.mapobject.portal.AbstractPortal;
+import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.dto.command.Direction;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
@@ -20,7 +20,6 @@ import static neverless.Constants.LOCAL_MAP_HEIGH;
 import static neverless.Constants.LOCAL_MAP_PLAYER_X;
 import static neverless.Constants.LOCAL_MAP_PLAYER_Y;
 import static neverless.Constants.LOCAL_MAP_WIDTH;
-import static neverless.Constants.PLAYER_ID;
 
 @Service
 @Transactional

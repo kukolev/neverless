@@ -1,11 +1,10 @@
 package neverless.service.screendata;
 
 
-import neverless.domain.mapobject.tree.FirTree;
-import neverless.dto.screendata.LocalMapScreenDataDto;
+import neverless.domain.entity.mapobject.tree.FirTree;
 import neverless.game.GameLoader;
-import neverless.domain.mapobject.AbstractMapObject;
-import neverless.domain.mapobject.Player;
+import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Player;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.repository.RespawnPointRepository;
@@ -13,13 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 
 public class LocalMapServiceTest {

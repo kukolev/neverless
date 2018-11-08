@@ -1,9 +1,9 @@
 package neverless.service.screendata;
 
-import neverless.domain.inventory.Inventory;
-import neverless.domain.item.civil.AbstractCivilItem;
-import neverless.domain.item.weapon.AbstractHandEquipment;
-import neverless.domain.mapobject.Player;
+import neverless.domain.entity.inventory.Inventory;
+import neverless.domain.entity.item.civil.AbstractCivilItem;
+import neverless.domain.entity.item.weapon.AbstractHandEquipment;
+import neverless.domain.entity.mapobject.Player;
 import neverless.dto.screendata.inventory.InventoryScreenDataDto;
 import neverless.dto.screendata.inventory.ItemDto;
 import neverless.dto.screendata.inventory.WeaponDto;

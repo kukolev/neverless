@@ -1,6 +1,6 @@
 package neverless.service.core;
 
-import neverless.domain.mapobject.Player;
+import neverless.domain.entity.mapobject.Player;
 import neverless.dto.command.Direction;
 import neverless.repository.PlayerRepository;
 import neverless.service.screendata.*;

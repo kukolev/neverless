@@ -1,9 +1,8 @@
 package neverless.service.screendata;
 
-import neverless.domain.GameObjectId;
-import neverless.domain.mapobject.Player;
-import neverless.domain.mapobject.monster.AbstractEnemy;
-import neverless.domain.mapobject.respawn.AbstractRespawnPoint;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.monster.AbstractEnemy;
+import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.repository.RespawnPointRepository;
@@ -18,9 +17,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
-import static java.lang.Math.abs;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
@@ -115,7 +112,7 @@ public class EnemyService extends AbstractService {
     }
 
     /**
-     * Changing position in aggressive mode.
+     * Changes position in aggressive mode.
      * Enemy should chase the player.
      *
      * @param enemy enemy that should chasing the player.
@@ -130,6 +127,11 @@ public class EnemyService extends AbstractService {
         return true;
     }
 
+    /**
+     * Calculates and returns next coordinate in LoS between player and enemy.
+     *
+     * @param enemy enemy.
+     */
     private Coordinate getNextCoordinatesForLos(AbstractEnemy enemy) {
         Player player = playerRepository.get();
         int playerX = player.getX();
@@ -137,7 +139,6 @@ public class EnemyService extends AbstractService {
         int enemyX = enemy.getX();
         int enemyY = enemy.getY();
 
-        // return getNextCoordinatesForLos point if there are no impases on LoS
         return CoordinateUtils.getNextCoordinatesForLos(playerX, playerY, enemyX, enemyY);
     }
 
@@ -147,7 +148,7 @@ public class EnemyService extends AbstractService {
      * @param enemy enemy that should attack the player.
      */
     private void attack(AbstractEnemy enemy) {
-
+        // todo: implement it.
     }
 
     public void respawn() {

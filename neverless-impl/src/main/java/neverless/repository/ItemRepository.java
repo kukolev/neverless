@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.item.AbstractItem;
+import neverless.domain.entity.item.AbstractItem;
 import neverless.repository.util.InjectionUtil;
 import org.springframework.stereotype.Repository;
 

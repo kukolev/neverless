@@ -1,6 +1,6 @@
 package neverless.util;
 
-import neverless.domain.GameObjectId;
+import neverless.domain.entity.GameObjectId;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

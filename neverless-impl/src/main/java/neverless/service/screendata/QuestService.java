@@ -1,7 +1,7 @@
 package neverless.service.screendata;
 
-import neverless.domain.dialog.quest.AbstractQuest;
-import neverless.game.quest.QuestContainer;
+import neverless.domain.quest.AbstractQuest;
+import neverless.domain.quest.QuestContainer;
 import neverless.dto.screendata.quest.QuestInfoDto;
 import neverless.dto.screendata.quest.QuestScreenDataDto;
 import neverless.service.core.EventContext;

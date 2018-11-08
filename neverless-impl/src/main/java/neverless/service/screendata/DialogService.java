@@ -3,12 +3,14 @@ package neverless.service.screendata;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.dialog.PlayerPhrase;
-import neverless.domain.mapobject.Player;
-import neverless.domain.mapobject.npc.AbstractNpc;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.DialogScreenDataDto;
+import neverless.service.core.DialogContext;
 import neverless.service.core.EventContext;
+import neverless.service.core.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +29,17 @@ public class DialogService extends AbstractService {
     private NpcService npcService;
     @Autowired
     private EventContext eventContext;
+    @Autowired
+    private DialogContext dialogContext;
+
+    private AbstractNpc nnn;
 
     public void dialogStart(int npcX, int npcY) {
         Player player = playerRepository.get();
 
         // find NPC
         AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
+        nnn = npc;
 
         // simpleGet NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -41,8 +48,8 @@ public class DialogService extends AbstractService {
         NpcPhrase npcPhrase = getStartPhrase(dialog);
 
         // set data to Player
-        player.setDialog(dialog);
-        player.setNpcPhrase(npcPhrase);
+        dialogContext.add(dialog);
+        dialogContext.add(npcPhrase);
 
         eventContext.addDialogStartEvent(npc.getId().getUniqueName(), npcX, npcY);
     }
@@ -57,8 +64,7 @@ public class DialogService extends AbstractService {
     }
 
     public DialogScreenDataDto getScreenData() {
-        Player player = playerRepository.get();
-        NpcPhrase npcPhrase = player.getNpcPhrase();
+        NpcPhrase npcPhrase = dialogContext.getNpcPhrase();
         if (npcPhrase == null) {
             return new DialogScreenDataDto();
         }
@@ -71,19 +77,19 @@ public class DialogService extends AbstractService {
     }
 
     public void selectPhrase(int phraseNumber) {
-        Player player = playerRepository.get();
-        NpcPhrase npcPhrase = player.getNpcPhrase();
+        NpcPhrase npcPhrase = dialogContext.getNpcPhrase();
         if (npcPhrase == null) {
             return;
         }
         PlayerPhrase playerPhrase = npcPhrase.getAnswers().get(phraseNumber);
         playerPhrase.getAnswerEvent().execute();
+        mapObjectsRepository.save(nnn);
         NpcPhrase nextNpcPhrase = playerPhrase.getNextNpcPhrase();
         if (nextNpcPhrase != null) {
-            player.setNpcPhrase(nextNpcPhrase);
+            dialogContext.add(nextNpcPhrase);
         } else {
-            player.setDialog(null);
-            player.setNpcPhrase(null);
+            dialogContext.clearDialog();
+            dialogContext.clearNpcPhrase();
         }
         eventContext.addDialogSelectPhraseEvent(phraseNumber);
     }

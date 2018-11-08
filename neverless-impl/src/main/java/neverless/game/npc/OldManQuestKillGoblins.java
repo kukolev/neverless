@@ -1,8 +1,8 @@
 package neverless.game.npc;
 
-import neverless.domain.dialog.quest.AbstractQuest;
-import neverless.domain.dialog.quest.QuestReward;
-import neverless.domain.dialog.quest.QuestStep;
+import neverless.domain.quest.AbstractQuest;
+import neverless.domain.quest.QuestReward;
+import neverless.domain.quest.QuestStep;
 import neverless.repository.MapObjectsRepository;
 import neverless.dto.screendata.quest.QuestState;
 import org.springframework.beans.factory.annotation.Autowired;

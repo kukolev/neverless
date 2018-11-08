@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.event.AbstractDialogEvent;
 import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
-import neverless.domain.mapobject.npc.AbstractNpc;
+import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.util.DialogBuilder;
 
 import javax.persistence.Entity;

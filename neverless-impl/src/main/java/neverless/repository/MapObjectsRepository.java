@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.repository.util.InjectionUtil;
 import org.springframework.stereotype.Repository;
 

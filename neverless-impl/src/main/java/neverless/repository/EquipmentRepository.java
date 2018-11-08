@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.inventory.Equipment;
+import neverless.domain.entity.inventory.Equipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

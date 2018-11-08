@@ -1,7 +1,7 @@
 package neverless.repository;
 
-import neverless.domain.AbstractGameObject;
-import neverless.domain.GameObjectId;
+import neverless.domain.entity.AbstractGameObject;
+import neverless.domain.entity.GameObjectId;
 import neverless.repository.util.InjectionUtil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

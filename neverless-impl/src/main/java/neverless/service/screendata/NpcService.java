@@ -1,7 +1,7 @@
 package neverless.service.screendata;
 
-import neverless.domain.mapobject.AbstractMapObject;
-import neverless.domain.mapobject.npc.AbstractNpc;
+import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.repository.MapObjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

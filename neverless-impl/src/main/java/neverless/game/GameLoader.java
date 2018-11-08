@@ -1,26 +1,29 @@
 package neverless.game;
 
 
-import neverless.domain.inventory.Bag;
-import neverless.domain.inventory.Equipment;
-import neverless.domain.inventory.Inventory;
-import neverless.domain.item.weapon.Sword;
-import neverless.domain.mapobject.Player;
-import neverless.domain.mapobject.building.AbstractBuilding;
-import neverless.domain.mapobject.monster.Goblin;
-import neverless.domain.mapobject.portal.LocationsPortal;
-import neverless.domain.mapobject.respawn.GoblinRespawnPoint;
-import neverless.domain.mapobject.wall.StoneWall;
+import neverless.domain.entity.inventory.Bag;
+import neverless.domain.entity.inventory.Equipment;
+import neverless.domain.entity.inventory.Inventory;
+import neverless.domain.entity.item.weapon.Sword;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.building.AbstractBuilding;
+import neverless.domain.entity.mapobject.monster.Goblin;
+import neverless.domain.entity.mapobject.portal.LocationsPortal;
+import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
+import neverless.domain.entity.mapobject.wall.StoneWall;
+import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
-import neverless.domain.mapobject.road.Road;
-import neverless.domain.mapobject.tree.FirTree;
-import neverless.domain.mapobject.building.LargeVillageHouse;
-import neverless.domain.mapobject.building.LittleVillageHouse;
-import neverless.domain.mapobject.building.LongVillageHouse;
+import neverless.domain.entity.mapobject.road.Road;
+import neverless.domain.entity.mapobject.tree.FirTree;
+import neverless.domain.entity.mapobject.building.LargeVillageHouse;
+import neverless.domain.entity.mapobject.building.LittleVillageHouse;
+import neverless.domain.entity.mapobject.building.LongVillageHouse;
+import neverless.game.npc.OldManQuestKillGoblins;
 import neverless.repository.*;
 
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -51,6 +54,10 @@ public class GameLoader {
     private RespawnPointRepository respawnPointRepository;
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private QuestContainer questContainer;
+    @Autowired
+    private ApplicationContext context;
 
     public void createNewGame() {
         createPlayer();
@@ -67,6 +74,7 @@ public class GameLoader {
         createPortalDungeon2Village();
         createDungeon();
         createRespawnPoint();
+        questContainer.add(context.getBean(OldManQuestKillGoblins.class));
     }
 
     private void createPlayer() {
@@ -231,8 +239,7 @@ public class GameLoader {
             .setX(51)
             .setY(51)
             .setLocation(LOCATION_VILLAGE);
-
-        oldMan.register(mapObjRepository);
+        mapObjRepository.simpleSave(oldMan);
     }
 
     private void createTreesMonster() {

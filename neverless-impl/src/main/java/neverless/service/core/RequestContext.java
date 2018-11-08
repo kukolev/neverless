@@ -1,9 +1,13 @@
 package neverless.service.core;
 
+import lombok.Data;
 import lombok.Getter;
-import neverless.domain.dialog.quest.AbstractQuest;
-import neverless.domain.mapobject.Player;
-import neverless.game.quest.QuestContainer;
+import lombok.Setter;
+import neverless.domain.dialog.Dialog;
+import neverless.domain.dialog.NpcPhrase;
+import neverless.domain.quest.AbstractQuest;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.quest.QuestContainer;
 import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

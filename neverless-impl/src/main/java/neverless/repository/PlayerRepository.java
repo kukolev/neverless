@@ -1,6 +1,6 @@
 package neverless.repository;
 
-import neverless.domain.mapobject.Player;
+import neverless.domain.entity.mapobject.Player;
 import neverless.repository.util.InjectionUtil;
 import org.springframework.stereotype.Repository;
 

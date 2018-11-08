@@ -4,7 +4,6 @@ import neverless.mapper.EventMapper;
 import neverless.domain.event.AbstractEvent;
 import neverless.dto.screendata.event.EventsScreenDataDto;
 import neverless.service.core.EventContext;
-import neverless.service.core.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ public class EventService extends AbstractService {
     @Autowired
     private EventMapper mapper;
 
+    /** Renders and returns DTO with happened events. */
     public EventsScreenDataDto getEventScreenData() {
         EventsScreenDataDto eventsScreenDataDto = new EventsScreenDataDto();
         List<AbstractEvent> events = eventContext.getEvents();
