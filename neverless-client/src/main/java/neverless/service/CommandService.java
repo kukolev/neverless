@@ -1,6 +1,6 @@
 package neverless.service;
 
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import neverless.service.reader.CommandMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package neverless.service.core;
+package neverless.context;
 
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;

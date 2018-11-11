@@ -1,6 +1,6 @@
 package neverless.service.reader;
 
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 

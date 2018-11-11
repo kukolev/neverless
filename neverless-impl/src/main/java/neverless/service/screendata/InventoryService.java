@@ -8,7 +8,7 @@ import neverless.dto.screendata.inventory.InventoryScreenDataDto;
 import neverless.dto.screendata.inventory.ItemDto;
 import neverless.dto.screendata.inventory.WeaponDto;
 import neverless.repository.PlayerRepository;
-import neverless.service.core.EventContext;
+import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Transactional
-public class InventoryService extends AbstractService {
+public class InventoryService {
 
     @Autowired
     private PlayerRepository playerRepository;

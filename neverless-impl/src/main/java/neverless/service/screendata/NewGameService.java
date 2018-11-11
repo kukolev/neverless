@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class NewGameService extends AbstractService {
+public class NewGameService {
 
     @Autowired
     private GameLoader loader;

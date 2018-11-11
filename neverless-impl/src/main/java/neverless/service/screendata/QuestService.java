@@ -4,8 +4,8 @@ import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestContainer;
 import neverless.dto.screendata.quest.QuestInfoDto;
 import neverless.dto.screendata.quest.QuestScreenDataDto;
-import neverless.service.core.EventContext;
-import neverless.service.core.RequestContext;
+import neverless.context.EventContext;
+import neverless.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class QuestService extends AbstractService {
+public class QuestService {
 
     @Autowired
     private QuestContainer repository;

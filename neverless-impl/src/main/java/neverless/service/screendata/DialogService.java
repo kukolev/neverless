@@ -8,9 +8,8 @@ import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.DialogScreenDataDto;
-import neverless.service.core.DialogContext;
-import neverless.service.core.EventContext;
-import neverless.service.core.RequestContext;
+import neverless.context.DialogContext;
+import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class DialogService extends AbstractService {
+public class DialogService {
 
     @Autowired
     private MapObjectsRepository mapObjectsRepository;

@@ -1,4 +1,4 @@
-package neverless.service.core;
+package neverless.context;
 
 import lombok.Data;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class RequestContext {
     @Getter
     private Map<String, String> questStates = new HashMap<>();
 
-    void initQuestStates() {
+    public void initQuestStates() {
         questContainer.findAll()
                 .forEach(q -> questStates.put(q.getQuestId(), q.getJournalHash()));
     }

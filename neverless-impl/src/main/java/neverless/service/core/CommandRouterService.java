@@ -1,15 +1,18 @@
 package neverless.service.core;
 
+import neverless.context.RequestContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.dto.command.Direction;
 import neverless.repository.PlayerRepository;
 import neverless.service.ai.AiService;
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import neverless.service.screendata.DialogService;
+import neverless.service.screendata.EnemyService;
 import neverless.service.screendata.EventService;
 import neverless.service.screendata.InventoryService;
 import neverless.service.screendata.LocalMapService;
 import neverless.service.screendata.NewGameService;
+import neverless.service.screendata.PlayerService;
 import neverless.service.screendata.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +42,10 @@ public class CommandRouterService {
     private RequestContext requestContext;
     @Autowired
     private PlayerRepository playerRepository;
-
-    @PostConstruct
-    public void init() {
-   //     cmdStartNewGame();
-    }
+    @Autowired
+    private PlayerService playerService;
+    @Autowired
+    private EnemyService enemyService;
 
     public ResponseDto getState() {
         Player player = playerRepository.get();
@@ -54,6 +56,8 @@ public class CommandRouterService {
                 .setQuestScreenDataDto(questService.getScreenData())
                 .setEventsScreenDataDto(eventService.getEventScreenData())
                 .setInventoryScreenDataDto(inventoryService.getScreenData())
+                .setPlayerScreenDataDto(playerService.getScreenData())
+                .setEnemyScreenDataDto(enemyService.getScreenData())
                 .setTurnNumber(player.incAndGetTurnNumber());
     }
 

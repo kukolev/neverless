@@ -7,7 +7,7 @@ import neverless.dto.command.Direction;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.LocalMapScreenDataDto;
-import neverless.service.core.EventContext;
+import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import static neverless.Constants.LOCAL_MAP_WIDTH;
 
 @Service
 @Transactional
-public class LocalMapService extends AbstractService {
+public class LocalMapService {
 
     @Autowired
     private PlayerRepository playerRepository;

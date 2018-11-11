@@ -22,5 +22,4 @@ public class SessionUtil {
     public GameObjectId createId() {
         return new GameObjectId(UUID.randomUUID().toString(), getCurrentSessionId());
     }
-
 }

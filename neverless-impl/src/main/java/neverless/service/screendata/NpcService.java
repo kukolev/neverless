@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class NpcService extends AbstractService {
+public class NpcService {
 
     @Autowired
     private MapObjectsRepository mapObjectsRepository;

@@ -1,28 +1,37 @@
 package neverless.service.screendata;
 
+import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.Player;
-import neverless.domain.entity.mapobject.monster.AbstractEnemy;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
+import neverless.dto.screendata.enemy.EnemyDto;
+import neverless.dto.screendata.enemy.EnemyScreenDataDto;
+import neverless.dto.screendata.inventory.WeaponDto;
+import neverless.repository.EnemyRepository;
+import neverless.repository.ItemRepository;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.repository.RespawnPointRepository;
-import neverless.service.core.RequestContext;
+import neverless.context.RequestContext;
 import neverless.util.Coordinate;
 import neverless.util.CoordinateUtils;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
 @Transactional
-public class EnemyService extends AbstractService {
+public class EnemyService {
 
     @Autowired
     private RespawnPointRepository respawnPointRepository;
@@ -31,11 +40,17 @@ public class EnemyService extends AbstractService {
     @Autowired
     private MapObjectsRepository mapObjectsRepository;
     @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
     private LocalMapService localMapService;
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private EnemyRepository enemyRepository;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     /**
      * Initiates a moving/attacking for all enemies.
@@ -91,10 +106,10 @@ public class EnemyService extends AbstractService {
     /**
      * Calculates possibility of walk to new coordinates and add the coordinates in list;
      *
-     * @param newX      new X coordinate for enemy
-     * @param newY      new Y coordinate for enemy
-     * @param enemy     enemy for which new coordinates are calculated
-     * @param coordinates    list of new coordinates
+     * @param newX          new X coordinate for enemy
+     * @param newY          new Y coordinate for enemy
+     * @param enemy         enemy for which new coordinates are calculated
+     * @param coordinates   list of new coordinates
      */
     private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<Coordinate> coordinates) {
         boolean isPassable = (localMapService.isPassable(newX, newY, enemy.getLocation()));
@@ -151,6 +166,10 @@ public class EnemyService extends AbstractService {
         // todo: implement it.
     }
 
+    /**
+     * Creates enemies, related to respawn points.
+     * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
+     */
     public void respawn() {
 
         List<AbstractRespawnPoint> points = respawnPointRepository.findAllObjects();
@@ -168,11 +187,78 @@ public class EnemyService extends AbstractService {
                 p.setLastTurnInLife(requestContext.getTurnNumber());
                 if (p.getEnemy() == null) {
                     // todo: raise an event ??
-                    AbstractEnemy enemy = p.respawnEnemy();
-                    enemy.setId(sessionUtil.createId());
+                    AbstractEnemy enemy = respawn(p);
                     p.setEnemy(enemy);
                 }
             }
         });
+    }
+
+    /**
+     * Creates new enemy, associated with respawn point.
+     *
+     * @param respawnPoint  respawn point that generates an enemy.
+     */
+    private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint) {
+
+        AbstractEnemyFactory factory = getEnemyFactory(respawnPoint);
+        AbstractEnemy newEnemy = factory.create();
+        newEnemy.setLocation(respawnPoint.getLocation());
+        // todo: position should be random
+        newEnemy.setX(respawnPoint.getX());
+        newEnemy.setY(respawnPoint.getY());
+        newEnemy.setBornX(respawnPoint.getX());
+        newEnemy.setBornY(respawnPoint.getY());
+        newEnemy.setAreaX(respawnPoint.getAreaX());
+        newEnemy.setAreaY(respawnPoint.getAreaY());
+        newEnemy.getWeapons()
+                .forEach(itemRepository::save);
+        return mapObjectsRepository.save(newEnemy);
+    }
+
+    /**
+     * Returns an enemy factory, specified for a particular respawn point from application context.
+     *
+     * @param respawnPoint  respawn point for which enemy factory should be returned.
+     */
+    private AbstractEnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
+        Class<? extends AbstractEnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
+        AbstractEnemyFactory factory = applicationContext.getBean(factoryClass);
+        return factory;
+    }
+
+    /** Returns list of enemies in the player's location */
+    public EnemyScreenDataDto getScreenData() {
+        EnemyScreenDataDto screenDataDto = new EnemyScreenDataDto();
+        String location = playerRepository.get().getLocation();
+        enemyRepository.findAllByLocation(location)
+                .forEach(e -> {
+                    EnemyDto enemyDto = new EnemyDto()
+                            .setHealthPoints(e.getHealthPoints())
+                            .setUniqueName(e.getUniqueName())
+                            .setName(e.getUniqueName())
+                            .setX(e.getX())
+                            .setY(e.getY());
+
+                    List<WeaponDto> weaponDtos = e.getWeapons()
+                            .stream()
+                            .map(this::mapWeaponToDto)
+                            .collect(Collectors.toList());
+
+                    enemyDto.setWeapons(weaponDtos);
+                    screenDataDto.getEnemies().add(enemyDto);
+                });
+        return screenDataDto;
+    }
+
+    /**
+     * Converts domain weapon to DTO.
+     *
+     * @param meleeWeapon   melee weapon that should be converted.
+     */
+    private WeaponDto mapWeaponToDto(AbstractMeleeWeapon meleeWeapon) {
+        return new WeaponDto()
+                .setPower(meleeWeapon.getPower())
+                .setTitle(meleeWeapon.getTitle());
     }
 }

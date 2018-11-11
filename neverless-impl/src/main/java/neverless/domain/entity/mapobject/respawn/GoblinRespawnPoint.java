@@ -2,8 +2,8 @@ package neverless.domain.entity.mapobject.respawn;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.entity.mapobject.monster.AbstractEnemyFactory;
-import neverless.domain.entity.mapobject.monster.GoblinFactory;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
+import neverless.domain.entity.mapobject.enemy.GoblinFactory;
 
 import javax.persistence.Entity;
 
@@ -15,10 +15,11 @@ public class GoblinRespawnPoint extends AbstractRespawnPoint {
 
     /** {@inheritDoc} */
     @Override
-    AbstractEnemyFactory getEnemyFactory() {
-        return new GoblinFactory();
+    public Class<? extends AbstractEnemyFactory> getEnemyFactory() {
+        return GoblinFactory.class;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getSignature() {
         return "RESPAWN_GOBLINS_";

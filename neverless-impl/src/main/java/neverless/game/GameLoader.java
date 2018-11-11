@@ -6,7 +6,7 @@ import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.AbstractBuilding;
-import neverless.domain.entity.mapobject.monster.Goblin;
+import neverless.domain.entity.mapobject.enemy.Goblin;
 import neverless.domain.entity.mapobject.portal.LocationsPortal;
 import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
 import neverless.domain.entity.mapobject.wall.StoneWall;
@@ -40,8 +40,8 @@ import static java.lang.String.format;
 @Transactional
 public class GameLoader {
 
-    public static final String LOCATION_VILLAGE = "Village";
-    public static final String LOCATION_DUNGEON = "Dungeon";
+    private static final String LOCATION_VILLAGE = "Village";
+    private static final String LOCATION_DUNGEON = "Dungeon";
 
     @Autowired
     private MapObjectsRepository mapObjRepository;
@@ -79,7 +79,7 @@ public class GameLoader {
         createPortalDungeon2Village();
         createDungeon();
         createRespawnPoint();
-        questContainer.add(context.getBean(OldManQuestKillGoblins.class));
+        createQuests();
     }
 
     private void createPlayer() {
@@ -296,13 +296,24 @@ public class GameLoader {
     }
 
     private void createRespawnPoint() {
-        GoblinRespawnPoint respawnPoint = new GoblinRespawnPoint();
-        respawnPoint
+        GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint();
+        respawnPoint1
                 .setX(50)
                 .setY(54)
                 .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Goblin Respawn Portal in Village");
-        respawnPointRepository.simpleSave(respawnPoint);
+                .setUniqueName("Goblin Respawn Portal in Village 1");
+        respawnPointRepository.simpleSave(respawnPoint1);
+
+        GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
+        respawnPoint2
+                .setX(40)
+                .setY(54)
+                .setLocation(LOCATION_VILLAGE)
+                .setUniqueName("Goblin Respawn Portal in Village 2");
+        respawnPointRepository.simpleSave(respawnPoint2);
     }
 
+    public void createQuests() {
+        questContainer.add(context.getBean(OldManQuestKillGoblins.class));
+    }
 }

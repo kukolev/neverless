@@ -38,6 +38,13 @@ public abstract class AbstractGameObject implements Serializable {
     }
 
     /**
+     * Returns unique name of the object.
+     */
+    public String getUniqueName() {
+        return id.getUniqueName();
+    }
+
+    /**
      * Returns param casted to String.
      *
      * @param key   param name.

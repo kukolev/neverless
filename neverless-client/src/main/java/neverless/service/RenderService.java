@@ -3,7 +3,7 @@ package neverless.service;
 import lombok.Getter;
 import lombok.Setter;
 import neverless.service.reader.CommandMapping;
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
 import neverless.dto.screendata.quest.QuestInfoDto;

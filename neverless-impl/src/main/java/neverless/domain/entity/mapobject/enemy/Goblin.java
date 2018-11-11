@@ -1,4 +1,4 @@
-package neverless.domain.entity.mapobject.monster;
+package neverless.domain.entity.mapobject.enemy;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

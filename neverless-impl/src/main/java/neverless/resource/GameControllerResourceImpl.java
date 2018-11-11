@@ -1,9 +1,8 @@
 package neverless.resource;
 
 import lombok.AllArgsConstructor;
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import neverless.service.core.CommandRouterService;
-import neverless.service.screendata.LocalMapService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;

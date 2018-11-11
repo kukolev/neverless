@@ -1,6 +1,6 @@
 package neverless.resource;
 
-import neverless.dto.ResponseDto;
+import neverless.dto.screendata.player.ResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

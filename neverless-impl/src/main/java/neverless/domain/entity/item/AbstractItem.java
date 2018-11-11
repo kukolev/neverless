@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.AbstractGameObject;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Data
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 @Entity
 public abstract class AbstractItem extends AbstractGameObject {
 
+    @Column
     private String title;
 }
 
