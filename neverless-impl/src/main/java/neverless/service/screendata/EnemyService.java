@@ -1,5 +1,6 @@
 package neverless.service.screendata;
 
+import neverless.context.EventContext;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
@@ -51,6 +52,8 @@ public class EnemyService {
     private EnemyRepository enemyRepository;
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private EventContext eventContext;
 
     /**
      * Initiates a moving/attacking for all enemies.
@@ -96,6 +99,8 @@ public class EnemyService {
                 // 3. set new coordinates
                 enemy.setX(newCoordinate.getX());
                 enemy.setY(newCoordinate.getY());
+
+                eventContext.addEnemyMoveEvent(enemy.getUniqueName());
             }
             return true;
         } else {
@@ -183,12 +188,12 @@ public class EnemyService {
             int delta = requestContext.getTurnNumber() - p.getLastTurnInLife();
 
             // Calculates if new enemy should be respawn
-            if (delta >= p.getRespawnPeriod()) {
-                p.setLastTurnInLife(requestContext.getTurnNumber());
+            if (delta > p.getRespawnPeriod()) {
                 if (p.getEnemy() == null) {
                     // todo: raise an event ??
                     AbstractEnemy enemy = respawn(p);
                     p.setEnemy(enemy);
+                    p.setLastTurnInLife(requestContext.getTurnNumber());
                 }
             }
         });
@@ -211,6 +216,7 @@ public class EnemyService {
         newEnemy.setBornY(respawnPoint.getY());
         newEnemy.setAreaX(respawnPoint.getAreaX());
         newEnemy.setAreaY(respawnPoint.getAreaY());
+        newEnemy.setRespawnPoint(respawnPoint);
         newEnemy.getWeapons()
                 .forEach(itemRepository::save);
         return mapObjectsRepository.save(newEnemy);
@@ -234,7 +240,7 @@ public class EnemyService {
         enemyRepository.findAllByLocation(location)
                 .forEach(e -> {
                     EnemyDto enemyDto = new EnemyDto()
-                            .setHealthPoints(e.getHealthPoints())
+                            .setHealthPoints(e.getHitPoints())
                             .setUniqueName(e.getUniqueName())
                             .setName(e.getUniqueName())
                             .setX(e.getX())

@@ -4,6 +4,12 @@ import lombok.Getter;
 import neverless.domain.event.AbstractEvent;
 import neverless.domain.event.DialogSelectPhraseEvent;
 import neverless.domain.event.DialogStartEvent;
+import neverless.domain.event.EnemyMoveEvent;
+import neverless.domain.event.FightingEnemyHitEvent;
+import neverless.domain.event.FightingEnemyKillEvent;
+import neverless.domain.event.FightingEnemyMissEvent;
+import neverless.domain.event.FightingPlayerHitEvent;
+import neverless.domain.event.FightingPlayerMissEvent;
 import neverless.domain.event.InventoryLeftHandEquipEvent;
 import neverless.domain.event.InventoryRightHandEquipEvent;
 import neverless.domain.event.JournalUpdateEvent;
@@ -63,5 +69,37 @@ public class EventContext {
 
     public void addPortalEnterEvent(String location) {
         events.add(new PortalEnterEvent());
+    }
+
+    public void addFightingEnemyHitEvent(String enemyId, Integer damage) {
+        events.add(new FightingEnemyHitEvent()
+                .setEnemyId(enemyId)
+                .setDamage(damage));
+    }
+
+    public void addFightingEnemyMissEvent(String enemyId) {
+        events.add(new FightingEnemyMissEvent()
+                .setEnemyId(enemyId));
+    }
+
+    public void addFightingPlayerHitEvent(String enemyId, Integer damage) {
+        events.add(new FightingPlayerHitEvent()
+                .setEnemyId(enemyId)
+                .setDamage(damage));
+    }
+
+    public void addFightingPlayerMissEvent(String enemyId) {
+        events.add(new FightingPlayerMissEvent()
+                .setEnemyId(enemyId));
+    }
+
+    public void addFightingEnemyKillEvent(String enemyId) {
+        events.add(new FightingEnemyKillEvent()
+        .setEnemyId(enemyId));
+    }
+
+    public void addEnemyMoveEvent(String enemyId) {
+        events.add(new EnemyMoveEvent()
+                .setEnemyId(enemyId));
     }
 }

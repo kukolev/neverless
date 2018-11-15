@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 public class Player extends AbstractMapObject {
 
     @Column
-    private Integer healthPoints = 100;
+    private Integer hitPoints = 100;
 
     @OneToOne
     private Inventory inventory;

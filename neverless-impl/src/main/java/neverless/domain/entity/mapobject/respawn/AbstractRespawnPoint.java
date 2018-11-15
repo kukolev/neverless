@@ -6,7 +6,6 @@ import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -28,10 +27,10 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
 
     /** Period, after that enemy should be respawned (turns) */
     @Column
-    private Integer respawnPeriod = 2;
+    private Integer respawnPeriod = 3;
 
     /** Enemy, created by this point */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private AbstractEnemy enemy;
 
     /**

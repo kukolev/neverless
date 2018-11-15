@@ -34,7 +34,7 @@ public class GoblinFactory extends AbstractEnemyFactory {
 
         Goblin goblin = new Goblin();
         goblin
-                .setHealthPoints(GOBLIN_HP)
+                .setHitPoints(GOBLIN_HP)
                 .setId(sessionUtil.createId());
         goblin
                 .getWeapons().add(sword);

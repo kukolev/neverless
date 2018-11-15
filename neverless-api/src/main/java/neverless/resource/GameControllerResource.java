@@ -51,4 +51,7 @@ public interface GameControllerResource {
 
     @PostMapping("/inventory_equip_left_hand/itemId/{itemId}")
     ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId);
+
+    @PostMapping("/fighting_attack/enemyId/{enemyId}")
+    ResponseDto cmdFightingAttack(@PathVariable String enemyId);
 }

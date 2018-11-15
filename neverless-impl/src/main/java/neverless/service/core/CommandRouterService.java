@@ -17,7 +17,6 @@ import neverless.service.screendata.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 @Service
@@ -139,6 +138,13 @@ public class CommandRouterService {
     public void cmdInventoryEquipLeftHand(Integer itemId) {
         requestContext.initQuestStates();
         inventoryService.equipLeftHand(itemId);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdFightingAttack(String enemyId) {
+        requestContext.initQuestStates();
+        playerService.attack(enemyId);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }

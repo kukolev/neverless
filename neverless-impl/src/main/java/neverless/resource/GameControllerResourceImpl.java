@@ -95,4 +95,11 @@ public class GameControllerResourceImpl implements GameControllerResource {
         commandRouterService.cmdInventoryEquipLeftHand(itemId);
         return commandRouterService.getState();
     }
+
+    @Override
+    @PostMapping("/fighting_attack/enemyId/{enemyId}")
+    public ResponseDto cmdFightingAttack(@PathVariable String enemyId) {
+        commandRouterService.cmdFightingAttack(enemyId);
+        return commandRouterService.getState();
+    }
 }
