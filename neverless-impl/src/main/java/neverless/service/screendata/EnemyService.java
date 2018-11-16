@@ -26,8 +26,10 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.abs;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
@@ -134,17 +136,42 @@ public class EnemyService {
     /**
      * Changes position in aggressive mode.
      * Enemy should chase the player.
+     * Returns true if chases. Returns false if should attack.
      *
      * @param enemy enemy that should chasing the player.
      */
     private boolean chase(AbstractEnemy enemy) {
-        Coordinate coordinate = getNextCoordinatesForLos(enemy);
-        if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), enemy.getLocation())) {
-            enemy
+        if (!isCanAttack(enemy)) {
+            Coordinate coordinate = getNextCoordinatesForLos(enemy);
+            if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), enemy.getLocation())) {
+                enemy
                     .setX(coordinate.getX())
                     .setY(coordinate.getY());
+            }
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    /**
+     * Calculates and returns if enemy is able to attack player.
+     *
+     * @param enemy enemy
+     */
+    private boolean isCanAttack(AbstractEnemy enemy) {
+        return isPlayerNear(enemy);
+    }
+
+    /**
+     * Returns true if enemy position is close to player.
+     *
+     * @param enemy checked enemy.
+     */
+    private boolean isPlayerNear(AbstractEnemy enemy) {
+        Player player = playerRepository.get();
+        int deltaX = abs(enemy.getX() - player.getX());
+        int deltaY = abs(enemy.getY() - player.getY());
+        return (deltaX <= 1) && (deltaY <= 1);
     }
 
     /**
@@ -168,7 +195,39 @@ public class EnemyService {
      * @param enemy enemy that should attack the player.
      */
     private void attack(AbstractEnemy enemy) {
-        // todo: implement it.
+        if (calcToHit(enemy)) {
+            int damage = calcDamage(enemy);
+            Player player = playerRepository.get();
+            player.decreaseHitPoints(damage);
+            eventContext.addFightingEnemyHitEvent(enemy.getUniqueName(), damage);
+        } else
+        {
+            eventContext.addFightingEnemyMissEvent(enemy.getUniqueName());
+        }
+    }
+
+    /**
+     * Calculates and returns if enemy hits the player.
+     *
+     * @param enemy enemy that tries tu hit the player.
+     */
+    private boolean calcToHit(AbstractEnemy enemy) {
+        Random random = new Random(System.currentTimeMillis());
+        return random.nextBoolean();
+    }
+
+    /**
+     * Calculates and returns damage, impacted by enemy.
+     *
+     * @param enemy enemy that attacks.
+     */
+    private int calcDamage(AbstractEnemy enemy) {
+        AtomicInteger damage = new AtomicInteger();
+        enemy.getWeapons()
+                .forEach(w -> {
+                    damage.addAndGet(w.getPower());
+                });
+        return damage.get();
     }
 
     /**

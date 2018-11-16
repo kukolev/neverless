@@ -30,4 +30,8 @@ public class Player extends AbstractMapObject {
     public int incAndGetTurnNumber() {
         return ++turnNumber;
     }
+
+    public void decreaseHitPoints(int damage) {
+        hitPoints -= damage;
+    }
 }

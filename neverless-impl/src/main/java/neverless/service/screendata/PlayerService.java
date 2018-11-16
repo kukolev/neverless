@@ -47,7 +47,7 @@ public class PlayerService {
         AbstractEnemy enemy = enemyRepository.findById(sessionUtil.createId(enemyId)).get();
         if (calcToHit(enemy)) {
             // Player hits.
-            int damage = calcHitPoints(enemy);
+            int damage = calcDamage(enemy);
             enemy.decreaseHitPoints(damage);
             if (enemy.getHitPoints() <= 0) {
                 killEnemy(enemy);
@@ -78,7 +78,7 @@ public class PlayerService {
      *
      * @param enemy enemy attacked by the player.
      */
-    private int calcHitPoints(AbstractEnemy enemy) {
+    private int calcDamage(AbstractEnemy enemy) {
         Player player = playerRepository.get();
         AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
         AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
