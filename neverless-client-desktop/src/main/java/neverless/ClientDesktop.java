@@ -24,6 +24,9 @@ public class ClientDesktop extends Application {
         stage.setScene(new Scene(rootPane));
         stage.setResizable(true);
         stage.centerOnScreen();
+        stage.setWidth(1000);
+        stage.setHeight(1000);
+
         stage.show();
     }
 

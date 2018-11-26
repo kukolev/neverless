@@ -2,8 +2,12 @@ package neverless.service.screendata;
 
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
+import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
+import neverless.dto.MapObjectMetaType;
 import neverless.dto.command.Direction;
+import neverless.dto.screendata.MapObjectDto;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.LocalMapScreenDataDto;
@@ -15,6 +19,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static neverless.Constants.LOCAL_MAP_HEIGH;
 import static neverless.Constants.LOCAL_MAP_PLAYER_X;
@@ -106,9 +111,46 @@ public class LocalMapService {
                             }
                         }
                 });
-
         localMapScreenDataDto.setCell(LOCAL_MAP_PLAYER_X, LOCAL_MAP_PLAYER_Y, player.getSignature());
+
+        List<MapObjectDto> objectDtos = objects.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+        localMapScreenDataDto.setObjects(objectDtos);
         return localMapScreenDataDto;
+    }
+
+    /**
+     * Converts map object to dto and returns last one.
+     * Calculates and adds meta type information about the object;
+     *
+     * @param mapObject object that should be converted
+     */
+    private MapObjectDto mapToDto(AbstractMapObject mapObject) {
+        MapObjectDto dto = new MapObjectDto();
+        dto
+                .setUniqueName(mapObject.getUniqueName())
+                .setSignature(mapObject.getSignature())
+                .setX(mapObject.getX())
+                .setY(mapObject.getY())
+                .setHeight(mapObject.getHeight())
+                .setWidth(mapObject.getWidth())
+                .setZOrder(mapObject.getZOrder());
+
+        // todo: maybe it should be optimized. for example store meta type in class
+        MapObjectMetaType metaType = MapObjectMetaType.IMPASSIBLE_TERRAIN;
+        if (mapObject.isPassable()) {
+            metaType = MapObjectMetaType.TERRAIN;
+        } else if (mapObject instanceof AbstractNpc) {
+            metaType = MapObjectMetaType.NPC;
+        } else if (mapObject instanceof AbstractEnemy) {
+            metaType = MapObjectMetaType.ENEMY;
+        } else if (mapObject instanceof AbstractPortal) {
+            metaType = MapObjectMetaType.PORTAL;
+        }
+        dto.setMetaType(metaType);
+
+        return dto;
     }
 
     private List<AbstractMapObject> getObjectsForRender(String location) {

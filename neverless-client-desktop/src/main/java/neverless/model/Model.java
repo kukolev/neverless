@@ -1,7 +1,8 @@
 package neverless.model;
 
 import neverless.dto.screendata.player.ResponseDto;
-import neverless.resource.GameControllerResourceImpl;
+import neverless.model.command.AbstractCommand;
+import neverless.model.command.StartNewGameCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +17,21 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class Model extends Thread {
 
     @Autowired
-    private GameControllerResourceImpl resource;
+    private ResolverRouterService resolver;
 
-    private final int COMMAND_QUEUE_CAPACITY = 1000;
-
-    private Queue<Command> queue = new ConcurrentLinkedDeque<>();
+    private Queue<StartNewGameCommand> queue = new ConcurrentLinkedDeque<>();
 
     @PostConstruct
     public void init() {
         start();
     }
 
-    public void putCommandList(List<Command> commandList) {
+    public void putCommandList(List<StartNewGameCommand> commandList) {
         queue.clear();
         queue.addAll(commandList);
     }
 
-    public void putCommand(Command command) {
+    public void putCommand(StartNewGameCommand command) {
         queue.clear();
         queue.add(command);
     }
@@ -46,30 +45,30 @@ public class Model extends Thread {
      */
     public void click(int x, int y) {
         // todo: remove stub and implement real code.
-        List<Command> commands = new ArrayList<>();
+        List<StartNewGameCommand> commands = new ArrayList<>();
         Random random = new Random(System.currentTimeMillis());
-        int commandCount = random.nextInt(10);
+        int commandCount = random.nextInt(2) + 1;
         for (int i = 0; i < commandCount; i++) {
-            commands.add(new Command());
+            commands.add(new StartNewGameCommand());
         }
         putCommandList(commands);
         System.out.println("put " + commands.size());
     }
 
     public void cmdStartNewGame() {
-
+        putCommand(new StartNewGameCommand());
     }
 
     @Override
     public void run() {
         while (true) {
             // 1. Get command from queue
-            Command command = queue.poll();
+            AbstractCommand command = queue.poll();
 
             // 2. Send command to engine + receive data from last one
             if (command != null) {
                 System.out.println("command! " + queue.size());
-                //resolveCommand(command);
+                resolveCommand(command);
             }
 
             try {
@@ -88,8 +87,8 @@ public class Model extends Thread {
         }
     }
 
-    private void resolveCommand(Command command) {
-        ResponseDto responseDto = resource.cmdStartNewGame();
+    private void resolveCommand(AbstractCommand command) {
+        ResponseDto responseDto = resolver.resolve(command);
         System.out.println(responseDto);
     }
 }
