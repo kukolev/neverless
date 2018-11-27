@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.road;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Resouces;
 
 import javax.persistence.Entity;
 
@@ -16,6 +17,6 @@ public final class Road extends AbstractRoad {
 
     @Override
     public String getSignature() {
-        return "ROAD_";
+        return Resouces.IMG_ROAD;
     }
 }

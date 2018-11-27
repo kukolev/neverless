@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.tree;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Resouces;
 
 import javax.persistence.Entity;
 
@@ -12,6 +13,6 @@ public final class FirTree extends AbstractTree {
 
     @Override
     public String getSignature() {
-        return "FIRTREE_";
+        return Resouces.IMG_TREE;
     }
 }

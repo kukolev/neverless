@@ -3,6 +3,10 @@ package neverless.model;
 import neverless.dto.screendata.player.ResponseDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.StartNewGameCommand;
+import neverless.util.FrameExchanger;
+import neverless.util.ResponseExchanger;
+import neverless.view.renderer.Frame;
+import neverless.view.renderer.Scene;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +22,13 @@ public class Model extends Thread {
 
     @Autowired
     private ResolverRouterService resolver;
+    @Autowired
+    private FrameExchanger frameExchanger;
+    @Autowired
+    private ResponseExchanger dtoExchanger;
 
     private Queue<StartNewGameCommand> queue = new ConcurrentLinkedDeque<>();
+    private Window window = new Window();
 
     @PostConstruct
     public void init() {
@@ -89,6 +98,11 @@ public class Model extends Thread {
 
     private void resolveCommand(AbstractCommand command) {
         ResponseDto responseDto = resolver.resolve(command);
-        System.out.println(responseDto);
+        try {
+            dtoExchanger.exchange(responseDto);
+        } catch (InterruptedException e) {
+            this.interrupt();
+            e.printStackTrace();
+        }
     }
 }

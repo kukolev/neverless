@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.portal;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Resouces;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ public class AbstractPortal extends AbstractMapObject {
 
     @Override
     public String getSignature() {
-        return "PORTAL_";
+        return Resouces.IMG_PORTAL;
     }
 
     @Override
