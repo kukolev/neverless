@@ -9,8 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Sprite {
 
-    private static final String IMAGE_LOC = "http://icons.iconarchive.com/icons/uiconstock/flat-halloween/128/Halloween-Bat-icon.png";
-    private static final Image image = new Image(IMAGE_LOC, 32, 32, true, true);
+    private Image image;
 
     private double x;
     private double y;
@@ -23,6 +22,12 @@ public class Sprite {
      */
     public Sprite(String signature) {
         this.signature = signature;
+        try {
+            this.image = new Image("sprites/" + signature);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+
     }
 
     /**

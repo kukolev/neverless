@@ -1,43 +1,59 @@
 package neverless.context;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import neverless.domain.dialog.Dialog;
-import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.quest.QuestContainer;
 import neverless.repository.PlayerRepository;
+import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-@Scope(value = WebApplicationContext.SCOPE_REQUEST,
-        proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class RequestContext {
 
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
     private QuestContainer questContainer;
-    @Getter
-    private Map<String, String> questStates = new HashMap<>();
+    @Autowired
+    private SessionUtil sessionUtil;
 
+    private Map<String, Map<String, String>> questCache = new ConcurrentHashMap<>();
+
+    /**
+     * Initializes states for every quest and stores them.
+     */
     public void initQuestStates() {
+        Map<String, String> questStates = getQuestStates();
         questContainer.findAll()
                 .forEach(q -> questStates.put(q.getQuestId(), q.getJournalHash()));
     }
 
+    /**
+     * Returns map with quest states for concrete session.
+     */
+    private Map<String, String> getQuestStates() {
+        String session = sessionUtil.getCurrentSessionId();
+        Map<String, String> questStates = questCache.get(session);
+        if (questStates == null) {
+            questStates = new HashMap<>();
+            questCache.put(session, questStates);
+        }
+        return questStates;
+    }
+
+    /**
+     * Returns list of changed quest identifiers.
+     * Quest considered as changed if any difference of journal hash in current time and data, stored in cache.
+     */
     public List<String> findUpdatedQuests() {
+        Map<String, String> questStates = getQuestStates();
         List<String> ids = new ArrayList<>();
         questStates.forEach((k, v) -> {
             AbstractQuest quest = questContainer.finaById(k);

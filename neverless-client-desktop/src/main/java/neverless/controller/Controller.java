@@ -1,6 +1,5 @@
 package neverless.controller;
 
-import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import neverless.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,27 @@ public class Controller {
     @Autowired
     private Model model;
 
-    @FXML
     public void onClick(MouseEvent event) {
-        model.click(0, 0);
+        model.click((int) event.getX(), (int) event.getY());
     }
 
-    @FXML
     public void startNewGameBtnClick(MouseEvent event) {
         model.cmdStartNewGame();
+    }
+
+    public void moveDownBtnClick(MouseEvent event) {
+        model.cmdMapGoDown();
+    }
+
+    public void moveUpBtnClick(MouseEvent event) {
+        model.cmdMapGoUp();
+    }
+
+    public void moveLeftBtnClick(MouseEvent event) {
+        model.cmdMapGoLeft();
+    }
+
+    public void moveRightBtnClick(MouseEvent event) {
+        model.cmdMapGoRight();
     }
 }

@@ -2,8 +2,8 @@ package neverless.service;
 
 import lombok.Getter;
 import lombok.Setter;
+import neverless.dto.screendata.player.GameStateDto;
 import neverless.service.reader.CommandMapping;
-import neverless.dto.screendata.player.ResponseDto;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
 import neverless.dto.screendata.quest.QuestInfoDto;
@@ -20,7 +20,7 @@ import static neverless.util.ConsoleCleaner.cleanConsole;
 public class RenderService {
 
     @Getter
-    private ResponseDto curResponse;
+    private GameStateDto curResponse;
     @Setter
     private Screen screen;
 
@@ -38,8 +38,8 @@ public class RenderService {
         }
     }
 
-    public void setCurResponse(ResponseDto responseDto) {
-        this.curResponse = responseDto;
+    public void setCurResponse(GameStateDto gameStateDto) {
+        this.curResponse = gameStateDto;
         detectScreen();
     }
 

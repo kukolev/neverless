@@ -2,7 +2,7 @@ package neverless.domain.entity.mapobject;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.Resouces;
+import neverless.Resources;
 import neverless.domain.entity.inventory.Inventory;
 
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ public class Player extends AbstractMapObject {
 
     @Override
     public String getSignature() {
-        return Resouces.IMG_PLAYER;
+        return Resources.IMG_PLAYER;
     }
 
     public int incAndGetTurnNumber() {

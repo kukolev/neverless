@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.wall;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Resources;
 
 import javax.persistence.Entity;
 
@@ -12,6 +13,6 @@ public final class StoneWall extends AbstractWall {
 
     @Override
     public String getSignature() {
-        return "STONE_WALL_";
+        return Resources.IMG_WALL;
     }
 }

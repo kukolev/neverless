@@ -1,6 +1,6 @@
 package neverless.domain.entity.mapobject.building;
 
-import neverless.Resouces;
+import neverless.Resources;
 
 import javax.persistence.Entity;
 
@@ -19,6 +19,6 @@ public final class LargeVillageHouse extends AbstractBuilding {
 
     @Override
     public String getSignature() {
-        return Resouces.IMG_HOUSE_LARGE;
+        return Resources.IMG_HOUSE_LARGE;
     }
 }

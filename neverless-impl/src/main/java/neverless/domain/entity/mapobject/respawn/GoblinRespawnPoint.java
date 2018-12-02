@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.respawn;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Resources;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.GoblinFactory;
 
@@ -22,6 +23,6 @@ public class GoblinRespawnPoint extends AbstractRespawnPoint {
     /** {@inheritDoc} */
     @Override
     public String getSignature() {
-        return "RESPAWN_GOBLINS_";
+        return Resources.IMG_RESPAWN_POINT;
     }
 }

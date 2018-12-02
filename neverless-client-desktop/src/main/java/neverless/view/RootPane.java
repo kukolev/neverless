@@ -1,70 +1,85 @@
 package neverless.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+
 import neverless.controller.Controller;
-import neverless.util.FrameExchanger;
-import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
-import neverless.view.renderer.Scene;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.concurrent.Exchanger;
+
+import static neverless.util.Constants.CANVAS_HEIGHT;
+import static neverless.util.Constants.CANVAS_WIDTH;
 
 @Component
 public class RootPane extends Pane {
+
+    private static final int MOVE_BTN_GABARIT = 40;
 
     @Autowired
     private Controller controller;
     @Autowired
     private Renderer renderer;
     @Autowired
-    private FrameExchanger frameExchanger;
+    private Drawer drawer;
 
     @PostConstruct
     public void init() {
-        Button button = new Button();
-        button.setText("Start New Game");
-        button.setMaxWidth(100);
-        button.setMaxHeight(40);
-        button.setOnMouseClicked(controller::startNewGameBtnClick);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        canvas.setLayoutX(20);
+        canvas.setLayoutY(20);
+        canvas.setOnMouseClicked(controller::onClick);
 
-        Canvas canvas = new Canvas(1000, 1000);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        Button btnStartNewGame = new Button();
+        btnStartNewGame.setText("Start New Game");
+        btnStartNewGame.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20);
+        btnStartNewGame.setMaxWidth(100);
+        btnStartNewGame.setLayoutY(0);
+        btnStartNewGame.setOnMouseClicked(controller::startNewGameBtnClick);
 
-        this.getChildren().add(button);
+        Button btnMoveDown = new Button();
+        btnMoveDown.setText("D");
+        btnMoveDown.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT);
+        btnMoveDown.setLayoutY(200 + MOVE_BTN_GABARIT);
+        btnMoveDown.setMaxWidth(MOVE_BTN_GABARIT);
+        btnMoveDown.setOnMouseClicked(controller::moveDownBtnClick);
+
+        Button btnMoveUp = new Button();
+        btnMoveUp.setText("U");
+        btnMoveUp.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT);
+        btnMoveUp.setLayoutY(200 - MOVE_BTN_GABARIT);
+        btnMoveUp.setMaxWidth(MOVE_BTN_GABARIT);
+        btnMoveUp.setOnMouseClicked(controller::moveUpBtnClick);
+
+        Button btnMoveLeft = new Button();
+        btnMoveLeft.setText("L");
+        btnMoveLeft.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20);
+        btnMoveLeft.setLayoutY(200);
+        btnMoveLeft.setMaxWidth(MOVE_BTN_GABARIT);
+        btnMoveLeft.setOnMouseClicked(controller::moveLeftBtnClick);
+
+        Button btnMoveRight = new Button();
+        btnMoveRight.setText("R");
+        btnMoveRight.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT * 2);
+        btnMoveRight.setLayoutY(200);
+        btnMoveRight.setMaxWidth(MOVE_BTN_GABARIT);
+        btnMoveRight.setOnMouseClicked(controller::moveRightBtnClick);
+
+        this.getChildren().add(btnStartNewGame);
+        this.getChildren().add(btnMoveDown);
+        this.getChildren().add(btnMoveUp);
+        this.getChildren().add(btnMoveLeft);
+        this.getChildren().add(btnMoveRight);
         this.getChildren().add(canvas);
 
-        setOnMouseClicked(controller::onClick);
 
-        renderer.messageProperty().addListener(new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                // System.out.println(newValue);
-
-                try {
-                    Frame frame = frameExchanger.exchange(null);
-                    System.out.println(frame);
-                    if (frame.getSprites().size() > 0) {
-
-                        frame.getSprites().forEach(s -> s.draw(gc));
-                    } else {
-                       // gc.drawImage(image, 32, 32);
-                    }
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-        });
-
+        drawer.setGraphicsContext(canvas.getGraphicsContext2D());
+        renderer.messageProperty().addListener(drawer);
         new Thread(renderer).start();
     }
 }

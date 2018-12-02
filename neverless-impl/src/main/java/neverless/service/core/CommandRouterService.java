@@ -3,9 +3,9 @@ package neverless.service.core;
 import neverless.context.RequestContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.dto.command.Direction;
+import neverless.dto.screendata.player.GameStateDto;
 import neverless.repository.PlayerRepository;
 import neverless.service.ai.AiService;
-import neverless.dto.screendata.player.ResponseDto;
 import neverless.service.screendata.DialogService;
 import neverless.service.screendata.EnemyService;
 import neverless.service.screendata.EventService;
@@ -46,10 +46,10 @@ public class CommandRouterService {
     @Autowired
     private EnemyService enemyService;
 
-    public ResponseDto getState() {
+    public GameStateDto getState() {
         Player player = playerRepository.get();
 
-        return new ResponseDto()
+        return new GameStateDto()
                 .setLocalMapScreenData(localMapService.getScreenData())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())

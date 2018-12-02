@@ -11,7 +11,7 @@ import neverless.dto.screendata.quest.QuestScreenDataDto;
 
 @Data
 @Accessors(chain = true)
-public class ResponseDto {
+public class GameStateDto {
     private int turnNumber;
     private LocalMapScreenDataDto localMapScreenData;
     private DialogScreenDataDto dialogScreenDataDto;

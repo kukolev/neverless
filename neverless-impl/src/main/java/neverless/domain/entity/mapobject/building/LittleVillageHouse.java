@@ -2,7 +2,7 @@ package neverless.domain.entity.mapobject.building;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.Resouces;
+import neverless.Resources;
 
 import javax.persistence.Entity;
 
@@ -13,7 +13,7 @@ public final class LittleVillageHouse extends AbstractBuilding {
 
     @Override
     public String getSignature() {
-        return Resouces.IMG_HOUSE_LITTLE;
+        return Resources.IMG_HOUSE_LITTLE;
     }
 
     @Override

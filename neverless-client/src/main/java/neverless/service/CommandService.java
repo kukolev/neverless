@@ -1,6 +1,6 @@
 package neverless.service;
 
-import neverless.dto.screendata.player.ResponseDto;
+import neverless.dto.screendata.player.GameStateDto;
 import neverless.service.reader.CommandMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CommandService {
     public void execute(CommandMapping commandMapping) {
 
         try {
-            ResponseEntity<ResponseDto> response = commandMapping.getReader().read(restTemplate);
+            ResponseEntity<GameStateDto> response = commandMapping.getReader().read(restTemplate);
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 renderService.setCurResponse(response.getBody());
                 renderService.render();

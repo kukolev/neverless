@@ -1,6 +1,6 @@
 package neverless.resource;
 
-import neverless.dto.screendata.player.ResponseDto;
+import neverless.dto.screendata.player.GameStateDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,46 +12,46 @@ import org.springframework.web.bind.annotation.RestController;
 public interface GameControllerResource {
 
     @GetMapping("/")
-    ResponseDto getState();
+    GameStateDto getState();
 
     @PostMapping("/start_new_game")
-    ResponseDto cmdStartNewGame();
+    GameStateDto cmdStartNewGame();
 
     @PostMapping("/wait")
-    ResponseDto cmdWait();
+    GameStateDto cmdWait();
 
 
     @PostMapping("/map_go_down")
-    ResponseDto cmdMoveDown();
+    GameStateDto cmdMoveDown();
 
     @PostMapping("/map_go_up")
-    ResponseDto cmdMoveUp();
+    GameStateDto cmdMoveUp();
 
     @PostMapping("/map_go_left")
-    ResponseDto cmdMoveLeft();
+    GameStateDto cmdMoveLeft();
 
     @PostMapping("/map_go_right")
-    ResponseDto cmdMoveRight();
+    GameStateDto cmdMoveRight();
 
     @PostMapping("/dialog_start/npcX/{npcX}/npcY/{npcY}")
-    ResponseDto cmdDialogStart(@PathVariable Integer npcX,
-                               @PathVariable Integer npcY);
+    GameStateDto cmdDialogStart(@PathVariable Integer npcX,
+                                @PathVariable Integer npcY);
 
     @PostMapping("/dialog_select_phrase/phraseNumber/{phraseNumber}")
-    ResponseDto cmdDialogSelectPhrase(@PathVariable Integer phraseId);
+    GameStateDto cmdDialogSelectPhrase(@PathVariable Integer phraseId);
 
     @PostMapping("/inventory_clear_right_hand")
-    ResponseDto cmdInventoryClearRightHand();
+    GameStateDto cmdInventoryClearRightHand();
 
     @PostMapping("/inventory_clear_left_hand")
-    ResponseDto cmdInventoryClearLeftHand();
+    GameStateDto cmdInventoryClearLeftHand();
 
     @PostMapping("/inventory_equip_right_hand/itemId/{itemId}")
-    ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer itemId);
+    GameStateDto cmdInventoryEquipRightHand(@PathVariable Integer itemId);
 
     @PostMapping("/inventory_equip_left_hand/itemId/{itemId}")
-    ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId);
+    GameStateDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId);
 
     @PostMapping("/fighting_attack/enemyId/{enemyId}")
-    ResponseDto cmdFightingAttack(@PathVariable String enemyId);
+    GameStateDto cmdFightingAttack(@PathVariable String enemyId);
 }

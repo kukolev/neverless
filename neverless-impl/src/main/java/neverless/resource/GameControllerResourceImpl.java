@@ -1,7 +1,7 @@
 package neverless.resource;
 
 import lombok.AllArgsConstructor;
-import neverless.dto.screendata.player.ResponseDto;
+import neverless.dto.screendata.player.GameStateDto;
 import neverless.service.core.CommandRouterService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,91 +14,91 @@ public class GameControllerResourceImpl implements GameControllerResource {
     private CommandRouterService commandRouterService;
 
     @Override
-    public ResponseDto getState() {
+    public GameStateDto getState() {
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdStartNewGame() {
+    public GameStateDto cmdStartNewGame() {
         commandRouterService.cmdStartNewGame();
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdWait() {
+    public GameStateDto cmdWait() {
         commandRouterService.cmdWait();
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdMoveDown() {
+    public GameStateDto cmdMoveDown() {
         commandRouterService.cmdMoveDown();
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdMoveUp() {
+    public GameStateDto cmdMoveUp() {
         commandRouterService.cmdMoveUp();
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdMoveLeft() {
+    public GameStateDto cmdMoveLeft() {
         commandRouterService.cmdMoveLeft();
         return commandRouterService.getState();
     }
 
     @Override
-    public ResponseDto cmdMoveRight() {
+    public GameStateDto cmdMoveRight() {
         commandRouterService.cmdMoveRight();
         return commandRouterService.getState();
     }
 
     @PostMapping("/dialog_start/npcX/{npcX}/npcY/{npcY}")
-    public ResponseDto cmdDialogStart(@PathVariable Integer npcX,
-                                      @PathVariable Integer npcY) {
+    public GameStateDto cmdDialogStart(@PathVariable Integer npcX,
+                                       @PathVariable Integer npcY) {
         commandRouterService.cmdDialogStart(npcX, npcY);
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("dialog_select_phrase/phraseNumber/{phraseNumber}")
-    public ResponseDto cmdDialogSelectPhrase(@PathVariable Integer phraseNumber) {
+    public GameStateDto cmdDialogSelectPhrase(@PathVariable Integer phraseNumber) {
         commandRouterService.cmdDialogSelectPhrase(phraseNumber);
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("/inventory_clear_right_hand")
-    public ResponseDto cmdInventoryClearRightHand() {
+    public GameStateDto cmdInventoryClearRightHand() {
         commandRouterService.cmdInventoryClearRightHand();
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("/inventory_clear_left_hand")
-    public ResponseDto cmdInventoryClearLeftHand() {
+    public GameStateDto cmdInventoryClearLeftHand() {
         commandRouterService.cmdInventoryClearLeftHand();
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("/inventory_equip_right_hand/itemId/{itemId}")
-    public ResponseDto cmdInventoryEquipRightHand(@PathVariable Integer itemId) {
+    public GameStateDto cmdInventoryEquipRightHand(@PathVariable Integer itemId) {
         commandRouterService.cmdInventoryEquipRightHand(itemId);
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("/inventory_equip_left_hand/itemId/{itemId}")
-    public ResponseDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId) {
+    public GameStateDto cmdInventoryEquipLeftHand(@PathVariable Integer itemId) {
         commandRouterService.cmdInventoryEquipLeftHand(itemId);
         return commandRouterService.getState();
     }
 
     @Override
     @PostMapping("/fighting_attack/enemyId/{enemyId}")
-    public ResponseDto cmdFightingAttack(@PathVariable String enemyId) {
+    public GameStateDto cmdFightingAttack(@PathVariable String enemyId) {
         commandRouterService.cmdFightingAttack(enemyId);
         return commandRouterService.getState();
     }

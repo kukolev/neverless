@@ -2,7 +2,7 @@ package neverless.game.npc;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.Resouces;
+import neverless.Resources;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.event.AbstractDialogEvent;
 import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
@@ -31,7 +31,7 @@ public final class OldMan extends AbstractNpc {
 
     @Override
     public String getSignature() {
-        return Resouces.IMG_OLD_MAN;
+        return Resources.IMG_OLD_MAN;
     }
 
     @Override
