@@ -1,11 +1,12 @@
 package neverless.view;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import neverless.controller.Controller;
+import neverless.controller.vcl.ImageButton;
 import neverless.view.renderer.Renderer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,16 @@ public class RootPane extends Pane {
         btnMoveRight.setLayoutY(200);
         btnMoveRight.setMaxWidth(MOVE_BTN_GABARIT);
         btnMoveRight.setOnMouseClicked(controller::moveRightBtnClick);
+
+        ImageButton imageButton = new ImageButton(this,
+                new Image("buttons/btn_normal.png"),
+                new Image("buttons/btn_over.png"),
+                new Image("buttons/btn_pressed.png"));
+        imageButton.setLayoutX(700);
+        imageButton.setLayoutY(100);
+        imageButton.setOnClicked(controller::startNewGameBtnClick);
+
+
 
         this.getChildren().add(btnStartNewGame);
         this.getChildren().add(btnMoveDown);
