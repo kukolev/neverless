@@ -3,6 +3,7 @@ package neverless.domain.entity.mapobject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.AbstractGameObject;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,6 +37,9 @@ public abstract class AbstractMapObject extends AbstractGameObject {
 
      /** Returns identifier, specified for graphic render. */
      public abstract String getSignature();
+
+     /** Returns meta-type of object. Meta-type describe main behavior of the object from Player perspective. */
+     public abstract MapObjectMetaType getMetaType();
 
      /**
       * Returns true if terrain is passable.

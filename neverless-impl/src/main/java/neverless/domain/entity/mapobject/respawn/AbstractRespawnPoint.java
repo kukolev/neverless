@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,16 +34,18 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
     @OneToOne
     private AbstractEnemy enemy;
 
-    /**
-     * Returns minimum int value, because respawn point should not overlay anything.
-     */
+    /** Returns minimum int value, because respawn point should not overlay anything. */
     @Override
     public int getZOrder() {
         return Integer.MIN_VALUE;
     }
 
-    /**
-     * Returns a factory which able to create enemies for this point.
-     */
+    /** Returns a factory which able to create enemies for this point. */
     public abstract Class<? extends AbstractEnemyFactory> getEnemyFactory();
+
+    /** {@inheritDoc} */
+    @Override
+    public MapObjectMetaType getMetaType() {
+        return MapObjectMetaType.TERRAIN;
+    }
 }

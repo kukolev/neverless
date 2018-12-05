@@ -6,5 +6,6 @@ public enum  MapObjectMetaType {
     NPC,
     ENEMY,
     PORTAL,
-    CHEST
+    CHEST,
+    PLAYER
 }

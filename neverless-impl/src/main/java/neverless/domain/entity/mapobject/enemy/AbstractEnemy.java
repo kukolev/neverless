@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,5 +55,10 @@ public abstract class AbstractEnemy extends AbstractMapObject {
         } else {
             hitPoints = 0;
         }
+    }
+
+    @Override
+    public MapObjectMetaType getMetaType() {
+        return MapObjectMetaType.ENEMY;
     }
 }

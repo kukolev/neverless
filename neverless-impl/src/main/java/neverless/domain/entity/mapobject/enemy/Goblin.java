@@ -3,6 +3,7 @@ package neverless.domain.entity.mapobject.enemy;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.Resources;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Entity;
 

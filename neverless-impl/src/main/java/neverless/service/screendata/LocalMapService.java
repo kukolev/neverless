@@ -86,33 +86,13 @@ public class LocalMapService {
     }
 
     public LocalMapScreenDataDto getScreenData() {
-        LocalMapScreenDataDto localMapScreenDataDto = createCleanMap();
+        LocalMapScreenDataDto localMapScreenDataDto = new LocalMapScreenDataDto();
         Player player = playerRepository.get();
         if (player == null) {
             return localMapScreenDataDto;
         }
-        final int screenX1 = player.getX() - LOCAL_MAP_PLAYER_X;
-        final int screenY1 = player.getY() - LOCAL_MAP_PLAYER_Y;
 
-        List<AbstractMapObject> objects = getObjectsForRender(player.getLocation());
-        objects.stream()
-                .sorted(Comparator.comparingInt(AbstractMapObject::getZOrder))
-                .forEach(obj -> {
-                    int objPart = 0;
-                    for (int j = obj.getY(); j < obj.getY() + obj.getHeight(); j++)
-                        for (int i = obj.getX(); i < obj.getX() + obj.getWidth(); i++) {
-
-                            objPart++;
-                            int localX = i - screenX1;
-                            int localY = j - screenY1;
-
-                            if ((localX >= 0) && (localY >= 0) && (localX < LOCAL_MAP_WIDTH)  && (localY < LOCAL_MAP_HEIGH)) {
-                                localMapScreenDataDto.setCell(localX, localY, obj.getSignature() + objPart);
-                            }
-                        }
-                });
-        localMapScreenDataDto.setCell(LOCAL_MAP_PLAYER_X, LOCAL_MAP_PLAYER_Y, player.getSignature());
-
+        List<AbstractMapObject> objects = mapObjRepository.findAllByLocation(player.getLocation());
         List<MapObjectDto> objectDtos = objects.stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
@@ -135,7 +115,8 @@ public class LocalMapService {
                 .setY(mapObject.getY())
                 .setHeight(mapObject.getHeight())
                 .setWidth(mapObject.getWidth())
-                .setZOrder(mapObject.getZOrder());
+                .setZOrder(mapObject.getZOrder())
+                .setMetaType(mapObject.getMetaType());
 
         // todo: maybe it should be optimized. for example store meta type in class
         MapObjectMetaType metaType = MapObjectMetaType.IMPASSIBLE_TERRAIN;
@@ -151,25 +132,6 @@ public class LocalMapService {
         dto.setMetaType(metaType);
 
         return dto;
-    }
-
-    private List<AbstractMapObject> getObjectsForRender(String location) {
-        List<AbstractMapObject> result = new ArrayList<>();
-        List<AbstractMapObject> mapObjects = mapObjRepository.findAllByLocation(location);
-
-        // TODO: Add real filtration for objects which should render
-        result.addAll(mapObjects);
-
-        return result;
-    }
-
-    private LocalMapScreenDataDto createCleanMap() {
-        LocalMapScreenDataDto localMapScreenDataDto = new LocalMapScreenDataDto();
-        for (int i = 0; i < LOCAL_MAP_WIDTH; i++)
-            for (int j = 0; j < LOCAL_MAP_HEIGH; j++) {
-                localMapScreenDataDto.setCell(i, j, "~");
-            }
-        return localMapScreenDataDto;
     }
 
     public boolean isPassable(int x, int y, String location) {

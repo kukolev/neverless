@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.Resources;
 import neverless.domain.entity.inventory.Inventory;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,5 +35,10 @@ public class Player extends AbstractMapObject {
 
     public void decreaseHitPoints(int damage) {
         hitPoints -= damage;
+    }
+
+    @Override
+    public MapObjectMetaType getMetaType() {
+        return MapObjectMetaType.PLAYER;
     }
 }

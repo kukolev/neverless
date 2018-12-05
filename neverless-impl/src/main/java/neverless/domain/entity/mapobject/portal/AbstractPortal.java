@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.Resources;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.dto.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,5 +29,10 @@ public class AbstractPortal extends AbstractMapObject {
     @Override
     public boolean isPassable() {
         return true;
+    }
+
+    @Override
+    public MapObjectMetaType getMetaType() {
+        return MapObjectMetaType.PORTAL;
     }
 }
