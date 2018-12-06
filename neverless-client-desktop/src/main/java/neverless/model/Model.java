@@ -1,7 +1,10 @@
 package neverless.model;
 
+import lombok.Data;
 import neverless.dto.MapObjectMetaType;
 import neverless.dto.command.Direction;
+import neverless.dto.screendata.MapObjectDto;
+import neverless.dto.screendata.PlayerDto;
 import neverless.dto.screendata.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.MapGoDownCommand;
@@ -18,10 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.ReentrantLock;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.atan;
 import static java.lang.Math.floor;
 import static neverless.util.Constants.CELL_HOR_CENTER;
 import static neverless.util.Constants.CELL_VERT_CENTER;
@@ -39,15 +39,30 @@ public class Model extends Thread {
 
     private volatile boolean isWorking = true;
     private volatile GameStateDto gameState;
-    private final ReentrantLock gameStateLock = new ReentrantLock();
-
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
 
+    /** Utility class for coordinates. */
+    @Data
+    private class Coordinate {
+        int x;
+        int y;
+    }
+
+    /**
+     * Clears command queue and adds list of commands.
+     *
+     * @param commandList   list of command added to queue.
+     */
     public void putCommandList(List<AbstractCommand> commandList) {
         queue.clear();
         queue.addAll(commandList);
     }
 
+    /**
+     * Clears command queue and adds one command.
+     *
+     * @param command   command added to queue.
+     */
     public void putCommand(AbstractCommand command) {
         queue.clear();
         queue.add(command);
@@ -57,23 +72,25 @@ public class Model extends Thread {
      * Evaluates a command that should be performed by clicking in some coordinates.
      * Puts the command in queue.
      *
-     * @param x horizontal cell index
-     * @param y vertical cell index
+     * @param screenX horizontal cell index
+     * @param screenY vertical cell index
      */
-    public void click(int x, int y) {
+    public void click(int screenX, int screenY) {
         // todo: remove stub and implement real code.
-        int cellX = convertToCellPosition(x);
-        int cellY = convertToCellPosition(y);
-        MapObjectMetaType metaType = getMetaTypeAtPosition(cellX, cellY);
+        MapObjectMetaType metaType = getMetaTypeAtScreenPosition(screenX, screenY);
+        System.out.println(metaType);
 
         switch (metaType) {
             case TERRAIN: {
+                int cellX = convertToCellPosition(screenX);
+                int cellY = convertToCellPosition(screenY);
+
                 Direction direction = calcDirection(cellX, cellY);
                 switch (direction) {
-                    case DOWN: putCommand(new MapGoDownCommand()); break;
-                    case UP: putCommand(new MapGoUpCommand()); break;
-                    case LEFT: putCommand(new MapGoLeftCommand()); break;
-                    case RIGHT: putCommand(new MapGoRightCommand()); break;
+                    case DOWN: cmdMapGoDown(); break;
+                    case UP: cmdMapGoUp(); break;
+                    case LEFT: cmdMapGoLeft(); break;
+                    case RIGHT: cmdMapGoRight(); break;
                 }
                 System.out.println(direction);
             }
@@ -138,10 +155,7 @@ public class Model extends Thread {
      * @param command   command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
-        GameStateDto dto = resolver.resolve(command);
-        gameStateLock.lock();
-        gameState = dto;
-        gameStateLock.unlock();
+        gameState = resolver.resolve(command);
 
         try {
             dtoExchanger.exchange(gameState);
@@ -152,16 +166,60 @@ public class Model extends Thread {
     }
 
     /**
-     * Returns metatype of object on local map with some x and y coordinates.
-     * @param x horizontal coordinate.
-     * @param y vertical coordinate.
+     * Returns metatype of object on local map with some screenX and screenY coordinates.
+     *
+     * @param screenX horizontal screen coordinate.
+     * @param screenY vertical screen coordinate.
      */
-    private MapObjectMetaType getMetaTypeAtPosition(int x, int y) {
-        gameStateLock.lock();
-        // todo: implement real calculation
-        MapObjectMetaType metaType = MapObjectMetaType.TERRAIN;
-        gameStateLock.unlock();
-        return metaType;
+    private MapObjectMetaType getMetaTypeAtScreenPosition(int screenX, int screenY) {
+        Coordinate coordinate = getObjectCoords(screenX, screenY);
+        List<MapObjectDto> objects = gameState.getLocalMapScreenData().getObjects();
+        return objects.stream()
+                .filter(o -> isObjectAtPosition(o, coordinate.getX(), coordinate.getY()))
+                .findFirst()
+                .map(MapObjectDto::getMetaType)
+                .orElse(MapObjectMetaType.TERRAIN);
+    }
+
+    /**
+     * Returns game coordinates for some couple of screen coordinates.
+     *
+     * @param screenX horizontal screen coordinate.
+     * @param screenY vertical screen coordinate.
+     */
+    private Coordinate getObjectCoords(int screenX, int screenY) {
+        int cellX = convertToCellPosition(screenX);
+        int cellY = convertToCellPosition(screenY);
+
+        // Create copy of reference to avoid concurrency issues in further code.
+        GameStateDto gameState = this.gameState;
+        PlayerDto player = gameState.getPlayerScreenDataDto().getPlayerDto();
+        int dx = player.getX() - CELL_HOR_CENTER;
+        int dy = player.getY() - CELL_VERT_CENTER ;
+
+        Coordinate coordinate = new Coordinate();
+        coordinate.setX(cellX + dx);
+        coordinate.setY(cellY + dy);
+
+        return coordinate;
+    }
+
+    /**
+     * Returns true if object is covering some coordinate.
+     *
+     * @param object    the object for position analysis.
+     * @param x         horizontal coordinate.
+     * @param y         vertical coordinate.
+     */
+    private boolean isObjectAtPosition(MapObjectDto object, int x, int y) {
+        boolean b = (object.getX() <= x) &&
+                (object.getY() <= y) &&
+                (x < (object.getX() + object.getWidth())) &&
+                (y < (object.getY() + object.getHeight()));
+        if (b) {
+            System.out.println(object.getUniqueName());
+        }
+        return b;
     }
 
     /**
@@ -183,16 +241,14 @@ public class Model extends Thread {
         int dx = x - CELL_HOR_CENTER;
         int dy = y - CELL_VERT_CENTER;
 
-        double tg = 0;
-        double alfa = 0;
+        double tg;
         if (dx != 0) {
             tg = (double) dy / dx;
-            alfa = atan(tg) * (180 / PI);
         } else {
-            alfa = 90;
+            tg = Integer.MAX_VALUE;
         }
 
-        if ((alfa > 0 && alfa < 45) || (alfa <= 0 && alfa >= -45)) {
+        if (tg >= -1 && tg < 1) {
             if (dx > 0) {
                 return Direction.RIGHT;
             } else {

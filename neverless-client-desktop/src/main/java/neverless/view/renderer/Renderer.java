@@ -14,9 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static neverless.util.Constants.CELL_HEIGHT;
 import static neverless.util.Constants.CELL_HOR_CENTER;
-import static neverless.util.Constants.CELL_HOR_COUNT;
 import static neverless.util.Constants.CELL_VERT_CENTER;
-import static neverless.util.Constants.CELL_VERT_COUNT;
 import static neverless.util.Constants.CELL_WIDTH;
 
 @Component
