@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
 
@@ -29,19 +32,42 @@ public class RootPane extends Pane {
     @Autowired
     private Drawer drawer;
 
+    private ViewState viewState;
+    private Pane localMapPane = new Pane();
+    private Pane inventoryPane = new Pane();
+    private Pane menuPane = new Pane();
+    private List<Pane> paneList = new ArrayList<>();
+    {
+        paneList.add(localMapPane);
+        paneList.add(inventoryPane);
+        paneList.add(menuPane);
+    }
+
+
     @PostConstruct
     public void init() {
+        initInventory();
+        initLocalMap();
+        initMainMenu();
+
+        this.getChildren().add(localMapPane);
+        this.getChildren().add(inventoryPane);
+        this.getChildren().add(menuPane);
+
+        setViewState(ViewState.MAIN_MENU);
+        new Thread(renderer).start();
+    }
+
+    private void initLocalMap() {
+        localMapPane.setLayoutX(0);
+        localMapPane.setLayoutY(0);
+        localMapPane.setMaxWidth(1000);
+        localMapPane.setMaxHeight(1000);
+
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         canvas.setLayoutX(20);
         canvas.setLayoutY(20);
         canvas.setOnMouseClicked(controller::onClick);
-
-        Button btnStartNewGame = new Button();
-        btnStartNewGame.setText("Start New Game");
-        btnStartNewGame.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20);
-        btnStartNewGame.setMaxWidth(100);
-        btnStartNewGame.setLayoutY(0);
-        btnStartNewGame.setOnMouseClicked(controller::startNewGameBtnClick);
 
         Button btnMoveDown = new Button();
         btnMoveDown.setText("D");
@@ -71,26 +97,55 @@ public class RootPane extends Pane {
         btnMoveRight.setMaxWidth(MOVE_BTN_GABARIT);
         btnMoveRight.setOnMouseClicked(controller::moveRightBtnClick);
 
-        ImageButton imageButton = new ImageButton(this,
+        localMapPane.getChildren().add(btnMoveDown);
+        localMapPane.getChildren().add(btnMoveUp);
+        localMapPane.getChildren().add(btnMoveLeft);
+        localMapPane.getChildren().add(btnMoveRight);
+        localMapPane.getChildren().add(canvas);
+
+        drawer.setGraphicsContext(canvas.getGraphicsContext2D());
+        renderer.messageProperty().addListener(drawer);
+    }
+
+    private void initMainMenu() {
+        menuPane.setLayoutX(0);
+        menuPane.setLayoutY(0);
+        menuPane.setMaxWidth(1000);
+        menuPane.setMaxHeight(1000);
+
+        ImageButton imageButton = new ImageButton(menuPane,
                 new Image("buttons/btn_normal.png"),
                 new Image("buttons/btn_over.png"),
                 new Image("buttons/btn_pressed.png"));
         imageButton.setLayoutX(700);
         imageButton.setLayoutY(100);
         imageButton.setOnClicked(controller::startNewGameBtnClick);
+    }
 
+    private void initInventory() {
+        inventoryPane.setLayoutX(0);
+        inventoryPane.setLayoutY(0);
+        inventoryPane.setMaxWidth(1000);
+        inventoryPane.setMaxHeight(1000);
+    }
 
+    public void setViewState(ViewState viewState) {
+        this.viewState = viewState;
+        refrViewState();
+    }
 
-        this.getChildren().add(btnStartNewGame);
-        this.getChildren().add(btnMoveDown);
-        this.getChildren().add(btnMoveUp);
-        this.getChildren().add(btnMoveLeft);
-        this.getChildren().add(btnMoveRight);
-        this.getChildren().add(canvas);
+    public void refrViewState() {
+        Pane displayPane = calcDisplayPane();
+        paneList.forEach(p -> p.setVisible(p == displayPane));
+    }
 
-
-        drawer.setGraphicsContext(canvas.getGraphicsContext2D());
-        renderer.messageProperty().addListener(drawer);
-        new Thread(renderer).start();
+    private Pane calcDisplayPane() {
+        Pane displayPane = localMapPane;
+        switch (viewState) {
+            case LOCAL_MAP: displayPane = localMapPane; break;
+            case MAIN_MENU: displayPane = menuPane; break;
+            case INVENTORY: displayPane = inventoryPane;
+        }
+        return displayPane;
     }
 }

@@ -10,6 +10,8 @@ import neverless.model.command.StartNewGameCommand;
 import neverless.model.command.WaitCommand;
 import neverless.model.exception.UnsupportedCommandException;
 import neverless.resource.GameControllerResource;
+import neverless.view.RootPane;
+import neverless.view.ViewState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ class ResolverRouterService {
 
     @Autowired
     private GameControllerResource backend;
+    @Autowired
+    private RootPane rootPane;
 
     /**
      * Resolves command via mapped resolver. Returns GameStateDto.
@@ -54,8 +58,11 @@ class ResolverRouterService {
     }
 
     private GameStateDto resolve(StartNewGameCommand command) {
-        return backend.cmdStartNewGame();
+        GameStateDto gameStateDto = backend.cmdStartNewGame();
+        rootPane.setViewState(ViewState.LOCAL_MAP);
+        return gameStateDto;
     }
+
     private GameStateDto resolve(WaitCommand command) {
         return backend.cmdWait();    }
 

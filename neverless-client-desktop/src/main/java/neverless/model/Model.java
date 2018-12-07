@@ -14,7 +14,7 @@ import neverless.model.command.MapGoUpCommand;
 import neverless.model.command.StartNewGameCommand;
 import neverless.model.command.WaitCommand;
 import neverless.util.FrameExchanger;
-import neverless.util.ResponseExchanger;
+import neverless.view.renderer.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +33,7 @@ public class Model extends Thread {
     @Autowired
     private ResolverRouterService resolver;
     @Autowired
-    private FrameExchanger frameExchanger;
-    @Autowired
-    private ResponseExchanger dtoExchanger;
+    private Renderer renderer;
 
     private volatile boolean isWorking = true;
     private volatile GameStateDto gameState;
@@ -151,28 +149,23 @@ public class Model extends Thread {
 
     /**
      * Resolves command and updates current game state.
+     * Sends actual game state to renderer.
      *
      * @param command   command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
         gameState = resolver.resolve(command);
-
-        try {
-            dtoExchanger.exchange(gameState);
-        } catch (InterruptedException e) {
-            this.interrupt();
-            e.printStackTrace();
-        }
+        renderer.processGameState(gameState);
     }
 
     /**
-     * Returns metatype of object on local map with some screenX and screenY coordinates.
+     * Returns meta-type of object on local map with some screenX and screenY coordinates.
      *
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
      */
     private MapObjectMetaType getMetaTypeAtScreenPosition(int screenX, int screenY) {
-        Coordinate coordinate = getObjectCoords(screenX, screenY);
+        Coordinate coordinate = getObjectCoordinates(screenX, screenY);
         List<MapObjectDto> objects = gameState.getLocalMapScreenData().getObjects();
         return objects.stream()
                 .filter(o -> isObjectAtPosition(o, coordinate.getX(), coordinate.getY()))
@@ -187,7 +180,7 @@ public class Model extends Thread {
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
      */
-    private Coordinate getObjectCoords(int screenX, int screenY) {
+    private Coordinate getObjectCoordinates(int screenX, int screenY) {
         int cellX = convertToCellPosition(screenX);
         int cellY = convertToCellPosition(screenY);
 

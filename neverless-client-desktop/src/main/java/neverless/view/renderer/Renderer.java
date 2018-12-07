@@ -18,7 +18,7 @@ import static neverless.util.Constants.CELL_VERT_CENTER;
 import static neverless.util.Constants.CELL_WIDTH;
 
 @Component
-public class Renderer extends Task {
+public class  Renderer extends Task {
 
     @Autowired
     private FrameExchanger frameExchanger;
@@ -32,6 +32,13 @@ public class Renderer extends Task {
 
         while (isWorking.get()) {
             GameStateDto gameStateDto = dtoExchanger.exchange(null);
+
+            Frame gameStateFrame = new Frame();
+            gameStateFrame.setGameState(gameStateDto);
+            updateMessage(UUID.randomUUID().toString());
+            frameExchanger.exchange(gameStateFrame);
+
+
             Scene scene = calcScene(gameStateDto);
 
             for (Frame frame: scene.getFrames()) {
@@ -45,6 +52,19 @@ public class Renderer extends Task {
 
     public void stop() {
         isWorking.set(false);
+    }
+
+    /**
+     * Receives game state and stores it to queue for further processing.
+     *
+     * @param gameState game state.
+     */
+    public void processGameState(GameStateDto gameState) {
+        try {
+            dtoExchanger.exchange(gameState);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
