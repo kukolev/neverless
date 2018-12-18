@@ -2,12 +2,13 @@ package neverless.view;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 import neverless.controller.Controller;
 import neverless.controller.vcl.ImageButton;
-import neverless.view.renderer.Renderer;
+import neverless.model.Model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class RootPane extends Pane {
     @Autowired
     private Controller controller;
     @Autowired
-    private Renderer renderer;
+    private Model model;
     @Autowired
     private Drawer drawer;
 
@@ -55,7 +56,6 @@ public class RootPane extends Pane {
         this.getChildren().add(menuPane);
 
         setViewState(ViewState.MAIN_MENU);
-        new Thread(renderer).start();
     }
 
     private void initLocalMap() {
@@ -97,14 +97,26 @@ public class RootPane extends Pane {
         btnMoveRight.setMaxWidth(MOVE_BTN_GABARIT);
         btnMoveRight.setOnMouseClicked(controller::moveRightBtnClick);
 
+        TextArea infoArea = new TextArea();
+        infoArea.setEditable(false);
+        infoArea.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT * 2);
+        infoArea.setLayoutY(300);
+        infoArea.setMaxWidth(150);
+        infoArea.setMaxHeight(150);
+
         localMapPane.getChildren().add(btnMoveDown);
         localMapPane.getChildren().add(btnMoveUp);
         localMapPane.getChildren().add(btnMoveLeft);
         localMapPane.getChildren().add(btnMoveRight);
         localMapPane.getChildren().add(canvas);
+        localMapPane.getChildren().add(infoArea);
 
-        drawer.setGraphicsContext(canvas.getGraphicsContext2D());
-        renderer.messageProperty().addListener(drawer);
+        DrawerContext drawerContext = new DrawerContext()
+                .setLocalMapCanvas(canvas)
+                .setInfoArea(infoArea);
+
+        drawer.setGraphicsContext(drawerContext);
+        model.messageProperty().addListener(drawer);
     }
 
     private void initMainMenu() {

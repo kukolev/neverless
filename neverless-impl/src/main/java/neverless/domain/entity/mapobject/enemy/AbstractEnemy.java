@@ -6,9 +6,12 @@ import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.dto.MapObjectMetaType;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
@@ -25,7 +28,8 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     @OneToOne
     private AbstractRespawnPoint respawnPoint;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<AbstractMeleeWeapon> weapons = new ArrayList<>();
 
     @Column

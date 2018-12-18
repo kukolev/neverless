@@ -1,8 +1,9 @@
 package neverless.domain.quest;
 
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.repository.MapObjectsRepository;
+import neverless.domain.Game;
 import neverless.dto.screendata.quest.QuestState;
+import neverless.repository.MapObjectsRepository;
+import neverless.service.screendata.GameService;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,16 @@ import java.util.List;
 @Service
 public abstract class AbstractQuest {
 
+    private static final String DEFAULT_BOOL = "false";
+    private static final String DEFAULT_STRING = "";
+    private static final String DEFAULT_INTEGER = "false";
+
     @Autowired
     private MapObjectsRepository repository;
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private GameService gameService;
 
     public abstract String getTitle();
 
@@ -66,19 +73,57 @@ public abstract class AbstractQuest {
 
     public abstract QuestReward getReward();
 
-    protected final Boolean getParamBool(String objName, String paramName) {
-        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
-        return object.getParamBool(paramName);
+    /**
+     * Returns boolean value for parameter, stored in game.
+     *
+     * @param paramName     parameter name
+     */
+    protected final Boolean getParamBool(String paramName) {
+        Game game = gameService.getGame();
+        String val = game.getParams().get(paramName);
+        if (val == null) {
+            val = DEFAULT_BOOL;
+        }
+        return Boolean.parseBoolean(val);
     }
 
-    public final Integer getParamInt(String objName, String paramName) {
-        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
-        return object.getParamInt(paramName);
+    /**
+     * Returns int value for parameter, stored in game.
+     *
+     * @param paramName     parameter name
+     */
+    public final Integer getParamInt(String paramName) {
+        Game game = gameService.getGame();
+        String val = game.getParams().get(paramName);
+        if (val == null) {
+            val = DEFAULT_INTEGER;
+        }
+        return Integer.parseInt(val);
     }
 
-    public final String getParamStr(String objName, String paramName) {
-        AbstractMapObject object = repository.findById(sessionUtil.createId(objName)).get();
-        return object.getParamStr(paramName);
+    /**
+     * Returns string value for parameter, stored in game.
+     *
+     * @param paramName     parameter name
+     */
+    public final String getParamStr(String paramName) {
+        Game game = gameService.getGame();
+        String val = game.getParams().get(paramName);
+        if (val == null) {
+            val = DEFAULT_STRING;
+        }
+        return val;
+    }
+
+    /**
+     * Sets game parameter.
+     *
+     * @param paramName     parameter name.
+     * @param val           parameter value.
+     */
+    protected final void setParam(String paramName, Object val) {
+        Game game = gameService.getGame();
+        game.getParams().put(paramName, val.toString());
     }
 
     /**

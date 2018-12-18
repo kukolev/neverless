@@ -1,14 +1,21 @@
 package neverless.game;
 
+import neverless.domain.Game;
+import neverless.domain.Location;
 import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.AbstractBuilding;
-import neverless.domain.entity.mapobject.enemy.Goblin;
+import neverless.domain.entity.mapobject.npc.AbstractNpc;
+import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.portal.LocationsPortal;
+import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
+import neverless.domain.entity.mapobject.tree.AbstractTree;
+import neverless.domain.entity.mapobject.wall.AbstractWall;
 import neverless.domain.entity.mapobject.wall.StoneWall;
 import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
@@ -19,20 +26,23 @@ import neverless.domain.entity.mapobject.building.LittleVillageHouse;
 import neverless.domain.entity.mapobject.building.LongVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 
-import neverless.repository.BagRepository;
-import neverless.repository.EquipmentRepository;
-import neverless.repository.InventoryRepository;
+import neverless.repository.GameRepository;
 import neverless.repository.ItemRepository;
+import neverless.repository.LocationRepository;
 import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import neverless.repository.RespawnPointRepository;
+import neverless.repository.BagRepository;
+import neverless.repository.EquipmentRepository;
+import neverless.repository.InventoryRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -40,9 +50,8 @@ import static java.lang.String.format;
 @Transactional
 public class GameLoader {
 
-    private static final String LOCATION_VILLAGE = "Village";
-    private static final String LOCATION_DUNGEON = "Dungeon";
-
+    @Autowired
+    private GameRepository gameRepository;
     @Autowired
     private MapObjectsRepository mapObjRepository;
     @Autowired
@@ -63,47 +72,94 @@ public class GameLoader {
     private QuestContainer questContainer;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private LocationRepository locationRepository;
 
     public void createNewGame() {
-        createPlayer();
-        createHouse2x2();
-        createHouse4x5();
-        createHouse3x7();
-        createRoads();
-        createTreesTop();
-        createTreesLeft();
-        createTreesRight();
-        createTreesNpc();
-        createTreesMonster();
-        createPortalVillage2Dungeon();
-        createPortalDungeon2Village();
-        createDungeon();
-        createRespawnPoint();
+        createGame();
         createQuests();
+//        createHouse2x2();
+//        createHouse4x5();
+//        createHouse3x7();
+//        createRoads();
+//        createTreesTop();
+//        createTreesLeft();
+//        createTreesRight();
+//        createNpc();
+//        createTreesMonster();
+//
+//        createDungeon();
+//        createRespawnPoints();
+//        createQuests();
     }
 
-    private void createPlayer() {
+    private Game createGame() {
+
+        Game game = gameRepository.save(new Game()
+                .setId(sessionUtil.getGameId()));
+
+        Location village = createLocationVillage();
+        Location dungeon = createLocationDungeon();
+
+        village.getPortals().add(createPortalVillage2Dungeon(dungeon));
+        dungeon.getPortals().add(createPortalDungeon2Village(village));
+
+        Player player = createPlayer();
+        player.setLocation(village);
+        playerRepository.save(player);
+
+        game.getLocations().add(village);
+        game.getLocations().add(dungeon);
+        game.setPlayer(player);
+        gameRepository.save(game);
+        return game;
+    }
+
+    private Location createLocationVillage() {
+        Location village = new Location()
+                .setTitle("Village")
+                .setRespawnPoints(createRespawnPoints());
+        village.getObjects().addAll(createRoads());
+        village.getObjects().addAll(createTreesLeft());
+        village.getObjects().addAll(createTreesTop());
+        village.getObjects().addAll(createTreesRight());
+
+        village.getNpcs().add(createNpc());
+
+        village.getObjects().add(createHouse2x2());
+        village.getObjects().add(createHouse3x7());
+        village.getObjects().add(createHouse4x5());
+
+        return locationRepository.save(village);
+    }
+
+    private Location createLocationDungeon() {
+        Location dungeon = new Location()
+                .setTitle("Dungeon");
+
+        dungeon.getObjects().addAll(createDungeonObjects());
+
+        return locationRepository.save(dungeon);
+    }
+
+
+    private Player createPlayer() {
         Bag bag = new Bag();
-        bag
-                .setId(UUID.randomUUID().toString());
         bagRepository.save(bag);
 
         Sword sword = new Sword();
         sword
                 .setPower(100)
-                .setTitle("Mega Sword of Ultra Power")
-                .setUniqueName("MEGA_SWORD");
-        itemRepository.simpleSave(sword);
+                .setTitle("Mega Sword of Ultra Power");
+        itemRepository.save(sword);
 
         Equipment equipment = new Equipment();
         equipment
-                .setId(UUID.randomUUID().toString())
                 .setRightHand(sword);
         equipmentRepository.save(equipment);
 
         Inventory inventory = new Inventory();
         inventory
-                .setId(UUID.randomUUID().toString())
                 .setBag(bag)
                 .setEquipment(equipment);
         inventoryRepository.save(inventory);
@@ -111,206 +167,193 @@ public class GameLoader {
         Player player = new Player();
         player
                 .setInventory(inventory)
-                .setX(50)
-                .setY(50)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Vova");
-        playerRepository.simpleSave(player);
+                .setX(1600)
+                .setY(1600);
+        return playerRepository.save(player);
     }
 
-    private void createHouse2x2() {
+    private AbstractBuilding createHouse2x2() {
         LittleVillageHouse building = new LittleVillageHouse();
         building
-                .setX(10)
-                .setY(10)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("House2x2");
-        mapObjRepository.simpleSave(building);
+                .setX(320)
+                .setY(320);
+        return mapObjRepository.save(building);
     }
 
-    private void createHouse4x5() {
+    private AbstractBuilding createHouse4x5() {
         AbstractBuilding building = new LargeVillageHouse();
         building
-                .setX(80)
-                .setY(14)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("House4x5");
-        mapObjRepository.simpleSave(building);
+                .setX(2560)
+                .setY(448);
+        return mapObjRepository.save(building);
     }
 
-    private void createHouse3x7() {
+    private AbstractBuilding createHouse3x7() {
         AbstractBuilding building = new LongVillageHouse();
         building
-                .setX(65)
-                .setY(90)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("House3x7");
-        mapObjRepository.simpleSave(building);
+                .setX(2080)
+                .setY(2880);
+        return mapObjRepository.save(building);
     }
 
-    private void createRoads() {
-
+    private List<Road> createRoads() {
+        List<Road> roads = new ArrayList<>();
         // 1-st road
-        drawRoadVertical(11, 12, 50);
-        drawRoadHorizontal(50, 11, 60);
-        drawRoadVertical(60, 40, 92);
-        drawRoadHorizontal(92, 60, 64);
-        drawRoadHorizontal(40, 60, 83);
-        drawRoadVertical(83, 17, 40);
+        roads.addAll(drawRoadVertical(352, 384, 1600));
+        roads.addAll(drawRoadHorizontal(1600, 352, 1920));
+        roads.addAll(drawRoadVertical(1920, 1280, 2944));
+        roads.addAll(drawRoadHorizontal(2944, 1920, 2048));
+        roads.addAll(drawRoadHorizontal(1280, 1920, 2656));
+        roads.addAll(drawRoadVertical(2656, 544, 1280));
+        return roads;
     }
 
-    private void drawRoadHorizontal(int y, int x1, int x2) {
-        for (int i = x1; i <= x2; i++ ) {
+    private List<Road> drawRoadHorizontal(int y, int x1, int x2) {
+        List<Road> roads = new ArrayList<>();
+        for (int i = x1; i <= x2; i+=32 ) {
             Road road = new Road();
             road
                     .setX(i)
-                    .setY(y)
-                    .setLocation(LOCATION_VILLAGE)
-                .setUniqueName(format("Road %s %s", i, y));
-            mapObjRepository.simpleSave(road);
+                    .setY(y);
+            roads.add(road);
+            mapObjRepository.save(road);
         }
+        return roads;
     }
 
-    private void drawRoadVertical(int x, int y1, int y2) {
-        for (int j = y1; j <= y2; j++ ) {
+    private List<Road> drawRoadVertical(int x, int y1, int y2) {
+        List<Road> roads = new ArrayList<>();
+        for (int j = y1; j <= y2; j+=32 ) {
             Road road = new Road();
             road
                     .setX(x)
-                    .setY(j)
-                    .setLocation(LOCATION_VILLAGE)
-                    .setUniqueName(format("Road %s %s", x, j));
-            mapObjRepository.simpleSave(road);
+                    .setY(j);
+            roads.add(mapObjRepository.save(road));
         }
+        return roads;
     }
 
-    private void createTreesTop() {
-        createTree(20, 43, LOCATION_VILLAGE);
-        createTree(35, 45, LOCATION_VILLAGE);
-        createTree(43, 47, LOCATION_VILLAGE);
-        createTree(63, 36, LOCATION_VILLAGE);
-        createTree(74, 38, LOCATION_VILLAGE);
+    private List<AbstractTree> createTreesTop() {
+        List<AbstractTree> trees = new ArrayList<>();
+        trees.add(createTree(640, 1376));
+        trees.add(createTree(1120, 1440));
+        trees.add(createTree(1376, 1504));
+        trees.add(createTree(2016, 1152));
+        trees.add(createTree(2368, 1216));
+        return trees;
     }
 
-    private void createTreesLeft() {
-        createTree(50, 55, LOCATION_VILLAGE);
-        createTree(53, 65, LOCATION_VILLAGE);
-        createTree(57, 75, LOCATION_VILLAGE);
-        createTree(52, 79, LOCATION_VILLAGE);
-        createTree(58, 87, LOCATION_VILLAGE);
+    private List<AbstractTree> createTreesLeft() {
+        List<AbstractTree> trees = new ArrayList<>();
+        trees.add(createTree(1600, 1760));
+        trees.add(createTree(1696, 2080));
+        trees.add(createTree(1824, 2400));
+        trees.add(createTree(1664, 2528));
+        trees.add(createTree(1856, 2784));
+        return trees;
     }
 
-    private void createTreesRight() {
-        createTree(69, 58, LOCATION_VILLAGE);
-        createTree(65, 63, LOCATION_VILLAGE);
-        createTree(67, 70, LOCATION_VILLAGE);
-        createTree(68, 75, LOCATION_VILLAGE);
-        createTree(68, 81, LOCATION_VILLAGE);
+    private List<AbstractTree> createTreesRight() {
+        List<AbstractTree> trees = new ArrayList<>();
+        trees.add(createTree(2208, 1856));
+        trees.add(createTree(2080, 2016));
+        trees.add(createTree(2144, 2240));
+        trees.add(createTree(2176, 2400));
+        trees.add(createTree(2176, 2592));
+        return trees;
     }
 
-    private void createTree(int x, int y, String location) {
+    private AbstractTree createTree(int x, int y) {
         FirTree tree = new FirTree();
         tree.setX(x)
-                .setY(y)
-                .setLocation(location)
-                .setUniqueName(format("FirTree %s %s", x, y));
-        mapObjRepository.simpleSave(tree);
+                .setY(y);
+        return mapObjRepository.save(tree);
     }
 
-    private void drawStoneWallVertical(int x, int y1, int y2, String location) {
-        for (int j = y1; j <= y2; j++ ) {
-            createStoneWall(x, j, location);
+    private List<AbstractWall> drawStoneWallVertical(int x, int y1, int y2) {
+        List<AbstractWall> walls = new ArrayList<>();
+        for (int j = y1; j <= y2; j+=32 ) {
+            walls.add(createStoneWall(x, j));
         }
+        return walls;
     }
 
-    private void drawStoneWallHorizontal(int y, int x1, int x2, String location) {
-        for (int i = x1; i <= x2; i++ ) {
-            createStoneWall(i, y, location);
+    private List<AbstractWall> drawStoneWallHorizontal(int y, int x1, int x2) {
+        List<AbstractWall> walls = new ArrayList<>();
+        for (int i = x1; i <= x2; i+=32 ) {
+            walls.add(createStoneWall(i, y));
         }
+        return walls;
     }
 
-    private void createStoneWall(int x, int y, String location) {
+    private AbstractWall createStoneWall(int x, int y) {
         StoneWall wall = new StoneWall();
         wall
-                .setLocation(location)
                 .setX(x)
-                .setY(y)
-                .setUniqueName(format("StoneWall %s %s", x, y));
-        mapObjRepository.simpleSave(wall);
+                .setY(y);
+        return mapObjRepository.save(wall);
     }
 
-    private void createTreesNpc() {
+    private AbstractNpc createNpc() {
         OldMan oldMan = new OldMan();
         oldMan
-            .setX(51)
-            .setY(51)
-            .setLocation(LOCATION_VILLAGE);
-        mapObjRepository.simpleSave(oldMan);
+            .setX(1632)
+            .setY(1632);
+        return mapObjRepository.save(oldMan);
     }
 
-    private void createTreesMonster() {
-        Goblin monster = new Goblin();
-        monster
-                .setX(75)
-                .setY(95)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Ork warrior 75 95");
-        mapObjRepository.simpleSave(monster);
-    }
-
-    private void createPortalVillage2Dungeon() {
+    private AbstractPortal createPortalVillage2Dungeon(Location destination) {
         LocationsPortal portal = new LocationsPortal();
         portal
-                .setDestination(LOCATION_DUNGEON)
-                .setDestX(2)
-                .setDestY(5)
-                .setX(51)
-                .setY(53)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Village to Dungeon Portal");
-        mapObjRepository.simpleSave(portal);
-
+                .setDestination(destination)
+                .setDestX(64)
+                .setDestY(160)
+                .setX(1632)
+                .setY(1696);
+        return mapObjRepository.save(portal);
     }
 
-    private void createPortalDungeon2Village() {
+    private AbstractPortal createPortalDungeon2Village(Location destination) {
         LocationsPortal portal = new LocationsPortal();
         portal
-                .setDestination(LOCATION_VILLAGE)
-                .setDestX(51)
-                .setDestY(52)
-                .setX(1)
-                .setY(5)
-                .setLocation(LOCATION_DUNGEON)
-                .setUniqueName("Dungeon to Village Portal");
-        mapObjRepository.simpleSave(portal);
-
+                .setDestination(destination)
+                .setDestX(1632)
+                .setDestY(1664)
+                .setX(32)
+                .setY(160);
+        return mapObjRepository.save(portal);
     }
 
-    private void createDungeon() {
-        drawStoneWallHorizontal(1, 1, 10, LOCATION_DUNGEON);
-        drawStoneWallHorizontal(10, 1, 10, LOCATION_DUNGEON);
+    private List<AbstractMapObject> createDungeonObjects() {
+        List<AbstractMapObject> walls = new ArrayList<>();
+        walls.addAll(drawStoneWallHorizontal(32, 32, 320));
+        walls.addAll(drawStoneWallHorizontal(320,  32, 320));
 
-        drawStoneWallVertical(1, 2, 4, LOCATION_DUNGEON);
-        drawStoneWallVertical(1, 6, 9, LOCATION_DUNGEON);
+        walls.addAll(drawStoneWallVertical(32, 64, 128));
+        walls.addAll(drawStoneWallVertical(32, 192, 288));
 
-        drawStoneWallVertical(10, 2, 9, LOCATION_DUNGEON);
+        walls.addAll(drawStoneWallVertical(320, 64, 288));
+        return walls;
     }
 
-    private void createRespawnPoint() {
+    private List<AbstractRespawnPoint> createRespawnPoints() {
+        List<AbstractRespawnPoint> points = new ArrayList<>();
+
         GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint();
         respawnPoint1
-                .setX(50)
-                .setY(54)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Goblin Respawn Portal in Village 1");
-        respawnPointRepository.simpleSave(respawnPoint1);
+                .setX(1600)
+                .setY(1728);
+        respawnPointRepository.save(respawnPoint1);
+        points.add(respawnPoint1);
 
         GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
         respawnPoint2
-                .setX(40)
-                .setY(54)
-                .setLocation(LOCATION_VILLAGE)
-                .setUniqueName("Goblin Respawn Portal in Village 2");
-        respawnPointRepository.simpleSave(respawnPoint2);
+                .setX(1280)
+                .setY(1728);
+        respawnPointRepository.save(respawnPoint2);
+        points.add(respawnPoint2);
+
+        return points;
     }
 
     public void createQuests() {

@@ -13,21 +13,14 @@ public class Sprite {
 
     private double x;
     private double y;
-    private String signature;
 
     /**
      * Constructor for Sprite.
      *
-     * @param signature identifier for graphical resource associated with sprite.
+     * @param image graphical resource associated with sprite.
      */
-    public Sprite(String signature) {
-        this.signature = signature;
-        try {
-            this.image = new Image("sprites/" + signature);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-
+    public Sprite(Image image) {
+        this.image = image;
     }
 
     /**

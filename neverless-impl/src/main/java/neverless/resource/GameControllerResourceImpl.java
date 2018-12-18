@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
+
 @RestController
 @AllArgsConstructor
+@Transactional
 public class GameControllerResourceImpl implements GameControllerResource {
 
     private CommandRouterService commandRouterService;

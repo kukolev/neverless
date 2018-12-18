@@ -4,7 +4,6 @@ import neverless.context.RequestContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.dto.command.Direction;
 import neverless.dto.screendata.player.GameStateDto;
-import neverless.repository.PlayerRepository;
 import neverless.service.ai.AiService;
 import neverless.service.screendata.DialogService;
 import neverless.service.screendata.EnemyService;
@@ -40,16 +39,15 @@ public class CommandRouterService {
     @Autowired
     private RequestContext requestContext;
     @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
     private PlayerService playerService;
     @Autowired
     private EnemyService enemyService;
 
     public GameStateDto getState() {
-        Player player = playerRepository.get();
+        long t = System.nanoTime();
+        Player player = playerService.getPlayer();
 
-        return new GameStateDto()
+        GameStateDto dto = new GameStateDto()
                 .setLocalMapScreenData(localMapService.getScreenData())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())
@@ -57,7 +55,9 @@ public class CommandRouterService {
                 .setInventoryScreenDataDto(inventoryService.getScreenData())
                 .setPlayerScreenDataDto(playerService.getScreenData())
                 .setEnemyScreenDataDto(enemyService.getScreenData())
-                .setTurnNumber(player.incAndGetTurnNumber());
+                .setTurnNumber(requestContext.incTurnNumber());
+        System.out.println("getState = " + (System.nanoTime() - t));
+        return dto;
     }
 
     // todo: DRY
@@ -67,9 +67,11 @@ public class CommandRouterService {
     }
 
     public void cmdWait() {
+        long t = System.nanoTime();
         requestContext.initQuestStates();
         aiService.handleEvents();
         questService.generateQuestEvents();
+        System.out.println("cmdWait = " + (System.nanoTime() - t));
     }
 
     public void cmdMoveDown() {

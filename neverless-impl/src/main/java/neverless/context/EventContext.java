@@ -20,10 +20,7 @@ import neverless.dto.command.Direction;
 import neverless.dto.screendata.quest.QuestState;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +28,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-//@Scope(value = WebApplicationContext.SCOPE_REQUEST,
-//        proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class EventContext {
 
     @Autowired
@@ -47,13 +42,8 @@ public class EventContext {
     }
 
     public List<AbstractEvent> getEvents() {
-        String sessionId = sessionUtil.getCurrentSessionId();
-        List<AbstractEvent> events = eventsCache.get(sessionId);
-        if (events == null) {
-            events = new ArrayList<>();
-            eventsCache.put(sessionId, events);
-        }
-        return events;
+        String sessionId = sessionUtil.getGameId();
+        return eventsCache.computeIfAbsent(sessionId, k -> new ArrayList<>());
     }
 
     public void addMapGoEvent(Direction direction) {

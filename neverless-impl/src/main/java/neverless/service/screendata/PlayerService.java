@@ -1,6 +1,7 @@
 package neverless.service.screendata;
 
 import neverless.context.EventContext;
+import neverless.domain.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
@@ -8,6 +9,7 @@ import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.dto.screendata.PlayerDto;
 import neverless.dto.screendata.player.PlayerScreenDataDto;
 import neverless.repository.EnemyRepository;
+import neverless.repository.GameRepository;
 import neverless.repository.PlayerRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,16 @@ public class PlayerService {
     @Autowired
     private EnemyRepository enemyRepository;
     @Autowired
+    private GameService gameService;
+    @Autowired
     private SessionUtil sessionUtil;
     @Autowired
     private EventContext eventContext;
+
+    public Player getPlayer() {
+        Game game = gameService.getGame();
+        return game.getPlayer();
+    }
 
     /**
      * Performs an attack to enemy.
@@ -44,7 +53,7 @@ public class PlayerService {
      * @param enemyId   id of the attacked enemy.
      */
     private void doAttackToEnemy(String enemyId) {
-        AbstractEnemy enemy = enemyRepository.findById(sessionUtil.createId(enemyId)).get();
+        AbstractEnemy enemy = enemyRepository.findById(enemyId).orElse(null);
         if (calcToHit(enemy)) {
             // Player hits.
             int damage = calcDamage(enemy);
@@ -79,7 +88,7 @@ public class PlayerService {
      * @param enemy enemy attacked by the player.
      */
     private int calcDamage(AbstractEnemy enemy) {
-        Player player = playerRepository.get();
+        Player player = getPlayer();
         AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
         AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
 
@@ -102,16 +111,18 @@ public class PlayerService {
 
 
     public PlayerScreenDataDto getScreenData() {
+        long t = System.nanoTime();
         PlayerDto playerDto = new PlayerDto();
         PlayerScreenDataDto screenDataDto = new PlayerScreenDataDto();
 
-        Player player = playerRepository.get();
+        Player player = getPlayer();
         playerDto
                 .setHealthPoints(player.getHitPoints())
-                .setLocation(player.getLocation())
+                .setLocation(player.getLocation().getTitle())
                 .setX(player.getX())
                 .setY(player.getY());
         screenDataDto.setPlayerDto(playerDto);
+        System.out.println("PlayerScreenData = " + (System.nanoTime() - t));
         return screenDataDto;
     }
 }

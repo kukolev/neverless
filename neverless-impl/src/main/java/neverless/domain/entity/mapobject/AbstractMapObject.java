@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.dto.MapObjectMetaType;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,17 +25,14 @@ public abstract class AbstractMapObject extends AbstractGameObject {
      @Column
      private int zOrder = 1;
 
-     @Column
-     private String location;
-
      /** Returns default value for object width. */
      public int getWidth() {
-          return 1;
+          return 32;
      }
 
      /** Returns default value for object height. */
      public int getHeight() {
-         return 1;
+         return 32;
      }
 
      /** Returns identifier, specified for graphic render. */

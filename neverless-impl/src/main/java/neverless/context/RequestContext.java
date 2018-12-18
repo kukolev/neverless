@@ -1,9 +1,8 @@
 package neverless.context;
 
 import neverless.domain.quest.AbstractQuest;
-import neverless.domain.entity.mapobject.Player;
 import neverless.domain.quest.QuestContainer;
-import neverless.repository.PlayerRepository;
+import neverless.service.screendata.PlayerService;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,13 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RequestContext {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
     @Autowired
     private QuestContainer questContainer;
     @Autowired
     private SessionUtil sessionUtil;
 
     private Map<String, Map<String, String>> questCache = new ConcurrentHashMap<>();
+    private Map<String, Integer> turnsCache = new ConcurrentHashMap<>();
 
     /**
      * Initializes states for every quest and stores them.
@@ -39,7 +39,7 @@ public class RequestContext {
      * Returns map with quest states for concrete session.
      */
     private Map<String, String> getQuestStates() {
-        String session = sessionUtil.getCurrentSessionId();
+        String session = sessionUtil.getGameId();
         Map<String, String> questStates = questCache.get(session);
         if (questStates == null) {
             questStates = new HashMap<>();
@@ -66,8 +66,21 @@ public class RequestContext {
         return ids;
     }
 
+    /**
+     * Returns turn number for current game session.
+     */
     public int getTurnNumber() {
-        Player player = playerRepository.get();
-        return player.getTurnNumber();
+        String gameId = sessionUtil.getGameId();
+        return turnsCache.computeIfAbsent(gameId, turnNumber -> 0);
+    }
+
+    /**
+     * Increments turn number for current game session and returns the number value.
+     */
+    public int incTurnNumber() {
+        String gameId = sessionUtil.getGameId();
+        int turnNumber = getTurnNumber();
+        turnsCache.put(gameId, ++turnNumber);
+        return turnNumber;
     }
 }

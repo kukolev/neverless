@@ -1,8 +1,8 @@
 package neverless.service.screendata;
 
+import neverless.domain.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
-import neverless.repository.MapObjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,8 @@ import javax.transaction.Transactional;
 @Transactional
 public class NpcService {
 
-    @Autowired
-    private MapObjectsRepository mapObjectsRepository;
-
-    public AbstractNpc getNpcAtPosition(int npcX, int npcY, String location) {
-        AbstractMapObject object = mapObjectsRepository.findAllByLocation(location)
+    public AbstractNpc getNpcAtPosition(int npcX, int npcY, Location location) {
+        AbstractMapObject object = location.getObjects()
                 .stream()
                 .filter(o -> o.getX() == npcX && o.getY() == npcY)
                 .findFirst()

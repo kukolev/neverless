@@ -3,8 +3,10 @@ package neverless.domain.entity.mapobject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.Resources;
+import neverless.domain.Location;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.dto.MapObjectMetaType;
+import org.springframework.cache.annotation.CacheConfig;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,16 +23,12 @@ public class Player extends AbstractMapObject {
     @OneToOne
     private Inventory inventory;
 
-    @Column
-    private Integer turnNumber = 0;
+    @OneToOne
+    private Location location;
 
     @Override
     public String getSignature() {
         return Resources.IMG_PLAYER;
-    }
-
-    public int incAndGetTurnNumber() {
-        return ++turnNumber;
     }
 
     public void decreaseHitPoints(int damage) {

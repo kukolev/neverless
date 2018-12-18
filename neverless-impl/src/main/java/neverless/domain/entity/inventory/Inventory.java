@@ -2,8 +2,10 @@ package neverless.domain.entity.inventory;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -13,6 +15,8 @@ import javax.persistence.OneToOne;
 public class Inventory {
 
     @Id
+    @GeneratedValue(generator = "generic-uuid")
+    @GenericGenerator(name = "generic-uuid", strategy = "uuid")
     private String id;
 
     @OneToOne

@@ -14,6 +14,15 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
     properties:
+      javax:
+        persistence:
+          sharedCache:
+            mode: ALL
       hibernate:
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
         temp:
           use_jdbc_metadata_defaults: false

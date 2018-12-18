@@ -9,12 +9,9 @@ import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.dto.screendata.enemy.EnemyDto;
 import neverless.dto.screendata.enemy.EnemyScreenDataDto;
 import neverless.dto.screendata.inventory.WeaponDto;
+import neverless.context.RequestContext;
 import neverless.repository.EnemyRepository;
 import neverless.repository.ItemRepository;
-import neverless.repository.MapObjectsRepository;
-import neverless.repository.PlayerRepository;
-import neverless.repository.RespawnPointRepository;
-import neverless.context.RequestContext;
 import neverless.util.Coordinate;
 import neverless.util.CoordinateUtils;
 import neverless.util.SessionUtil;
@@ -25,11 +22,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
+import static java.util.stream.Collectors.toList;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
@@ -37,17 +35,11 @@ import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 public class EnemyService {
 
     @Autowired
-    private RespawnPointRepository respawnPointRepository;
-    @Autowired
     private RequestContext requestContext;
-    @Autowired
-    private MapObjectsRepository mapObjectsRepository;
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
     private LocalMapService localMapService;
-    @Autowired
-    private PlayerRepository playerRepository;
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
@@ -56,12 +48,15 @@ public class EnemyService {
     private ApplicationContext applicationContext;
     @Autowired
     private EventContext eventContext;
+    @Autowired
+    private PlayerService playerService;
 
     /**
      * Initiates a moving/attacking for all enemies.
      */
     public void move() {
-        respawnPointRepository.findAllObjects()
+        Player player = playerService.getPlayer();
+        player.getLocation().getRespawnPoints()
                 .forEach(rp -> {
                     if (rp.getEnemy() != null) {
                         if (!(walk(rp.getEnemy()) || chase(rp.getEnemy()))) {
@@ -79,9 +74,8 @@ public class EnemyService {
      */
     private boolean walk(AbstractEnemy enemy) {
 
-        Player player = playerRepository.get();
-        boolean chaseOrAttack = player.getLocation().equals(enemy.getLocation())
-                    && isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
+        Player player = playerService.getPlayer();
+        boolean chaseOrAttack = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
 
         if (!chaseOrAttack) {
 
@@ -113,23 +107,24 @@ public class EnemyService {
     /**
      * Calculates possibility of walk to new coordinates and add the coordinates in list;
      *
-     * @param newX          new X coordinate for enemy
-     * @param newY          new Y coordinate for enemy
-     * @param enemy         enemy for which new coordinates are calculated
-     * @param coordinates   list of new coordinates
+     * @param newX        new X coordinate for enemy
+     * @param newY        new Y coordinate for enemy
+     * @param enemy       enemy for which new coordinates are calculated
+     * @param coordinates list of new coordinates
      */
     private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<Coordinate> coordinates) {
-        boolean isPassable = (localMapService.isPassable(newX, newY, enemy.getLocation()));
+        Player player = playerService.getPlayer();
+        boolean isPassable = (localMapService.isPassable(newX, newY, player.getLocation()));
         boolean isNear =
                 (newX <= enemy.getBornX() + enemy.getAreaX())
-                && (newY <= enemy.getBornY() + enemy.getAreaY())
-                && (newX >= enemy.getBornX() - enemy.getAreaX())
-                && (newY >= enemy.getBornY() - enemy.getAreaY());
+                        && (newY <= enemy.getBornY() + enemy.getAreaY())
+                        && (newX >= enemy.getBornX() - enemy.getAreaX())
+                        && (newY >= enemy.getBornY() - enemy.getAreaY());
 
         if (isNear && isPassable) {
             coordinates.add(new Coordinate()
-            .setX(newX)
-            .setY(newY));
+                    .setX(newX)
+                    .setY(newY));
         }
     }
 
@@ -141,12 +136,13 @@ public class EnemyService {
      * @param enemy enemy that should chasing the player.
      */
     private boolean chase(AbstractEnemy enemy) {
+        Player player = playerService.getPlayer();
         if (!isCanAttack(enemy)) {
             Coordinate coordinate = getNextCoordinatesForLos(enemy);
-            if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), enemy.getLocation())) {
+            if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), player.getLocation())) {
                 enemy
-                    .setX(coordinate.getX())
-                    .setY(coordinate.getY());
+                        .setX(coordinate.getX())
+                        .setY(coordinate.getY());
             }
             return true;
         }
@@ -168,7 +164,7 @@ public class EnemyService {
      * @param enemy checked enemy.
      */
     private boolean isPlayerNear(AbstractEnemy enemy) {
-        Player player = playerRepository.get();
+        Player player = playerService.getPlayer();
         int deltaX = abs(enemy.getX() - player.getX());
         int deltaY = abs(enemy.getY() - player.getY());
         return (deltaX <= 1) && (deltaY <= 1);
@@ -180,7 +176,7 @@ public class EnemyService {
      * @param enemy enemy.
      */
     private Coordinate getNextCoordinatesForLos(AbstractEnemy enemy) {
-        Player player = playerRepository.get();
+        Player player = playerService.getPlayer();
         int playerX = player.getX();
         int playerY = player.getY();
         int enemyX = enemy.getX();
@@ -197,11 +193,10 @@ public class EnemyService {
     private void attack(AbstractEnemy enemy) {
         if (calcToHit(enemy)) {
             int damage = calcDamage(enemy);
-            Player player = playerRepository.get();
+            Player player = playerService.getPlayer();
             player.decreaseHitPoints(damage);
             eventContext.addFightingEnemyHitEvent(enemy.getUniqueName(), damage);
-        } else
-        {
+        } else {
             eventContext.addFightingEnemyMissEvent(enemy.getUniqueName());
         }
     }
@@ -235,8 +230,9 @@ public class EnemyService {
      * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
      */
     public void respawn() {
+        Player player = playerService.getPlayer();
 
-        List<AbstractRespawnPoint> points = respawnPointRepository.findAllObjects();
+        List<AbstractRespawnPoint> points = player.getLocation().getRespawnPoints();
         points.forEach(p -> {
 
             // Guarantee that new enemy would not be created
@@ -261,13 +257,12 @@ public class EnemyService {
     /**
      * Creates new enemy, associated with respawn point.
      *
-     * @param respawnPoint  respawn point that generates an enemy.
+     * @param respawnPoint respawn point that generates an enemy.
      */
     private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint) {
 
         AbstractEnemyFactory factory = getEnemyFactory(respawnPoint);
         AbstractEnemy newEnemy = factory.create();
-        newEnemy.setLocation(respawnPoint.getLocation());
         // todo: position should be random
         newEnemy.setX(respawnPoint.getX());
         newEnemy.setY(respawnPoint.getY());
@@ -278,13 +273,14 @@ public class EnemyService {
         newEnemy.setRespawnPoint(respawnPoint);
         newEnemy.getWeapons()
                 .forEach(itemRepository::save);
-        return mapObjectsRepository.save(newEnemy);
+        AbstractEnemy result = enemyRepository.save(newEnemy);
+        return result;
     }
 
     /**
      * Returns an enemy factory, specified for a particular respawn point from application context.
      *
-     * @param respawnPoint  respawn point for which enemy factory should be returned.
+     * @param respawnPoint respawn point for which enemy factory should be returned.
      */
     private AbstractEnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
         Class<? extends AbstractEnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
@@ -292,34 +288,44 @@ public class EnemyService {
         return factory;
     }
 
-    /** Returns list of enemies in the player's location */
+    /**
+     * Returns list of enemies in the player's location
+     */
     public EnemyScreenDataDto getScreenData() {
         EnemyScreenDataDto screenDataDto = new EnemyScreenDataDto();
-        String location = playerRepository.get().getLocation();
-        enemyRepository.findAllByLocation(location)
-                .forEach(e -> {
-                    EnemyDto enemyDto = new EnemyDto()
-                            .setHealthPoints(e.getHitPoints())
-                            .setUniqueName(e.getUniqueName())
-                            .setName(e.getUniqueName())
-                            .setX(e.getX())
-                            .setY(e.getY());
+        Player player = playerService.getPlayer();
 
-                    List<WeaponDto> weaponDtos = e.getWeapons()
-                            .stream()
-                            .map(this::mapWeaponToDto)
-                            .collect(Collectors.toList());
+        // find all enemies on sane location with player
+        List<AbstractEnemy> enemies = player.getLocation()
+                .getRespawnPoints()
+                .stream()
+                .map(AbstractRespawnPoint::getEnemy)
+                .filter(Objects::nonNull)
+                .collect(toList());
 
-                    enemyDto.setWeapons(weaponDtos);
-                    screenDataDto.getEnemies().add(enemyDto);
-                });
+        enemies.forEach(e -> {
+            EnemyDto enemyDto = new EnemyDto()
+                    .setHealthPoints(e.getHitPoints())
+                    .setUniqueName(e.getUniqueName())
+                    .setName(e.getUniqueName())
+                    .setX(e.getX())
+                    .setY(e.getY());
+
+            List<WeaponDto> weaponDtos = e.getWeapons()
+                    .stream()
+                    .map(this::mapWeaponToDto)
+                    .collect(toList());
+
+            enemyDto.setWeapons(weaponDtos);
+            screenDataDto.getEnemies().add(enemyDto);
+        });
         return screenDataDto;
     }
 
     /**
      * Converts domain weapon to DTO.
      *
-     * @param meleeWeapon   melee weapon that should be converted.
+     * @param meleeWeapon melee weapon that should be converted.
      */
     private WeaponDto mapWeaponToDto(AbstractMeleeWeapon meleeWeapon) {
         return new WeaponDto()

@@ -7,7 +7,6 @@ import neverless.domain.entity.mapobject.Player;
 import neverless.dto.screendata.inventory.InventoryScreenDataDto;
 import neverless.dto.screendata.inventory.ItemDto;
 import neverless.dto.screendata.inventory.WeaponDto;
-import neverless.repository.PlayerRepository;
 import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InventoryService {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
     @Autowired
     private EventContext eventContext;
 
@@ -141,7 +140,7 @@ public class InventoryService {
      * @return inventory.
      */
     private Inventory loadInventory() {
-        Player player = playerRepository.get();
+        Player player = playerService.getPlayer();
         return player.getInventory();
     }
 }

@@ -5,11 +5,11 @@ import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.dialog.PlayerPhrase;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
-import neverless.repository.MapObjectsRepository;
-import neverless.repository.PlayerRepository;
 import neverless.dto.screendata.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
+import neverless.repository.MapObjectsRepository;
+import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class DialogService {
     @Autowired
     private MapObjectsRepository mapObjectsRepository;
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
     @Autowired
     private NpcService npcService;
     @Autowired
@@ -31,14 +31,11 @@ public class DialogService {
     @Autowired
     private DialogContext dialogContext;
 
-    private AbstractNpc nnn;
-
     public void dialogStart(int npcX, int npcY) {
-        Player player = playerRepository.get();
+        Player player = playerService.getPlayer();
 
         // find NPC
         AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
-        nnn = npc;
 
         // simpleGet NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -50,7 +47,7 @@ public class DialogService {
         dialogContext.add(dialog);
         dialogContext.add(npcPhrase);
 
-        eventContext.addDialogStartEvent(npc.getId().getUniqueName(), npcX, npcY);
+        eventContext.addDialogStartEvent(npc.getUniqueName(), npcX, npcY);
     }
 
     private NpcPhrase getStartPhrase(Dialog dialog) {
@@ -82,7 +79,6 @@ public class DialogService {
         }
         PlayerPhrase playerPhrase = npcPhrase.getAnswers().get(phraseNumber);
         playerPhrase.getAnswerEvent().execute();
-        mapObjectsRepository.save(nnn);
         NpcPhrase nextNpcPhrase = playerPhrase.getNextNpcPhrase();
         if (nextNpcPhrase != null) {
             dialogContext.add(nextNpcPhrase);

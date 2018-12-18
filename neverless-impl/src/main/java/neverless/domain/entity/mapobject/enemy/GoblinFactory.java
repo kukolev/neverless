@@ -2,12 +2,12 @@ package neverless.domain.entity.mapobject.enemy;
 
 import neverless.domain.entity.item.weapon.Sword;
 import neverless.repository.ItemRepository;
-import neverless.repository.MapObjectsRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 
 @Component
@@ -22,8 +22,6 @@ public class GoblinFactory extends AbstractEnemyFactory {
     private SessionUtil sessionUtil;
     @Autowired
     private ItemRepository itemRepository;
-    @Autowired
-    private MapObjectsRepository mapObjectsRepository;
 
     /**
      * Creates and returns Goblin with weapon.
@@ -34,8 +32,7 @@ public class GoblinFactory extends AbstractEnemyFactory {
 
         Goblin goblin = new Goblin();
         goblin
-                .setHitPoints(GOBLIN_HP)
-                .setId(sessionUtil.createId());
+                .setHitPoints(GOBLIN_HP);
         goblin
                 .getWeapons().add(sword);
         return goblin;
@@ -48,8 +45,7 @@ public class GoblinFactory extends AbstractEnemyFactory {
         Sword sword = new Sword();
         sword
                 .setPower(GOBLIN_RUST_SWORD_POWER)
-                .setTitle(GOBLIN_RUST_SWORD_TITLE)
-                .setId(sessionUtil.createId());
+                .setTitle(GOBLIN_RUST_SWORD_TITLE);
         return sword;
     }
 }

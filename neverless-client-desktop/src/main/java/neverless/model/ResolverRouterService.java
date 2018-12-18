@@ -2,6 +2,7 @@ package neverless.model;
 
 import neverless.dto.screendata.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
+import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
 import neverless.model.command.MapGoLeftCommand;
 import neverless.model.command.MapGoRightCommand;
@@ -53,6 +54,10 @@ class ResolverRouterService {
         if (command instanceof MapGoRightCommand) {
             return resolve((MapGoRightCommand) command);
         }
+        // Attack Enemy command
+        if (command instanceof FightingAttackCommand) {
+            return resolve((FightingAttackCommand) command);
+        }
 
         throw new UnsupportedCommandException();
     }
@@ -80,5 +85,9 @@ class ResolverRouterService {
 
     private GameStateDto resolve(MapGoRightCommand command) {
         return backend.cmdMoveRight();
+    }
+
+    private GameStateDto resolve(FightingAttackCommand command) {
+        return backend.cmdFightingAttack(command.getEnemyId());
     }
 }

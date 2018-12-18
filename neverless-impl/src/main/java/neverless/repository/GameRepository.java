@@ -1,10 +1,9 @@
 package neverless.repository;
 
-import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
+import neverless.domain.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EnemyRepository extends JpaRepository<AbstractEnemy, String> {
+public interface GameRepository extends JpaRepository<Game, String> {
 }
-

@@ -7,9 +7,11 @@ import neverless.view.RootPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
+@EnableCaching
 public class ClientDesktop extends Application {
 
     protected ConfigurableApplicationContext context;
