@@ -40,8 +40,32 @@ public class GameControllerResourceImpl implements GameControllerResource {
     }
 
     @Override
+    public GameStateDto cmdMoveDownLeft() {
+        commandRouterService.cmdMoveDownLeft();
+        return commandRouterService.getState();
+    }
+
+    @Override
+    public GameStateDto cmdMoveDownRight() {
+        commandRouterService.cmdMoveDownRight();
+        return commandRouterService.getState();
+    }
+
+    @Override
     public GameStateDto cmdMoveUp() {
         commandRouterService.cmdMoveUp();
+        return commandRouterService.getState();
+    }
+
+    @Override
+    public GameStateDto cmdMoveUpLeft() {
+        commandRouterService.cmdMoveUpLeft();
+        return commandRouterService.getState();
+    }
+
+    @Override
+    public GameStateDto cmdMoveUpRight() {
+        commandRouterService.cmdMoveUpRight();
         return commandRouterService.getState();
     }
 

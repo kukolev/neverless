@@ -4,9 +4,13 @@ import neverless.dto.screendata.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
+import neverless.model.command.MapGoDownLeftCommand;
+import neverless.model.command.MapGoDownRightCommand;
 import neverless.model.command.MapGoLeftCommand;
 import neverless.model.command.MapGoRightCommand;
 import neverless.model.command.MapGoUpCommand;
+import neverless.model.command.MapGoUpLeftCommand;
+import neverless.model.command.MapGoUpRightCommand;
 import neverless.model.command.StartNewGameCommand;
 import neverless.model.command.WaitCommand;
 import neverless.model.exception.UnsupportedCommandException;
@@ -42,9 +46,25 @@ class ResolverRouterService {
         if (command instanceof MapGoDownCommand) {
             return resolve((MapGoDownCommand) command);
         }
+        // Map Go Down Right command
+        if (command instanceof MapGoDownRightCommand) {
+            return resolve((MapGoDownRightCommand) command);
+        }
+        // Map Go Down Left command
+        if (command instanceof MapGoDownLeftCommand) {
+            return resolve((MapGoDownLeftCommand) command);
+        }
         // Map Go Up command
         if (command instanceof MapGoUpCommand) {
             return resolve((MapGoUpCommand) command);
+        }
+        // Map Go Up Right command
+        if (command instanceof MapGoUpRightCommand) {
+            return resolve((MapGoUpRightCommand) command);
+        }
+        // Map Go Up Left command
+        if (command instanceof MapGoUpLeftCommand) {
+            return resolve((MapGoUpLeftCommand) command);
         }
         // Map Go Left command
         if (command instanceof MapGoLeftCommand) {
@@ -75,8 +95,24 @@ class ResolverRouterService {
         return backend.cmdMoveDown();
     }
 
+    private GameStateDto resolve(MapGoDownRightCommand command) {
+        return backend.cmdMoveDownRight();
+    }
+
+    private GameStateDto resolve(MapGoDownLeftCommand command) {
+        return backend.cmdMoveDownLeft();
+    }
+
     private GameStateDto resolve(MapGoUpCommand command) {
         return backend.cmdMoveUp();
+    }
+
+    private GameStateDto resolve(MapGoUpRightCommand command) {
+        return backend.cmdMoveUpRight();
+    }
+
+    private GameStateDto resolve(MapGoUpLeftCommand command) {
+        return backend.cmdMoveUpLeft();
     }
 
     private GameStateDto resolve(MapGoLeftCommand command) {
@@ -86,6 +122,7 @@ class ResolverRouterService {
     private GameStateDto resolve(MapGoRightCommand command) {
         return backend.cmdMoveRight();
     }
+
 
     private GameStateDto resolve(FightingAttackCommand command) {
         return backend.cmdFightingAttack(command.getEnemyId());

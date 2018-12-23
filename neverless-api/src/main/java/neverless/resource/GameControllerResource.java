@@ -24,8 +24,20 @@ public interface GameControllerResource {
     @PostMapping("/map_go_down")
     GameStateDto cmdMoveDown();
 
+    @PostMapping("/map_go_down_right")
+    GameStateDto cmdMoveDownRight();
+
+    @PostMapping("/map_go_down_left")
+    GameStateDto cmdMoveDownLeft();
+
     @PostMapping("/map_go_up")
     GameStateDto cmdMoveUp();
+
+    @PostMapping("/map_go_up_right")
+    GameStateDto cmdMoveUpRight();
+
+    @PostMapping("/map_go_up_left")
+    GameStateDto cmdMoveUpLeft();
 
     @PostMapping("/map_go_left")
     GameStateDto cmdMoveLeft();

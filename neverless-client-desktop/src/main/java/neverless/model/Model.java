@@ -10,9 +10,13 @@ import neverless.dto.screendata.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
+import neverless.model.command.MapGoDownLeftCommand;
+import neverless.model.command.MapGoDownRightCommand;
 import neverless.model.command.MapGoLeftCommand;
 import neverless.model.command.MapGoRightCommand;
 import neverless.model.command.MapGoUpCommand;
+import neverless.model.command.MapGoUpLeftCommand;
+import neverless.model.command.MapGoUpRightCommand;
 import neverless.model.command.StartNewGameCommand;
 import neverless.model.command.WaitCommand;
 import neverless.util.FrameExchanger;
@@ -29,12 +33,14 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static neverless.Constants.LOCAL_MAP_CELL_STEPS;
+import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 import static neverless.dto.command.Direction.DOWN;
 import static neverless.dto.command.Direction.LEFT;
 import static neverless.dto.command.Direction.RIGHT;
 import static neverless.dto.command.Direction.UP;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
+import static neverless.util.CoordinateUtils.line;
 
 @Component
 public class Model extends Task {
@@ -96,23 +102,19 @@ public class Model extends Task {
 
         switch (metaType) {
             case TERRAIN: {
+                GameStateDto curGameState = this.gameState;
 
-                Direction direction = calcDirection(cellX, cellY);
-                switch (direction) {
-                    case DOWN:
-                        cmdMapGoDown();
-                        break;
-                    case UP:
-                        cmdMapGoUp();
-                        break;
-                    case LEFT:
-                        cmdMapGoLeft();
-                        break;
-                    case RIGHT:
-                        cmdMapGoRight();
-                        break;
-                }
-                System.out.println(direction);
+                int centerX = convertToCellPosition(CANVAS_WIDTH / 2);
+                int centerY = convertToCellPosition(CANVAS_HEIGHT / 2);
+
+                int playerX = convertToCellPosition(curGameState.getPlayerScreenDataDto().getPlayerDto().getX());
+                int playerY = convertToCellPosition(curGameState.getPlayerScreenDataDto().getPlayerDto().getY());
+                List<Direction> directions = line(centerX, centerY, cellX, cellY);
+
+                System.out.println(directions);
+
+                putCommandList(createMapGoCommands(directions));
+
             } break;
 
             case ENEMY: {
@@ -163,6 +165,23 @@ public class Model extends Task {
         return commands;
     }
 
+    private List<AbstractCommand> createMapGoCommands(List<Direction> directions) {
+        List<AbstractCommand> commands = new ArrayList<>();
+        for(Direction direction: directions) {
+            switch (direction) {
+                case DOWN: commands.add(new MapGoDownCommand()); break;
+                case UP: commands.add(new MapGoUpCommand()); break;
+                case LEFT: commands.add(new MapGoLeftCommand()); break;
+                case RIGHT: commands.add(new MapGoRightCommand()); break;
+                case UP_LEFT: commands.add(new MapGoUpLeftCommand()); break;
+                case UP_RIGHT: commands.add(new MapGoUpRightCommand()); break;
+                case DOWN_LEFT: commands.add(new MapGoDownLeftCommand()); break;
+                case DOWN_RIGHT: commands.add(new MapGoDownRightCommand()); break;
+            }
+        }
+        return commands;
+    }
+
     @Override
     public Object call() {
         try {
@@ -182,8 +201,7 @@ public class Model extends Task {
                 }
 
                 long t2 = System.nanoTime();
-
-                long dt = 60 - ((t2 - t) / 1000_000);
+                long dt = 30 - ((t2 - t) / 1000_000);
 
                 if (dt > 1) {
                     try {
@@ -192,8 +210,6 @@ public class Model extends Task {
                         e.printStackTrace();
                     }
                 }
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -314,7 +330,7 @@ public class Model extends Task {
      * @param coordinate coordinate of pixel on the screen.
      */
     private int convertToCellPosition(int coordinate) {
-        return  coordinate;
+        return  coordinate / LOCAL_MAP_STEP_LENGTH;
     }
 
     /**

@@ -45,6 +45,26 @@ public class LocalMapService {
             case DOWN: newY += LOCAL_MAP_STEP_LENGTH; break;
             case LEFT: newX -= LOCAL_MAP_STEP_LENGTH; break;
             case RIGHT: newX += LOCAL_MAP_STEP_LENGTH; break;
+            case UP_LEFT: {
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case UP_RIGHT: {
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case DOWN_LEFT: {
+                newY += LOCAL_MAP_STEP_LENGTH;
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case DOWN_RIGHT: {
+                newY += LOCAL_MAP_STEP_LENGTH;
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
         }
         mapGo(newX, newY, direction);
     }

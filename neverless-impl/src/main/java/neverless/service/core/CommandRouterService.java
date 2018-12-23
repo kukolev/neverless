@@ -81,12 +81,42 @@ public class CommandRouterService {
         questService.generateQuestEvents();
     }
 
+    public void cmdMoveDownLeft() {
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.DOWN_LEFT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdMoveDownRight() {
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.DOWN_RIGHT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+
     public void cmdMoveUp() {
         requestContext.initQuestStates();
         localMapService.mapGo(Direction.UP);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
+
+    public void cmdMoveUpLeft() {
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.UP_LEFT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
+    public void cmdMoveUpRight() {
+        requestContext.initQuestStates();
+        localMapService.mapGo(Direction.UP_RIGHT);
+        aiService.handleEvents();
+        questService.generateQuestEvents();
+    }
+
 
     public void cmdMoveLeft() {
         requestContext.initQuestStates();
