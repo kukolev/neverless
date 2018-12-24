@@ -181,4 +181,26 @@ public class CoordinateUtils {
         }
         return result;
     }
+
+    /**
+     * Returns true if two ellipses have one or common points.
+     *
+     * @param x1    horizontal coordinate of first ellipse center.
+     * @param y1    vertical coordinate of first ellipse center.
+     * @param a1    horizontal width of first ellipse.
+     * @param b1    vertical width of first ellipse.
+     * @param x2    horizontal coordinate of second ellipse center.
+     * @param y2    vertical coordinate of second ellipse center.
+     * @param a2    horizontal width of second ellipse.
+     * @param b2    vertical width of second ellipse.
+     */
+    public static boolean isEllipsesIntersected(int x1, int y1, int a1, int b1, int x2, int y2, int a2, int b2) {
+        double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        double sinus = abs((y2 - y1) / distance);
+
+        double radius1 = sqrt(a1 * a1 - sinus * sinus * (a1 * a1 - b1 * b1));
+        double radius2 = sqrt(a2 * a2 - sinus * sinus * (a2 * a2 - b2 * b2));
+
+        return radius1 + radius2 >= distance;
+    }
 }

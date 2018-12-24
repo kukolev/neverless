@@ -3,20 +3,17 @@ package neverless.util;
 import neverless.dto.command.Direction;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
-import static neverless.dto.command.Direction.DOWN;
-import static neverless.dto.command.Direction.DOWN_LEFT;
-import static neverless.dto.command.Direction.DOWN_RIGHT;
 import static neverless.dto.command.Direction.UP;
-import static neverless.dto.command.Direction.UP_LEFT;
 import static neverless.dto.command.Direction.UP_RIGHT;
 import static neverless.util.CoordinateUtils.getNextCoordinatesForLos;
+import static neverless.util.CoordinateUtils.isEllipsesIntersected;
 import static neverless.util.CoordinateUtils.line;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class CoordinateUtilsTest {
 
@@ -63,5 +60,11 @@ public class CoordinateUtilsTest {
         assertEquals(directions.get(2), UP);
         assertEquals(directions.get(3), UP);
         assertEquals(directions.get(4), UP_RIGHT);
+    }
+
+    @Test
+    public void testIsEllipsMerged() {
+        assertFalse(isEllipsesIntersected(10, 10, 4, 4, 20, 20, 5, 5));
+        assertTrue(isEllipsesIntersected(10, 10, 4, 4, 20, 10, 7, 7));
     }
 }
