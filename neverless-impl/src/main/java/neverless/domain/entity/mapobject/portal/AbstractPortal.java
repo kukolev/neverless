@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.Resources;
 import neverless.domain.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

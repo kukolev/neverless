@@ -2,7 +2,8 @@ package neverless.dto.screendata;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
+import neverless.PlatformShape;
 
 @Data
 @Accessors(chain = true)
@@ -16,4 +17,5 @@ public class MapObjectDto {
     private Integer height;
     private Integer zOrder;
     private MapObjectMetaType metaType;
+    private PlatformShape platformShape;
 }

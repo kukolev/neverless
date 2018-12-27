@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 

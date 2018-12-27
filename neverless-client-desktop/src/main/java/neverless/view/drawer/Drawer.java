@@ -1,8 +1,9 @@
-package neverless.view;
+package neverless.view.drawer;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.ArcType;
 import neverless.dto.screendata.PlayerDto;
 import neverless.dto.screendata.player.GameStateDto;
 import neverless.util.FrameExchanger;
@@ -59,7 +60,35 @@ public class Drawer implements ChangeListener<String> {
         if (sprites.size() > 0) {
             GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
             gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            sprites.forEach(s -> s.draw(gc));
+            sprites.forEach(s -> {
+                //drawPlatformShape(s);
+                s.draw(gc);
+            });
+        }
+    }
+
+    /**
+     * Draws platform shape under sprite.
+     */
+    private void drawPlatformShape(Sprite sprite) {
+        switch (sprite.getPlatformShape()) {
+            case ELLIPSE: {
+                int dx = (int) (sprite.getImage().getWidth() - sprite.getPlatformShapeWidth());
+                int centerX = sprite.getX() - (dx / 2);
+
+                int dy = (int) (sprite.getImage().getHeight() - sprite.getPlatformShapeHeight() / 2);
+                int centerY = sprite.getY() + dy;
+                GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+                gc.fillArc(
+                        centerX,
+                        centerY,
+                        sprite.getPlatformShapeWidth(),
+                        sprite.getPlatformShapeHeight(), 0, 360, ArcType.OPEN);
+                break;
+            }
+            case RECTANGLE: {
+                break;
+            }
         }
     }
 

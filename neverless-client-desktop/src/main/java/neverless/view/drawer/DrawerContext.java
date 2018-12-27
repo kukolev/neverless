@@ -1,4 +1,4 @@
-package neverless.view;
+package neverless.view.drawer;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextArea;

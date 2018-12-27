@@ -4,7 +4,7 @@ package neverless.domain.entity.mapobject.building;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
 
 import javax.persistence.Entity;
 

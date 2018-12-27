@@ -150,34 +150,38 @@ public class CoordinateUtils {
             upCount = abs(dx - upRightCount);
         }
 
+        if (upRightCount > 0) {
+            int[] packs = new int[upRightCount];
+            int packValue = upCount / upRightCount;
+            for (int i = 0; i < packs.length; i++) {
+                packs[i] = packValue;
+            }
 
-
-        int[] packs = new int[upRightCount];
-        int packValue = upCount / upRightCount;
-        for (int i = 0; i < packs.length; i++) {
-            packs[i] = packValue;
-        }
-
-        int extraValue = upCount % upRightCount;
-        if (extraValue > 0) {
-            int extraStep = packs.length / extraValue;
-            for (int i = 0; i < packs.length / 2; i += extraStep) {
-                if (extraValue > 0) {
-                    packs[packs.length - 1 - i]++;
-                    extraValue--;
-                }
-                if (extraValue > 0) {
-                    packs[i]++;
-                    extraValue--;
+            int extraValue = upCount % upRightCount;
+            if (extraValue > 0) {
+                int extraStep = packs.length / extraValue;
+                for (int i = 0; i < packs.length / 2; i += extraStep) {
+                    if (extraValue > 0) {
+                        packs[packs.length - 1 - i]++;
+                        extraValue--;
+                    }
+                    if (extraValue > 0) {
+                        packs[i]++;
+                        extraValue--;
+                    }
                 }
             }
-        }
 
-        for (int i = 0; i < packs.length; i++) {
-            for (int j = 0; j < packs[i]; j++) {
+            for (int i = 0; i < packs.length; i++) {
+                for (int j = 0; j < packs[i]; j++) {
+                    result.add(LINE_UP);
+                }
+                result.add(LINE_JUMP);
+            }
+        } else {
+            for (int i = 0; i < upCount; i++) {
                 result.add(LINE_UP);
             }
-            result.add(LINE_JUMP);
         }
         return result;
     }

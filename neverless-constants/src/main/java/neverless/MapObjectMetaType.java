@@ -1,4 +1,4 @@
-package neverless.dto;
+package neverless;
 
 public enum  MapObjectMetaType {
     TERRAIN,

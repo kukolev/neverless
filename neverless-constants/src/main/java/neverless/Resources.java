@@ -14,5 +14,4 @@ public class Resources {
     public static final String IMG_GRASS = "grass.png";
     public static final String IMG_PORTAL = "portal.png";
     public static final String IMG_RESPAWN_POINT = "respawn_point.png";
-
 }

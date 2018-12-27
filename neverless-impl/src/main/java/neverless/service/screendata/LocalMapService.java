@@ -152,7 +152,8 @@ public class LocalMapService {
                 .setHeight(mapObject.getHeight())
                 .setWidth(mapObject.getWidth())
                 .setZOrder(mapObject.getZOrder())
-                .setMetaType(mapObject.getMetaType());
+                .setMetaType(mapObject.getMetaType())
+                .setPlatformShape(mapObject.getPlatformShape());
     }
 
     public boolean isPassable(int x, int y, Location location) {

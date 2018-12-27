@@ -92,7 +92,7 @@ public class EnemyService {
                 int crdInd = random.nextInt(coordinates.size());
                 Coordinate newCoordinate = coordinates.get(crdInd);
 
-                // 3. set new coordinates
+                // 3. set new customCoordinates
                 enemy.setX(newCoordinate.getX());
                 enemy.setY(newCoordinate.getY());
 
@@ -105,12 +105,12 @@ public class EnemyService {
     }
 
     /**
-     * Calculates possibility of walk to new coordinates and add the coordinates in list;
+     * Calculates possibility of walk to new customCoordinates and add the customCoordinates in list;
      *
      * @param newX        new X coordinate for enemy
      * @param newY        new Y coordinate for enemy
-     * @param enemy       enemy for which new coordinates are calculated
-     * @param coordinates list of new coordinates
+     * @param enemy       enemy for which new customCoordinates are calculated
+     * @param coordinates list of new customCoordinates
      */
     private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<Coordinate> coordinates) {
         Player player = playerService.getPlayer();

@@ -5,8 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.Resources;
 import neverless.domain.Location;
 import neverless.domain.entity.inventory.Inventory;
-import neverless.dto.MapObjectMetaType;
-import org.springframework.cache.annotation.CacheConfig;
+import neverless.MapObjectMetaType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

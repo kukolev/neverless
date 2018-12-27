@@ -2,7 +2,7 @@ package neverless.model;
 
 import javafx.concurrent.Task;
 import lombok.Data;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
 import neverless.dto.command.Direction;
 import neverless.dto.screendata.MapObjectDto;
 import neverless.dto.screendata.PlayerDto;
@@ -57,7 +57,7 @@ public class Model extends Task {
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
 
     /**
-     * Utility class for coordinates.
+     * Utility class for customCoordinates.
      */
     @Data
     private class Coordinate {
@@ -86,7 +86,7 @@ public class Model extends Task {
     }
 
     /**
-     * Evaluates a command that should be performed by clicking in some coordinates.
+     * Evaluates a command that should be performed by clicking in some customCoordinates.
      * Puts the command in queue.
      *
      * @param screenX horizontal cell index
@@ -259,7 +259,7 @@ public class Model extends Task {
     }
 
     /**
-     * Returns meta-type of object on local map with some screenX and screenY coordinates.
+     * Returns meta-type of object on local map with some screenX and screenY customCoordinates.
      *
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
@@ -284,7 +284,7 @@ public class Model extends Task {
     }
 
     /**
-     * Returns game coordinates for some couple of screen coordinates.
+     * Returns game customCoordinates for some couple of screen customCoordinates.
      *
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
@@ -334,7 +334,7 @@ public class Model extends Task {
     }
 
     /**
-     * Calculates and returns direction for vector between center of screen and some x and y coordinates
+     * Calculates and returns direction for vector between center of screen and some x and y customCoordinates
      *
      * @param x horizontal coordinate.
      * @param y vertical coordinate.

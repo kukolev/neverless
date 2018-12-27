@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import neverless.domain.dialog.Dialog;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.dto.MapObjectMetaType;
+import neverless.MapObjectMetaType;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;

@@ -71,6 +71,10 @@ public class Renderer {
 
         for (MapObjectDto o: objects) {
             Sprite sprite = calcSprite(o.getSignature(), o.getX(), o.getY(), playerX, playerY);
+            sprite
+                    .setPlatformShape(o.getPlatformShape())
+                    .setPlatformShapeWidth(o.getWidth())
+                    .setPlatformShapeHeight(o.getHeight());
             frame.getSprites().add(sprite);
         }
         return frame;
@@ -80,10 +84,11 @@ public class Renderer {
         int centerX = CANVAS_WIDTH / 2;
         int centerY = CANVAS_HEIGHT / 2;
 
-        int imgX = (int) (centerX - (playerX - objectX));
-        int imgY = (int) (centerY - (playerY - objectY));
-
         Image image = spriteRepository.getImage(signature);
+
+        int imgX = (int) (centerX - (playerX - objectX + (image.getWidth() / 2)));
+        int imgY = (int) (centerY - (playerY - objectY + image.getHeight()));
+
         return new Sprite(image)
                 .setX(imgX)
                 .setY(imgY);
