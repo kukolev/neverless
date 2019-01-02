@@ -2,8 +2,8 @@ package neverless.service.core;
 
 import neverless.context.RequestContext;
 import neverless.domain.entity.mapobject.Player;
-import neverless.dto.command.Direction;
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.Direction;
+import neverless.dto.player.GameStateDto;
 import neverless.service.ai.AiService;
 import neverless.service.screendata.DialogService;
 import neverless.service.screendata.EnemyService;

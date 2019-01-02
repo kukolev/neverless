@@ -2,7 +2,7 @@ package neverless.domain.quest;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.quest.QuestState;
+import neverless.dto.quest.QuestState;
 
 import java.util.Arrays;
 import java.util.List;

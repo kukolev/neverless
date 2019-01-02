@@ -1,15 +1,15 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.dto.screendata.CoordinateDto;
-import neverless.dto.command.Direction;
+import neverless.dto.CoordinateDto;
+import neverless.Direction;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.dto.command.Direction.DOWN;
-import static neverless.dto.command.Direction.DOWN_RIGHT;
+import static neverless.Direction.DOWN;
+import static neverless.Direction.DOWN_RIGHT;
 import static neverless.util.CoordinateUtils.getNextCoordinatesForLos;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 import static neverless.util.CoordinateUtils.line;

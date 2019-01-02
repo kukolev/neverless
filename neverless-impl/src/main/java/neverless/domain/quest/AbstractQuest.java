@@ -1,7 +1,7 @@
 package neverless.domain.quest;
 
 import neverless.domain.Game;
-import neverless.dto.screendata.quest.QuestState;
+import neverless.dto.quest.QuestState;
 import neverless.repository.MapObjectsRepository;
 import neverless.service.screendata.GameService;
 import neverless.util.SessionUtil;

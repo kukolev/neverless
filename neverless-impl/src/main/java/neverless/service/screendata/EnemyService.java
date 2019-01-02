@@ -1,15 +1,15 @@
 package neverless.service.screendata;
 
-import neverless.dto.screendata.CoordinateDto;
+import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.dto.screendata.enemy.EnemyDto;
-import neverless.dto.screendata.enemy.EnemyScreenDataDto;
-import neverless.dto.screendata.inventory.WeaponDto;
+import neverless.dto.enemy.EnemyDto;
+import neverless.dto.enemy.EnemyScreenDataDto;
+import neverless.dto.inventory.WeaponDto;
 import neverless.context.RequestContext;
 import neverless.repository.EnemyRepository;
 import neverless.repository.ItemRepository;

@@ -1,8 +1,8 @@
-package neverless.dto.screendata.enemy;
+package neverless.dto.enemy;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.inventory.WeaponDto;
+import neverless.dto.inventory.WeaponDto;
 
 import java.util.ArrayList;
 import java.util.List;

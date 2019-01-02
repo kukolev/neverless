@@ -1,13 +1,13 @@
-package neverless.dto.screendata.player;
+package neverless.dto.player;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.DialogScreenDataDto;
-import neverless.dto.screendata.enemy.EnemyScreenDataDto;
-import neverless.dto.screendata.event.EventsScreenDataDto;
-import neverless.dto.screendata.LocalMapScreenDataDto;
-import neverless.dto.screendata.inventory.InventoryScreenDataDto;
-import neverless.dto.screendata.quest.QuestScreenDataDto;
+import neverless.dto.DialogScreenDataDto;
+import neverless.dto.enemy.EnemyScreenDataDto;
+import neverless.dto.event.EventsScreenDataDto;
+import neverless.dto.LocalMapScreenDataDto;
+import neverless.dto.inventory.InventoryScreenDataDto;
+import neverless.dto.quest.QuestScreenDataDto;
 
 @Data
 @Accessors(chain = true)

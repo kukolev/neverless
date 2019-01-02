@@ -1,4 +1,4 @@
-package neverless.dto.screendata.event;
+package neverless.dto.event;
 
 public enum EventType {
 

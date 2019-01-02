@@ -1,8 +1,8 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.dto.screendata.CoordinateDto;
-import neverless.dto.command.Direction;
+import neverless.dto.CoordinateDto;
+import neverless.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,14 @@ import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
-import static neverless.dto.command.Direction.DOWN;
-import static neverless.dto.command.Direction.DOWN_LEFT;
-import static neverless.dto.command.Direction.DOWN_RIGHT;
-import static neverless.dto.command.Direction.LEFT;
-import static neverless.dto.command.Direction.RIGHT;
-import static neverless.dto.command.Direction.UP;
-import static neverless.dto.command.Direction.UP_LEFT;
-import static neverless.dto.command.Direction.UP_RIGHT;
+import static neverless.Direction.DOWN;
+import static neverless.Direction.DOWN_LEFT;
+import static neverless.Direction.DOWN_RIGHT;
+import static neverless.Direction.LEFT;
+import static neverless.Direction.RIGHT;
+import static neverless.Direction.UP;
+import static neverless.Direction.UP_LEFT;
+import static neverless.Direction.UP_RIGHT;
 
 public class CoordinateUtils {
 

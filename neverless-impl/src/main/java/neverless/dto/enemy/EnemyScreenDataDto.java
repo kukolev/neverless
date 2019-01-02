@@ -1,4 +1,4 @@
-package neverless.dto.screendata.enemy;
+package neverless.dto.enemy;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

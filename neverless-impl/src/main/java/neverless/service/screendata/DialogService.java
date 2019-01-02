@@ -5,11 +5,10 @@ import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.dialog.PlayerPhrase;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
-import neverless.dto.screendata.DialogScreenDataDto;
+import neverless.dto.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
 import neverless.repository.MapObjectsRepository;
-import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

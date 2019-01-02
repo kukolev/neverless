@@ -2,8 +2,8 @@ package neverless.domain.event;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.event.EventType;
-import neverless.dto.screendata.quest.QuestState;
+import neverless.dto.event.EventType;
+import neverless.dto.quest.QuestState;
 
 @Data
 @Accessors(chain = true)

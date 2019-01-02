@@ -1,6 +1,6 @@
 package neverless.view.renderer;
 
-import neverless.dto.screendata.CoordinateDto;
+import neverless.dto.CoordinateDto;
 import neverless.PlatformShape;
 import org.testng.annotations.Test;
 

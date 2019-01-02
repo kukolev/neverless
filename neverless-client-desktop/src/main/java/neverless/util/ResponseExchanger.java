@@ -1,6 +1,6 @@
 package neverless.util;
 
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.dto.player.GameStateDto;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Exchanger;

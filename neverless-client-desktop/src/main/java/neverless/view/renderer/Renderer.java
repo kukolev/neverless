@@ -2,9 +2,8 @@ package neverless.view.renderer;
 
 import javafx.scene.image.Image;
 import neverless.PlatformShape;
-import neverless.dto.screendata.CoordinateDto;
-import neverless.dto.screendata.MapObjectDto;
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.dto.MapObjectDto;
+import neverless.dto.player.GameStateDto;
 import neverless.util.FrameExchanger;
 import neverless.util.ResponseExchanger;
 import org.springframework.beans.factory.annotation.Autowired;

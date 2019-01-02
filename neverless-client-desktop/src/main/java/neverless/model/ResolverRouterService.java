@@ -1,6 +1,6 @@
 package neverless.model;
 
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.dto.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;

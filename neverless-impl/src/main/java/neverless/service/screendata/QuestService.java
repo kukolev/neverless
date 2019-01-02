@@ -2,8 +2,8 @@ package neverless.service.screendata;
 
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestContainer;
-import neverless.dto.screendata.quest.QuestInfoDto;
-import neverless.dto.screendata.quest.QuestScreenDataDto;
+import neverless.dto.quest.QuestInfoDto;
+import neverless.dto.quest.QuestScreenDataDto;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;

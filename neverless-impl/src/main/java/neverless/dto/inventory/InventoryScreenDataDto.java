@@ -1,4 +1,4 @@
-package neverless.dto.screendata.inventory;
+package neverless.dto.inventory;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

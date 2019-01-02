@@ -1,9 +1,8 @@
 package neverless.view.renderer;
 
-import javafx.scene.image.Image;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.dto.player.GameStateDto;
 
 import java.util.ArrayList;
 import java.util.List;

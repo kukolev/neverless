@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.CoordinateDto;
+import neverless.dto.CoordinateDto;
 import neverless.PlatformShape;
 
 import java.util.ArrayList;

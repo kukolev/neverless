@@ -1,4 +1,4 @@
-package neverless.dto.command;
+package neverless;
 
 public enum Direction {
     UP,

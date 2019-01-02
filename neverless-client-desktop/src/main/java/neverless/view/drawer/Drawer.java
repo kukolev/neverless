@@ -3,10 +3,8 @@ package neverless.view.drawer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.shape.ArcType;
-import neverless.dto.screendata.PlayerDto;
-import neverless.dto.screendata.player.GameStateDto;
+import neverless.dto.PlayerDto;
+import neverless.dto.player.GameStateDto;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static neverless.util.Constants.CANVAS_HEIGHT;
-import static neverless.util.Constants.CANVAS_WIDTH;
 import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
 
 @Component

@@ -1,8 +1,8 @@
-package neverless.dto.screendata.player;
+package neverless.dto.player;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.screendata.PlayerDto;
+import neverless.dto.PlayerDto;
 
 @Data
 @Accessors(chain = true)

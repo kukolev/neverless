@@ -22,11 +22,6 @@
             <artifactId>neverless-util</artifactId>
             <version>${neverless.constants.version}</version>
         </dependency>
-        <dependency>
-            <groupId>stormborn.games</groupId>
-            <artifactId>neverless-api</artifactId>
-            <version>${neverless.api.version}</version>
-        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

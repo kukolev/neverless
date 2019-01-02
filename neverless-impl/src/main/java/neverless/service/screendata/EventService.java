@@ -2,7 +2,7 @@ package neverless.service.screendata;
 
 import neverless.mapper.EventMapper;
 import neverless.domain.event.AbstractEvent;
-import neverless.dto.screendata.event.EventsScreenDataDto;
+import neverless.dto.event.EventsScreenDataDto;
 import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

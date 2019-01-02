@@ -1,4 +1,4 @@
-package neverless.dto.screendata.quest;
+package neverless.dto.quest;
 
 /**
  *  Quest states enum.
