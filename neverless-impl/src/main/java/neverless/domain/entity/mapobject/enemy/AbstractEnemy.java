@@ -2,8 +2,11 @@ package neverless.domain.entity.mapobject.enemy;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.Direction;
+import neverless.PlatformShape;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.EnemyBehavior;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.MapObjectMetaType;
 import org.hibernate.annotations.Cache;
@@ -50,6 +53,12 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     @Column
     private Integer agrRange = 7; // todo: should be in constants
 
+    @Column
+    private Direction walkDirection;
+
+    @Column
+    private EnemyBehavior behavior;
+
     /**
      * Decreases amount of hit points.
      * Hit points could not be less than zero.
@@ -67,5 +76,10 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     @Override
     public MapObjectMetaType getMetaType() {
         return MapObjectMetaType.ENEMY;
+    }
+
+    @Override
+    public PlatformShape getPlatformShape() {
+        return PlatformShape.ELLIPSE;
     }
 }

@@ -35,7 +35,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
 
      /** Returns default value for  */
      public PlatformShape getPlatformShape() {
-         return PlatformShape.CUSTOM;
+         return PlatformShape.ELLIPSE;
      }
 
     @OneToMany(fetch = FetchType.EAGER)

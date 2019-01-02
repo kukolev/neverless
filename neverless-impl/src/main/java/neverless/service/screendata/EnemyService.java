@@ -113,8 +113,7 @@ public class EnemyService {
      * @param coordinates list of new platformCoordinates
      */
     private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<CoordinateDto> coordinates) {
-        Player player = playerService.getPlayer();
-        boolean isPassable = (localMapService.isPassable(newX, newY, player.getLocation()));
+        boolean isPassable = (localMapService.isPassable(enemy, newX, newY));
         boolean isNear =
                 (newX <= enemy.getBornX() + enemy.getAreaX())
                         && (newY <= enemy.getBornY() + enemy.getAreaY())
@@ -139,7 +138,7 @@ public class EnemyService {
         Player player = playerService.getPlayer();
         if (!isCanAttack(enemy)) {
             CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
-            if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), player.getLocation())) {
+            if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
                 enemy
                         .setX(coordinate.getX())
                         .setY(coordinate.getY());
@@ -247,6 +246,7 @@ public class EnemyService {
                 if (p.getEnemy() == null) {
                     // todo: raise an event ??
                     AbstractEnemy enemy = respawn(p);
+                    enemy.setLocation(p.getLocation());
                     p.setEnemy(enemy);
                     p.setLastTurnInLife(requestContext.getTurnNumber());
                 }

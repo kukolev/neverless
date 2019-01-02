@@ -171,14 +171,13 @@ public class LocalMapService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isPassable(int x, int y, Location location) {
-        // todo: remove it if obsolete or refactor it.
-        return true;
-    }
-
     public boolean isPassable(AbstractMapObject walker, int newX, int newY) {
-
+        // todo: fix it
+        if (walker.getLocation() == null) {
+            return false;
+        }
         boolean intersection = false;
+
         for (int i = 0; i < walker.getLocation().getObjects().size(); i++) {
             AbstractMapObject object = walker.getLocation().getObjects().get(i);
             if (object.getPlatformShape() == PlatformShape.CUSTOM) {
@@ -193,7 +192,6 @@ public class LocalMapService {
 
                     int ellipseCenterX = newX + walker.getPlatformCenterX();
                     int ellipseCenterY = newY + walker.getPlatformCenterY();
-
 
                     intersection = isCurvesIntersected(ellipseCenterX, ellipseCenterY, walker.getPlatformWidth() / 2, walker.getPlatformHeight() / 2, realCoordinates);
                     if (intersection) {

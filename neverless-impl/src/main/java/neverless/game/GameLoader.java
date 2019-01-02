@@ -81,19 +81,6 @@ public class GameLoader {
     public void createNewGame() {
         createGame();
         createQuests();
-//        createHouse2x2();
-//        createHouse4x5();
-//        createHouse3x7();
-//        createRoads();
-//        createTreesTop();
-//        createTreesLeft();
-//        createTreesRight();
-//        createNpc();
-//        createTreesMonster();
-//
-//        createDungeon();
-//        createRespawnPoints();
-//        createQuests();
     }
 
     private Game createGame() {
@@ -119,13 +106,15 @@ public class GameLoader {
     }
 
     private Location createLocationVillage() {
+        List<AbstractRespawnPoint> respawnPoints = createRespawnPoints();
         Location village = new Location()
                 .setTitle("Village")
-                .setRespawnPoints(createRespawnPoints())
+                .setRespawnPoints(respawnPoints)
                 .setSignature(IMG_VILLAGE_BACKGROUND);
         village.getObjects().addAll(createTreesLeft());
         village.getObjects().addAll(createTreesTop());
         village.getObjects().addAll(createTreesRight());
+        village.getObjects().addAll(respawnPoints);
 
         village.getNpcs().add(createNpc());
 
@@ -319,15 +308,15 @@ public class GameLoader {
         respawnPoint1
                 .setX(1600)
                 .setY(1728);
-        respawnPointRepository.save(respawnPoint1);
-        points.add(respawnPoint1);
+        //respawnPointRepository.save(respawnPoint1);
+        points.add(respawnPointRepository.save(respawnPoint1));
 
         GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
         respawnPoint2
                 .setX(1280)
                 .setY(1728);
-        respawnPointRepository.save(respawnPoint2);
-        points.add(respawnPoint2);
+//        respawnPointRepository.save(respawnPoint2);
+        points.add(respawnPointRepository.save(respawnPoint2));
 
         return points;
     }
