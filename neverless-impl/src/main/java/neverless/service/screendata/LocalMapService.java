@@ -1,10 +1,13 @@
 package neverless.service.screendata;
 
+import neverless.PlatformShape;
 import neverless.domain.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.dto.command.Direction;
+import neverless.dto.screendata.CoordinateDto;
 import neverless.dto.screendata.MapObjectDto;
 import neverless.dto.screendata.LocalMapScreenDataDto;
 import neverless.context.EventContext;
@@ -20,6 +23,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
+import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
 @Transactional
@@ -76,7 +80,7 @@ public class LocalMapService {
             doPortalEnter(player, x, y);
             return;
         }
-        if (isPassable(x, y, player.getLocation())) {
+        if (isPassable(player, x, y)) {
             doMoving(player, x, y, direction);
             return;
         }
@@ -116,6 +120,7 @@ public class LocalMapService {
 
         objectDtos.add(mapToDto(player));
         localMapScreenDataDto.setObjects(objectDtos);
+        localMapScreenDataDto.setSignature(player.getLocation().getSignature());
         return localMapScreenDataDto;
     }
 
@@ -149,19 +154,55 @@ public class LocalMapService {
                 .setSignature(mapObject.getSignature())
                 .setX(mapObject.getX())
                 .setY(mapObject.getY())
-                .setHeight(mapObject.getHeight())
-                .setWidth(mapObject.getWidth())
-                .setZOrder(mapObject.getZOrder())
+                .setPlatformHeight(mapObject.getPlatformHeight())
+                .setPlatformWidth(mapObject.getPlatformWidth())
+                .setPlatformCenterX(mapObject.getPlatformCenterX())
+                .setPlatformCenterY(mapObject.getPlatformCenterY())
                 .setMetaType(mapObject.getMetaType())
-                .setPlatformShape(mapObject.getPlatformShape());
+                .setPlatformShape(mapObject.getPlatformShape())
+                .setPlatformCoordinates(mapCoordinates(mapObject.getPlatformCoordinates()));
+    }
+
+    private List<CoordinateDto> mapCoordinates(List<Coordinate> coordinates) {
+        return coordinates.stream()
+                .map(c -> new CoordinateDto()
+                        .setX(c.getX())
+                        .setY(c.getY()))
+                .collect(Collectors.toList());
     }
 
     public boolean isPassable(int x, int y, Location location) {
-        Player player = playerService.getPlayer();
-        boolean isPlayer = player.getX().equals(x) && player.getY().equals(y);
-        AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
+        // todo: remove it if obsolete or refactor it.
+        return true;
+    }
 
-        return (!isPlayer) && (mapObject == null || mapObject.isPassable());
+    public boolean isPassable(AbstractMapObject walker, int newX, int newY) {
+
+        boolean intersection = false;
+        for (int i = 0; i < walker.getLocation().getObjects().size(); i++) {
+            AbstractMapObject object = walker.getLocation().getObjects().get(i);
+            if (object.getPlatformShape() == PlatformShape.CUSTOM) {
+                if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {
+
+                    List<Coordinate> realCoordinates = object.getPlatformCoordinates()
+                            .stream()
+                            .map(c -> new Coordinate()
+                                    .setX(object.getX() + c.getX())
+                                    .setY(object.getY() + c.getY()))
+                            .collect(Collectors.toList());
+
+                    int ellipseCenterX = newX + walker.getPlatformCenterX();
+                    int ellipseCenterY = newY + walker.getPlatformCenterY();
+
+
+                    intersection = isCurvesIntersected(ellipseCenterX, ellipseCenterY, walker.getPlatformWidth() / 2, walker.getPlatformHeight() / 2, realCoordinates);
+                    if (intersection) {
+                        break;
+                    }
+                }
+            }
+        }
+        return !intersection;
     }
 
     private boolean isPortal(int x, int y, Location location) {

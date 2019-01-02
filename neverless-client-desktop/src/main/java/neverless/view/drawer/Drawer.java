@@ -3,6 +3,7 @@ package neverless.view.drawer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.ArcType;
 import neverless.dto.screendata.PlayerDto;
 import neverless.dto.screendata.player.GameStateDto;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
+import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
 
 @Component
 public class Drawer implements ChangeListener<String> {
@@ -45,7 +47,7 @@ public class Drawer implements ChangeListener<String> {
         try {
             Frame frame = frameExchanger.exchange(null);
             displayGameState(frame.getGameState());
-            displayLocalMap(frame.getSprites());
+            displayLocalMap(frame.getBackground(), frame.getSprites());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -54,41 +56,18 @@ public class Drawer implements ChangeListener<String> {
     /**
      * Draws graphic scene on game screen in local map pane.
      *
-     * @param sprites list of sprites for drawing.
+     * @param background    special sprite for background.
+     * @param sprites       list of sprites for drawing.
      */
-    private void displayLocalMap(List<Sprite> sprites) {
+    private void displayLocalMap(Sprite background, List<Sprite> sprites) {
         if (sprites.size() > 0) {
             GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
-            gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            sprites.forEach(s -> {
-                //drawPlatformShape(s);
+            background.draw(gc);
+
+            List<Sprite> orderedSprites = calcRenderOrder(sprites);
+            orderedSprites.forEach(s -> {
                 s.draw(gc);
             });
-        }
-    }
-
-    /**
-     * Draws platform shape under sprite.
-     */
-    private void drawPlatformShape(Sprite sprite) {
-        switch (sprite.getPlatformShape()) {
-            case ELLIPSE: {
-                int dx = (int) (sprite.getImage().getWidth() - sprite.getPlatformShapeWidth());
-                int centerX = sprite.getX() - (dx / 2);
-
-                int dy = (int) (sprite.getImage().getHeight() - sprite.getPlatformShapeHeight() / 2);
-                int centerY = sprite.getY() + dy;
-                GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
-                gc.fillArc(
-                        centerX,
-                        centerY,
-                        sprite.getPlatformShapeWidth(),
-                        sprite.getPlatformShapeHeight(), 0, 360, ArcType.OPEN);
-                break;
-            }
-            case RECTANGLE: {
-                break;
-            }
         }
     }
 

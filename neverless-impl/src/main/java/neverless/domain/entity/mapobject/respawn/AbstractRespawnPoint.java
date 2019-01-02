@@ -34,12 +34,6 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
     @OneToOne
     private AbstractEnemy enemy;
 
-    /** Returns minimum int value, because respawn point should not overlay anything. */
-    @Override
-    public int getZOrder() {
-        return Integer.MIN_VALUE;
-    }
-
     /** Returns a factory which able to create enemies for this point. */
     public abstract Class<? extends AbstractEnemyFactory> getEnemyFactory();
 

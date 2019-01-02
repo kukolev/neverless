@@ -17,12 +17,12 @@ public final class LittleVillageHouse extends AbstractBuilding {
     }
 
     @Override
-    public int getWidth() {
+    public int getPlatformWidth() {
         return 2;
     }
 
     @Override
-    public int getHeight() {
+    public int getPlatformHeight() {
         return 2;
     }
 }

@@ -7,6 +7,7 @@ import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.AbstractBuilding;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
@@ -19,13 +20,13 @@ import neverless.domain.entity.mapobject.wall.AbstractWall;
 import neverless.domain.entity.mapobject.wall.StoneWall;
 import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
-import neverless.domain.entity.mapobject.road.Road;
 import neverless.domain.entity.mapobject.tree.FirTree;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.domain.entity.mapobject.building.LittleVillageHouse;
 import neverless.domain.entity.mapobject.building.LongVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 
+import neverless.repository.CoordinateRepository;
 import neverless.repository.GameRepository;
 import neverless.repository.ItemRepository;
 import neverless.repository.LocationRepository;
@@ -44,7 +45,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.format;
+import static neverless.Resources.IMG_VILLAGE_BACKGROUND;
 
 @Component
 @Transactional
@@ -74,6 +75,8 @@ public class GameLoader {
     private ApplicationContext context;
     @Autowired
     private LocationRepository locationRepository;
+    @Autowired
+    private CoordinateRepository coordinateRepository;
 
     public void createNewGame() {
         createGame();
@@ -118,8 +121,8 @@ public class GameLoader {
     private Location createLocationVillage() {
         Location village = new Location()
                 .setTitle("Village")
-                .setRespawnPoints(createRespawnPoints());
-        village.getObjects().addAll(createRoads());
+                .setRespawnPoints(createRespawnPoints())
+                .setSignature(IMG_VILLAGE_BACKGROUND);
         village.getObjects().addAll(createTreesLeft());
         village.getObjects().addAll(createTreesTop());
         village.getObjects().addAll(createTreesRight());
@@ -183,8 +186,18 @@ public class GameLoader {
     private AbstractBuilding createHouse4x5() {
         AbstractBuilding building = new LargeVillageHouse();
         building
-                .setX(2560)
-                .setY(448);
+                .setX(1900)
+                .setY(1400);
+        List<Coordinate> coordinates = new ArrayList<>();
+        coordinates.add(new Coordinate().setX(68).setY(156));
+        coordinates.add(new Coordinate().setX(92).setY(156));
+        coordinates.add(new Coordinate().setX(159).setY(118));
+        coordinates.add(new Coordinate().setX(92).setY(86));
+        coordinates.add(new Coordinate().setX(6).setY(116));
+        building.setPlatformCoordinates(coordinates);
+
+        coordinates.forEach(c -> coordinateRepository.save(c));
+
         return mapObjRepository.save(building);
     }
 
@@ -194,43 +207,6 @@ public class GameLoader {
                 .setX(2080)
                 .setY(2880);
         return mapObjRepository.save(building);
-    }
-
-    private List<Road> createRoads() {
-        List<Road> roads = new ArrayList<>();
-        // 1-st road
-        roads.addAll(drawRoadVertical(352, 384, 1600));
-        roads.addAll(drawRoadHorizontal(1600, 352, 1920));
-        roads.addAll(drawRoadVertical(1920, 1280, 2944));
-        roads.addAll(drawRoadHorizontal(2944, 1920, 2048));
-        roads.addAll(drawRoadHorizontal(1280, 1920, 2656));
-        roads.addAll(drawRoadVertical(2656, 544, 1280));
-        return roads;
-    }
-
-    private List<Road> drawRoadHorizontal(int y, int x1, int x2) {
-        List<Road> roads = new ArrayList<>();
-        for (int i = x1; i <= x2; i+=32 ) {
-            Road road = new Road();
-            road
-                    .setX(i)
-                    .setY(y);
-            roads.add(road);
-            mapObjRepository.save(road);
-        }
-        return roads;
-    }
-
-    private List<Road> drawRoadVertical(int x, int y1, int y2) {
-        List<Road> roads = new ArrayList<>();
-        for (int j = y1; j <= y2; j+=32 ) {
-            Road road = new Road();
-            road
-                    .setX(x)
-                    .setY(j);
-            roads.add(mapObjRepository.save(road));
-        }
-        return roads;
     }
 
     private List<AbstractTree> createTreesTop() {

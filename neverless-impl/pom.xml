@@ -19,7 +19,7 @@
         <!-- Internal -->
         <dependency>
             <groupId>stormborn.games</groupId>
-            <artifactId>neverless-constants</artifactId>
+            <artifactId>neverless-util</artifactId>
             <version>${neverless.constants.version}</version>
         </dependency>
         <dependency>

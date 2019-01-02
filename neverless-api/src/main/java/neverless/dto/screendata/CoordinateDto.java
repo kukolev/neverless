@@ -1,14 +1,14 @@
-package neverless.view.renderer;
+package neverless.dto.screendata;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * Utility class for customCoordinates
+ * Utility class for custom Coordinates
  */
 @Data
 @Accessors(chain = true)
-public class Coordinate {
+public class CoordinateDto {
     private int x;
     private int y;
 }

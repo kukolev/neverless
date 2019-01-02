@@ -8,6 +8,8 @@ import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.MapObjectMetaType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +31,7 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     private AbstractRespawnPoint respawnPoint;
 
     @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<AbstractMeleeWeapon> weapons = new ArrayList<>();
 

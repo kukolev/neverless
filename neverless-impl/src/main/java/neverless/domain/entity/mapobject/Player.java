@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.PlatformShape;
 import neverless.Resources;
 import neverless.domain.Location;
 import neverless.domain.entity.inventory.Inventory;
@@ -28,6 +29,11 @@ public class Player extends AbstractMapObject {
     @Override
     public String getSignature() {
         return Resources.IMG_PLAYER;
+    }
+
+    @Override
+    public PlatformShape getPlatformShape() {
+        return PlatformShape.ELLIPSE;
     }
 
     public void decreaseHitPoints(int damage) {

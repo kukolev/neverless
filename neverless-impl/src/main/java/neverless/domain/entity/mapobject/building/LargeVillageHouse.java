@@ -8,12 +8,12 @@ import javax.persistence.Entity;
 public final class LargeVillageHouse extends AbstractBuilding {
 
     @Override
-    public int getWidth() {
+    public int getPlatformWidth() {
         return 5;
     }
 
     @Override
-    public int getHeight() {
+    public int getPlatformHeight() {
         return 4;
     }
 

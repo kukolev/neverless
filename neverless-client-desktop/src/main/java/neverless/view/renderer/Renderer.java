@@ -1,6 +1,8 @@
 package neverless.view.renderer;
 
 import javafx.scene.image.Image;
+import neverless.PlatformShape;
+import neverless.dto.screendata.CoordinateDto;
 import neverless.dto.screendata.MapObjectDto;
 import neverless.dto.screendata.player.GameStateDto;
 import neverless.util.FrameExchanger;
@@ -67,30 +69,52 @@ public class Renderer {
         double playerY = gameStateDto.getPlayerScreenDataDto().getPlayerDto().getY();
 
         Frame frame = new Frame();
+
+        String backSignature = gameStateDto.getLocalMapScreenData().getSignature();
+        Sprite background = calcBackground(backSignature, playerX, playerY);
+        frame.setBackground(background);
+
         List<MapObjectDto> objects = gameStateDto.getLocalMapScreenData().getObjects();
 
-        for (MapObjectDto o: objects) {
-            Sprite sprite = calcSprite(o.getSignature(), o.getX(), o.getY(), playerX, playerY);
-            sprite
-                    .setPlatformShape(o.getPlatformShape())
-                    .setPlatformShapeWidth(o.getWidth())
-                    .setPlatformShapeHeight(o.getHeight());
+        for (MapObjectDto o : objects) {
+            Sprite sprite = calcSprite(o, playerX, playerY);
             frame.getSprites().add(sprite);
         }
         return frame;
     }
 
-    private Sprite calcSprite(String signature, double objectX, double objectY, double playerX, double playerY) {
+    private Sprite calcBackground(String signature, double playerX, double playerY) {
         int centerX = CANVAS_WIDTH / 2;
         int centerY = CANVAS_HEIGHT / 2;
 
         Image image = spriteRepository.getImage(signature);
 
-        int imgX = (int) (centerX - (playerX - objectX + (image.getWidth() / 2)));
-        int imgY = (int) (centerY - (playerY - objectY + image.getHeight()));
+        int imgX = (int) (centerX - (playerX));
+        int imgY = (int) (centerY - (playerY));
 
         return new Sprite(image)
                 .setX(imgX)
-                .setY(imgY);
+                .setY(imgY)
+                .setPlatformShape(PlatformShape.CUSTOM);
+    }
+
+    private Sprite calcSprite(MapObjectDto object, double playerX, double playerY) {
+        int centerX = CANVAS_WIDTH / 2;
+        int centerY = CANVAS_HEIGHT / 2;
+
+        Image image = spriteRepository.getImage(object.getSignature());
+
+        int imgX = (int) (centerX - (playerX - object.getX()));
+        int imgY = (int) (centerY - (playerY - object.getY()));
+
+        return new Sprite(image)
+                .setX(imgX)
+                .setY(imgY)
+                .setPlatformCoordinates(object.getPlatformCoordinates())
+                .setPlatformShape(object.getPlatformShape())
+                .setPlatformShapeWidth(object.getPlatformWidth())
+                .setPlatformShapeHeight(object.getPlatformHeight())
+                .setPlatformCenterX(object.getPlatformCenterX())
+                .setPlatformCenterY(object.getPlatformCenterY());
     }
 }

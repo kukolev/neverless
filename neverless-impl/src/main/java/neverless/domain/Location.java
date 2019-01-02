@@ -34,6 +34,9 @@ public class Location {
     @Column
     private String title;
 
+    @Column
+    private String signature;
+
     @OneToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

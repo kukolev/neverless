@@ -1,5 +1,6 @@
 package neverless.view.renderer;
 
+import neverless.dto.screendata.CoordinateDto;
 import neverless.PlatformShape;
 import org.testng.annotations.Test;
 
@@ -35,89 +36,89 @@ public class RendererUtilsTest {
                 .setX(90)
                 .setY(60)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates1 = new ArrayList<>();
-        coordinates1.add(new Coordinate().setX(-60).setY(40));
-        coordinates1.add(new Coordinate().setX(60).setY(-20));
-        coordinates1.add(new Coordinate().setX(50).setY(-40));
-        coordinates1.add(new Coordinate().setX(-70).setY(20));
-        sprite1.setCustomCoordinates(coordinates1);
+        List<CoordinateDto> coordinates1 = new ArrayList<>();
+        coordinates1.add(new CoordinateDto().setX(-60).setY(40));
+        coordinates1.add(new CoordinateDto().setX(60).setY(-20));
+        coordinates1.add(new CoordinateDto().setX(50).setY(-40));
+        coordinates1.add(new CoordinateDto().setX(-70).setY(20));
+        sprite1.setPlatformCoordinates(coordinates1);
 
         Sprite sprite2 = new Sprite(null)
                 .setX(20)
                 .setY(50)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates2 = new ArrayList<>();
-        coordinates2.add(new Coordinate().setX(-10).setY(10));
-        coordinates2.add(new Coordinate().setX(10).setY(10));
-        coordinates2.add(new Coordinate().setX(10).setY(-10));
-        coordinates2.add(new Coordinate().setX(-10).setY(-10));
-        sprite2.setCustomCoordinates(coordinates2);
+        List<CoordinateDto> coordinates2 = new ArrayList<>();
+        coordinates2.add(new CoordinateDto().setX(-10).setY(10));
+        coordinates2.add(new CoordinateDto().setX(10).setY(10));
+        coordinates2.add(new CoordinateDto().setX(10).setY(-10));
+        coordinates2.add(new CoordinateDto().setX(-10).setY(-10));
+        sprite2.setPlatformCoordinates(coordinates2);
 
         Sprite sprite3 = new Sprite(null)
                 .setX(135)
                 .setY(85)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates3 = new ArrayList<>();
-        coordinates3.add(new Coordinate().setX(-35).setY(5));
-        coordinates3.add(new Coordinate().setX(35).setY(5));
-        coordinates3.add(new Coordinate().setX(35).setY(-5));
-        coordinates3.add(new Coordinate().setX(-35).setY(-5));
-        sprite3.setCustomCoordinates(coordinates3);
+        List<CoordinateDto> coordinates3 = new ArrayList<>();
+        coordinates3.add(new CoordinateDto().setX(-35).setY(5));
+        coordinates3.add(new CoordinateDto().setX(35).setY(5));
+        coordinates3.add(new CoordinateDto().setX(35).setY(-5));
+        coordinates3.add(new CoordinateDto().setX(-35).setY(-5));
+        sprite3.setPlatformCoordinates(coordinates3);
 
         Sprite sprite4 = new Sprite(null)
                 .setX(115)
                 .setY(105)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates4 = new ArrayList<>();
-        coordinates4.add(new Coordinate().setX(-5).setY(5));
-        coordinates4.add(new Coordinate().setX(5).setY(5));
-        coordinates4.add(new Coordinate().setX(5).setY(-5));
-        coordinates4.add(new Coordinate().setX(-5).setY(-5));
-        sprite4.setCustomCoordinates(coordinates4);
+        List<CoordinateDto> coordinates4 = new ArrayList<>();
+        coordinates4.add(new CoordinateDto().setX(-5).setY(5));
+        coordinates4.add(new CoordinateDto().setX(5).setY(5));
+        coordinates4.add(new CoordinateDto().setX(5).setY(-5));
+        coordinates4.add(new CoordinateDto().setX(-5).setY(-5));
+        sprite4.setPlatformCoordinates(coordinates4);
 
         Sprite sprite5 = new Sprite(null)
                 .setX(65)
                 .setY(105)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates5 = new ArrayList<>();
-        coordinates5.add(new Coordinate().setX(-5).setY(5));
-        coordinates5.add(new Coordinate().setX(5).setY(5));
-        coordinates5.add(new Coordinate().setX(5).setY(-5));
-        coordinates5.add(new Coordinate().setX(-5).setY(-5));
-        sprite5.setCustomCoordinates(coordinates5);
+        List<CoordinateDto> coordinates5 = new ArrayList<>();
+        coordinates5.add(new CoordinateDto().setX(-5).setY(5));
+        coordinates5.add(new CoordinateDto().setX(5).setY(5));
+        coordinates5.add(new CoordinateDto().setX(5).setY(-5));
+        coordinates5.add(new CoordinateDto().setX(-5).setY(-5));
+        sprite5.setPlatformCoordinates(coordinates5);
 
         Sprite sprite6 = new Sprite(null)
                 .setX(145)
                 .setY(65)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates6 = new ArrayList<>();
-        coordinates6.add(new Coordinate().setX(-15).setY(5));
-        coordinates6.add(new Coordinate().setX(15).setY(5));
-        coordinates6.add(new Coordinate().setX(15).setY(-5));
-        coordinates6.add(new Coordinate().setX(-15).setY(-5));
-        sprite6.setCustomCoordinates(coordinates6);
+        List<CoordinateDto> coordinates6 = new ArrayList<>();
+        coordinates6.add(new CoordinateDto().setX(-15).setY(5));
+        coordinates6.add(new CoordinateDto().setX(15).setY(5));
+        coordinates6.add(new CoordinateDto().setX(15).setY(-5));
+        coordinates6.add(new CoordinateDto().setX(-15).setY(-5));
+        sprite6.setPlatformCoordinates(coordinates6);
 
         Sprite sprite7 = new Sprite(null)
                 .setX(85)
                 .setY(25)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates7 = new ArrayList<>();
-        coordinates7.add(new Coordinate().setX(-5).setY(5));
-        coordinates7.add(new Coordinate().setX(5).setY(5));
-        coordinates7.add(new Coordinate().setX(5).setY(-5));
-        coordinates7.add(new Coordinate().setX(-5).setY(-5));
-        sprite7.setCustomCoordinates(coordinates7);
+        List<CoordinateDto> coordinates7 = new ArrayList<>();
+        coordinates7.add(new CoordinateDto().setX(-5).setY(5));
+        coordinates7.add(new CoordinateDto().setX(5).setY(5));
+        coordinates7.add(new CoordinateDto().setX(5).setY(-5));
+        coordinates7.add(new CoordinateDto().setX(-5).setY(-5));
+        sprite7.setPlatformCoordinates(coordinates7);
 
         Sprite sprite8 = new Sprite(null)
                 .setX(85)
                 .setY(5)
                 .setPlatformShape(PlatformShape.CUSTOM);
-        List<Coordinate> coordinates8 = new ArrayList<>();
-        coordinates8.add(new Coordinate().setX(-5).setY(5));
-        coordinates8.add(new Coordinate().setX(5).setY(5));
-        coordinates8.add(new Coordinate().setX(5).setY(-5));
-        coordinates8.add(new Coordinate().setX(-5).setY(-5));
-        sprite8.setCustomCoordinates(coordinates8);
+        List<CoordinateDto> coordinates8 = new ArrayList<>();
+        coordinates8.add(new CoordinateDto().setX(-5).setY(5));
+        coordinates8.add(new CoordinateDto().setX(5).setY(5));
+        coordinates8.add(new CoordinateDto().setX(5).setY(-5));
+        coordinates8.add(new CoordinateDto().setX(-5).setY(-5));
+        sprite8.setPlatformCoordinates(coordinates8);
 
 
         List<Sprite> sprites = new ArrayList<>();

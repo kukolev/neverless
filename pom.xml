@@ -11,7 +11,7 @@
     <modules>
         <module>neverless-impl</module>
         <module>neverless-api</module>
-        <module>neverless-constants</module>
+        <module>neverless-util</module>
         <module>neverless-client-desktop</module>
     </modules>
 

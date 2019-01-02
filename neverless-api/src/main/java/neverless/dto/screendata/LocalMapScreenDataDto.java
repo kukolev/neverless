@@ -9,4 +9,5 @@ import java.util.List;
 public class LocalMapScreenDataDto {
 
     private List<MapObjectDto> objects = new ArrayList<>();
+    private String signature;
 }

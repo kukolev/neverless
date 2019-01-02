@@ -3,11 +3,21 @@ package neverless.domain.entity.mapobject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
+import neverless.domain.Location;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.MapObjectMetaType;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -20,21 +30,35 @@ public abstract class AbstractMapObject extends AbstractGameObject {
      @Column
      private Integer y;
 
-     @Column
-     private int zOrder = 1;
+     @ManyToOne
+     private Location location;
 
      /** Returns default value for  */
      public PlatformShape getPlatformShape() {
-         return PlatformShape.ELLIPSE;
+         return PlatformShape.CUSTOM;
      }
 
-     /** Returns default value for object width. */
-     public int getWidth() {
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private List<Coordinate> platformCoordinates = new ArrayList<>();
+
+     public int getPlatformCenterX() {
+         return 16;
+     }
+
+    public int getPlatformCenterY() {
+        return 32;
+    }
+
+
+    /** Returns default value for object platformWidth. */
+     public int getPlatformWidth() {
           return 32;
      }
 
-     /** Returns default value for object height. */
-     public int getHeight() {
+     /** Returns default value for object platformHeight. */
+     public int getPlatformHeight() {
          return 16;
      }
 

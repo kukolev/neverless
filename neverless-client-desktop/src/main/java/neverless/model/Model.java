@@ -57,7 +57,7 @@ public class Model extends Task {
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
 
     /**
-     * Utility class for customCoordinates.
+     * Utility class for platformCoordinates.
      */
     @Data
     private class Coordinate {
@@ -86,7 +86,7 @@ public class Model extends Task {
     }
 
     /**
-     * Evaluates a command that should be performed by clicking in some customCoordinates.
+     * Evaluates a command that should be performed by clicking in some platformCoordinates.
      * Puts the command in queue.
      *
      * @param screenX horizontal cell index
@@ -102,17 +102,10 @@ public class Model extends Task {
 
         switch (metaType) {
             case TERRAIN: {
-                GameStateDto curGameState = this.gameState;
-
                 int centerX = convertToCellPosition(CANVAS_WIDTH / 2);
                 int centerY = convertToCellPosition(CANVAS_HEIGHT / 2);
 
-                int playerX = convertToCellPosition(curGameState.getPlayerScreenDataDto().getPlayerDto().getX());
-                int playerY = convertToCellPosition(curGameState.getPlayerScreenDataDto().getPlayerDto().getY());
                 List<Direction> directions = line(centerX, centerY, cellX, cellY);
-
-                System.out.println(directions);
-
                 putCommandList(createMapGoCommands(directions));
 
             } break;
@@ -259,7 +252,7 @@ public class Model extends Task {
     }
 
     /**
-     * Returns meta-type of object on local map with some screenX and screenY customCoordinates.
+     * Returns meta-type of object on local map with some screenX and screenY platformCoordinates.
      *
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
@@ -284,7 +277,7 @@ public class Model extends Task {
     }
 
     /**
-     * Returns game customCoordinates for some couple of screen customCoordinates.
+     * Returns game platformCoordinates for some couple of screen platformCoordinates.
      *
      * @param screenX horizontal screen coordinate.
      * @param screenY vertical screen coordinate.
@@ -316,8 +309,8 @@ public class Model extends Task {
     private boolean isObjectAtPosition(MapObjectDto object, int x, int y) {
         boolean b = (object.getX() <= x) &&
                 (object.getY() <= y) &&
-                (x < (object.getX() + object.getWidth())) &&
-                (y < (object.getY() + object.getHeight()));
+                (x < (object.getX() + object.getPlatformWidth())) &&
+                (y < (object.getY() + object.getPlatformHeight()));
         if (b) {
             System.out.println(object.getUniqueName());
         }
@@ -334,7 +327,7 @@ public class Model extends Task {
     }
 
     /**
-     * Calculates and returns direction for vector between center of screen and some x and y customCoordinates
+     * Calculates and returns direction for vector between center of screen and some x and y platformCoordinates
      *
      * @param x horizontal coordinate.
      * @param y vertical coordinate.

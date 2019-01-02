@@ -1,5 +1,6 @@
 package neverless.service.screendata;
 
+import neverless.dto.screendata.CoordinateDto;
 import neverless.context.EventContext;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.Player;
@@ -12,7 +13,6 @@ import neverless.dto.screendata.inventory.WeaponDto;
 import neverless.context.RequestContext;
 import neverless.repository.EnemyRepository;
 import neverless.repository.ItemRepository;
-import neverless.util.Coordinate;
 import neverless.util.CoordinateUtils;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +80,7 @@ public class EnemyService {
         if (!chaseOrAttack) {
 
             // 1. create list of ways where enemy can go
-            List<Coordinate> coordinates = new ArrayList<>();
+            List<CoordinateDto> coordinates = new ArrayList<>();
             addWalkDirection(enemy.getX() + 1, enemy.getY(), enemy, coordinates);
             addWalkDirection(enemy.getX() - 1, enemy.getY(), enemy, coordinates);
             addWalkDirection(enemy.getX(), enemy.getY() + 1, enemy, coordinates);
@@ -90,9 +90,9 @@ public class EnemyService {
                 // 2. choose random direction
                 Random random = new Random(System.currentTimeMillis());
                 int crdInd = random.nextInt(coordinates.size());
-                Coordinate newCoordinate = coordinates.get(crdInd);
+                CoordinateDto newCoordinate = coordinates.get(crdInd);
 
-                // 3. set new customCoordinates
+                // 3. set new platformCoordinates
                 enemy.setX(newCoordinate.getX());
                 enemy.setY(newCoordinate.getY());
 
@@ -105,14 +105,14 @@ public class EnemyService {
     }
 
     /**
-     * Calculates possibility of walk to new customCoordinates and add the customCoordinates in list;
+     * Calculates possibility of walk to new platformCoordinates and add the platformCoordinates in list;
      *
      * @param newX        new X coordinate for enemy
      * @param newY        new Y coordinate for enemy
-     * @param enemy       enemy for which new customCoordinates are calculated
-     * @param coordinates list of new customCoordinates
+     * @param enemy       enemy for which new platformCoordinates are calculated
+     * @param coordinates list of new platformCoordinates
      */
-    private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<Coordinate> coordinates) {
+    private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<CoordinateDto> coordinates) {
         Player player = playerService.getPlayer();
         boolean isPassable = (localMapService.isPassable(newX, newY, player.getLocation()));
         boolean isNear =
@@ -122,7 +122,7 @@ public class EnemyService {
                         && (newY >= enemy.getBornY() - enemy.getAreaY());
 
         if (isNear && isPassable) {
-            coordinates.add(new Coordinate()
+            coordinates.add(new CoordinateDto()
                     .setX(newX)
                     .setY(newY));
         }
@@ -138,7 +138,7 @@ public class EnemyService {
     private boolean chase(AbstractEnemy enemy) {
         Player player = playerService.getPlayer();
         if (!isCanAttack(enemy)) {
-            Coordinate coordinate = getNextCoordinatesForLos(enemy);
+            CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
             if (localMapService.isPassable(coordinate.getX(), coordinate.getY(), player.getLocation())) {
                 enemy
                         .setX(coordinate.getX())
@@ -175,7 +175,7 @@ public class EnemyService {
      *
      * @param enemy enemy.
      */
-    private Coordinate getNextCoordinatesForLos(AbstractEnemy enemy) {
+    private CoordinateDto getNextCoordinatesForLos(AbstractEnemy enemy) {
         Player player = playerService.getPlayer();
         int playerX = player.getX();
         int playerY = player.getY();
