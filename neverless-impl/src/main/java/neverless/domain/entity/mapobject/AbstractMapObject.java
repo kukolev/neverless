@@ -24,56 +24,66 @@ import java.util.List;
 @Entity
 public abstract class AbstractMapObject extends AbstractGameObject {
 
-     @Column
-     private Integer x;
+    @Column
+    private Integer x;
 
-     @Column
-     private Integer y;
+    @Column
+    private Integer y;
 
-     @ManyToOne
-     private Location location;
+    @ManyToOne
+    private Location location;
 
-     /** Returns default value for  */
-     public PlatformShape getPlatformShape() {
-         return PlatformShape.ELLIPSE;
-     }
+    /**
+     * Returns default value for
+     */
+    public PlatformShape getPlatformShape() {
+        return PlatformShape.ELLIPSE;
+    }
 
     @OneToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Coordinate> platformCoordinates = new ArrayList<>();
 
-     public int getPlatformCenterX() {
-         return 16;
-     }
+    public int getPlatformCenterX() {
+        return 16;
+    }
 
     public int getPlatformCenterY() {
         return 32;
     }
 
 
-    /** Returns default value for object platformWidth. */
-     public int getPlatformWidth() {
-          return 32;
-     }
+    /**
+     * Returns default value for object platformWidth.
+     */
+    public int getPlatformWidth() {
+        return 32;
+    }
 
-     /** Returns default value for object platformHeight. */
-     public int getPlatformHeight() {
-         return 16;
-     }
+    /**
+     * Returns default value for object platformHeight.
+     */
+    public int getPlatformHeight() {
+        return 16;
+    }
 
-     /** Returns identifier, specified for graphic render. */
-     public abstract String getSignature();
+    /**
+     * Returns identifier, specified for graphic render.
+     */
+    public abstract String getSignature();
 
-     /** Returns meta-type of object. Meta-type describe main behavior of the object from Player perspective. */
-     public abstract MapObjectMetaType getMetaType();
+    /**
+     * Returns meta-type of object. Meta-type describe main behavior of the object from Player perspective.
+     */
+    public abstract MapObjectMetaType getMetaType();
 
-     /**
-      * Returns true if terrain is passable.
-      *
-      * @return true/false.
-      */
-     public boolean isPassable() {
-          return false;
-     }
+    /**
+     * Returns true if terrain is passable.
+     *
+     * @return true/false.
+     */
+    public boolean isPassable() {
+        return false;
+    }
 }

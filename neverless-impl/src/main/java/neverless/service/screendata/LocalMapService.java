@@ -11,15 +11,12 @@ import neverless.dto.CoordinateDto;
 import neverless.dto.MapObjectDto;
 import neverless.dto.LocalMapScreenDataDto;
 import neverless.context.EventContext;
-import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
@@ -31,8 +28,6 @@ public class LocalMapService {
 
     @Autowired
     private PlayerRepository playerRepository;
-    @Autowired
-    private MapObjectsRepository mapObjRepository;
     @Autowired
     private EventContext eventContext;
     @Autowired
@@ -113,33 +108,15 @@ public class LocalMapService {
         if (player == null) {
             return localMapScreenDataDto;
         }
-        List<MapObjectDto> objectDtos = getAllMapObjects(player.getLocation())
+        List<MapObjectDto> objectDtos = player.getLocation().getObjects()
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
 
-        objectDtos.add(mapToDto(player));
-        localMapScreenDataDto.setObjects(objectDtos);
-        localMapScreenDataDto.setSignature(player.getLocation().getSignature());
+        localMapScreenDataDto
+                .setObjects(objectDtos)
+                .setSignature(player.getLocation().getSignature());
         return localMapScreenDataDto;
-    }
-
-    public List<AbstractMapObject> getAllMapObjects(Location location) {
-        List<AbstractMapObject> result = new ArrayList<>();
-        // collect objects from lists
-        result.addAll(location.getObjects());
-        result.addAll(location.getNpcs());
-        result.addAll(location.getRespawnPoints());
-        result.addAll(location.getPortals());
-
-        // collect enemies
-        result.addAll(location.getRespawnPoints()
-                .stream()
-                .map(rp -> rp.getEnemy())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList()));
-
-        return result;
     }
 
     /**
@@ -172,10 +149,6 @@ public class LocalMapService {
     }
 
     public boolean isPassable(AbstractMapObject walker, int newX, int newY) {
-        // todo: fix it
-        if (walker.getLocation() == null) {
-            return false;
-        }
         boolean intersection = false;
 
         for (int i = 0; i < walker.getLocation().getObjects().size(); i++) {

@@ -45,8 +45,8 @@ public class Sprite {
      * @param gc graphical context where we should draw the sprite.
      */
     public void draw(GraphicsContext gc) {
-        gc.drawImage(image, x, y);
         drawPlatform(gc);
+        gc.drawImage(image, x, y);
     }
 
     private void drawPlatform(GraphicsContext gc) {
@@ -60,7 +60,7 @@ public class Sprite {
 
                 int dy = (int) (image.getHeight() - platformShapeHeight / 2);
                 int centerY = y + dy;
-                gc.fillArc(
+                gc.strokeArc(
                         centerX,
                         centerY,
                         platformShapeWidth,

@@ -108,7 +108,6 @@ public class PlayerService {
         enemyRepository.delete(enemy);
     }
 
-
     public PlayerScreenDataDto getScreenData() {
         long t = System.nanoTime();
         PlayerDto playerDto = new PlayerDto();

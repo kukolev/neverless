@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -37,23 +38,29 @@ public class Location {
     @Column
     private String signature;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "location")
     @Fetch(value = FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<AbstractMapObject> objects = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<AbstractRespawnPoint> respawnPoints = new ArrayList<>();
+    public List<AbstractRespawnPoint> getRespawnPoints() {
+        return objects.stream()
+                .filter(o -> o instanceof AbstractRespawnPoint)
+                .map(o -> (AbstractRespawnPoint) o)
+                .collect(Collectors.toList());
+    }
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<AbstractNpc> npcs = new ArrayList<>();
+    public List<AbstractNpc> getNpcs() {
+        return objects.stream()
+                .filter(o -> o instanceof AbstractNpc)
+                .map(o -> (AbstractNpc) o)
+                .collect(Collectors.toList());
+    }
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<AbstractPortal> portals = new ArrayList<>();
+    public List<AbstractPortal> getPortals() {
+        return objects.stream()
+                .filter(o -> o instanceof AbstractPortal)
+                .map(o -> (AbstractPortal) o)
+                .collect(Collectors.toList());
+    }
 }

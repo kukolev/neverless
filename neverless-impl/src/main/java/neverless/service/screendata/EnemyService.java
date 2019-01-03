@@ -1,5 +1,6 @@
 package neverless.service.screendata;
 
+import neverless.domain.Location;
 import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
@@ -14,7 +15,6 @@ import neverless.context.RequestContext;
 import neverless.repository.EnemyRepository;
 import neverless.repository.ItemRepository;
 import neverless.util.CoordinateUtils;
-import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -40,8 +40,6 @@ public class EnemyService {
     private ItemRepository itemRepository;
     @Autowired
     private LocalMapService localMapService;
-    @Autowired
-    private SessionUtil sessionUtil;
     @Autowired
     private EnemyRepository enemyRepository;
     @Autowired
@@ -135,7 +133,6 @@ public class EnemyService {
      * @param enemy enemy that should chasing the player.
      */
     private boolean chase(AbstractEnemy enemy) {
-        Player player = playerService.getPlayer();
         if (!isCanAttack(enemy)) {
             CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
             if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
@@ -244,9 +241,7 @@ public class EnemyService {
             // Calculates if new enemy should be respawn
             if (delta > p.getRespawnPeriod()) {
                 if (p.getEnemy() == null) {
-                    // todo: raise an event ??
-                    AbstractEnemy enemy = respawn(p);
-                    enemy.setLocation(p.getLocation());
+                    AbstractEnemy enemy = respawn(p, p.getLocation());
                     p.setEnemy(enemy);
                     p.setLastTurnInLife(requestContext.getTurnNumber());
                 }
@@ -259,21 +254,24 @@ public class EnemyService {
      *
      * @param respawnPoint respawn point that generates an enemy.
      */
-    private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint) {
+    private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint, Location location) {
 
         AbstractEnemyFactory factory = getEnemyFactory(respawnPoint);
         AbstractEnemy newEnemy = factory.create();
-        // todo: position should be random
-        newEnemy.setX(respawnPoint.getX());
-        newEnemy.setY(respawnPoint.getY());
-        newEnemy.setBornX(respawnPoint.getX());
-        newEnemy.setBornY(respawnPoint.getY());
-        newEnemy.setAreaX(respawnPoint.getAreaX());
-        newEnemy.setAreaY(respawnPoint.getAreaY());
-        newEnemy.setRespawnPoint(respawnPoint);
-        newEnemy.getWeapons()
-                .forEach(itemRepository::save);
         AbstractEnemy result = enemyRepository.save(newEnemy);
+        // todo: position should be random
+        result.setX(respawnPoint.getX() + 20);
+        result.setY(respawnPoint.getY() + 20);
+        result.setBornX(result.getX());
+        result.setBornY(result.getY());
+        result.setAreaX(respawnPoint.getAreaX());
+        result.setAreaY(respawnPoint.getAreaY());
+        result.getWeapons()
+                .forEach(itemRepository::save);
+        result.setRespawnPoint(respawnPoint);
+
+        result.setLocation(location);
+        location.getObjects().add(result);
         return result;
     }
 
@@ -284,8 +282,7 @@ public class EnemyService {
      */
     private AbstractEnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
         Class<? extends AbstractEnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
-        AbstractEnemyFactory factory = applicationContext.getBean(factoryClass);
-        return factory;
+        return applicationContext.getBean(factoryClass);
     }
 
     /**

@@ -51,7 +51,7 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     private Integer areaY;
 
     @Column
-    private Integer agrRange = 7; // todo: should be in constants
+    private Integer agrRange = 200; // todo: should be in constants
 
     @Column
     private Direction walkDirection;

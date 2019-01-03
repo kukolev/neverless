@@ -10,20 +10,14 @@ import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.AbstractBuilding;
-import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.portal.LocationsPortal;
-import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
-import neverless.domain.entity.mapobject.tree.AbstractTree;
 import neverless.domain.entity.mapobject.wall.AbstractWall;
 import neverless.domain.entity.mapobject.wall.StoneWall;
 import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
-import neverless.domain.entity.mapobject.tree.FirTree;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
-import neverless.domain.entity.mapobject.building.LittleVillageHouse;
-import neverless.domain.entity.mapobject.building.LongVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 
 import neverless.repository.CoordinateRepository;
@@ -83,16 +77,15 @@ public class GameLoader {
         createQuests();
     }
 
-    private Game createGame() {
-
+    private void createGame() {
         Game game = gameRepository.save(new Game()
                 .setId(sessionUtil.getGameId()));
 
         Location village = createLocationVillage();
         Location dungeon = createLocationDungeon();
 
-        village.getPortals().add(createPortalVillage2Dungeon(dungeon));
-        dungeon.getPortals().add(createPortalDungeon2Village(village));
+        village.getObjects().add(createPortalVillage2Dungeon(dungeon));
+        dungeon.getObjects().add(createPortalDungeon2Village(village));
 
         Player player = createPlayer();
         player.setLocation(village);
@@ -102,27 +95,20 @@ public class GameLoader {
         game.getLocations().add(dungeon);
         game.setPlayer(player);
         gameRepository.save(game);
-        return game;
     }
 
     private Location createLocationVillage() {
-        List<AbstractRespawnPoint> respawnPoints = createRespawnPoints();
+
         Location village = new Location()
                 .setTitle("Village")
-                .setRespawnPoints(respawnPoints)
                 .setSignature(IMG_VILLAGE_BACKGROUND);
-        village.getObjects().addAll(createTreesLeft());
-        village.getObjects().addAll(createTreesTop());
-        village.getObjects().addAll(createTreesRight());
-        village.getObjects().addAll(respawnPoints);
+        village = locationRepository.save(village);
 
-        village.getNpcs().add(createNpc());
+        createNpc(village);
+        createRespawnPoints(village);
+        createHouse(village);
 
-        village.getObjects().add(createHouse2x2());
-        village.getObjects().add(createHouse3x7());
-        village.getObjects().add(createHouse4x5());
-
-        return locationRepository.save(village);
+        return village;
     }
 
     private Location createLocationDungeon() {
@@ -164,19 +150,12 @@ public class GameLoader {
         return playerRepository.save(player);
     }
 
-    private AbstractBuilding createHouse2x2() {
-        LittleVillageHouse building = new LittleVillageHouse();
-        building
-                .setX(320)
-                .setY(320);
-        return mapObjRepository.save(building);
-    }
-
-    private AbstractBuilding createHouse4x5() {
+    private void createHouse(Location location) {
         AbstractBuilding building = new LargeVillageHouse();
         building
                 .setX(1900)
-                .setY(1400);
+                .setY(1400)
+                .setLocation(location);
         List<Coordinate> coordinates = new ArrayList<>();
         coordinates.add(new Coordinate().setX(68).setY(156));
         coordinates.add(new Coordinate().setX(92).setY(156));
@@ -186,53 +165,7 @@ public class GameLoader {
         building.setPlatformCoordinates(coordinates);
 
         coordinates.forEach(c -> coordinateRepository.save(c));
-
-        return mapObjRepository.save(building);
-    }
-
-    private AbstractBuilding createHouse3x7() {
-        AbstractBuilding building = new LongVillageHouse();
-        building
-                .setX(2080)
-                .setY(2880);
-        return mapObjRepository.save(building);
-    }
-
-    private List<AbstractTree> createTreesTop() {
-        List<AbstractTree> trees = new ArrayList<>();
-        trees.add(createTree(640, 1376));
-        trees.add(createTree(1120, 1440));
-        trees.add(createTree(1376, 1504));
-        trees.add(createTree(2016, 1152));
-        trees.add(createTree(2368, 1216));
-        return trees;
-    }
-
-    private List<AbstractTree> createTreesLeft() {
-        List<AbstractTree> trees = new ArrayList<>();
-        trees.add(createTree(1600, 1760));
-        trees.add(createTree(1696, 2080));
-        trees.add(createTree(1824, 2400));
-        trees.add(createTree(1664, 2528));
-        trees.add(createTree(1856, 2784));
-        return trees;
-    }
-
-    private List<AbstractTree> createTreesRight() {
-        List<AbstractTree> trees = new ArrayList<>();
-        trees.add(createTree(2208, 1856));
-        trees.add(createTree(2080, 2016));
-        trees.add(createTree(2144, 2240));
-        trees.add(createTree(2176, 2400));
-        trees.add(createTree(2176, 2592));
-        return trees;
-    }
-
-    private AbstractTree createTree(int x, int y) {
-        FirTree tree = new FirTree();
-        tree.setX(x)
-                .setY(y);
-        return mapObjRepository.save(tree);
+        mapObjRepository.save(building);
     }
 
     private List<AbstractWall> drawStoneWallVertical(int x, int y1, int y2) {
@@ -245,7 +178,7 @@ public class GameLoader {
 
     private List<AbstractWall> drawStoneWallHorizontal(int y, int x1, int x2) {
         List<AbstractWall> walls = new ArrayList<>();
-        for (int i = x1; i <= x2; i+=32 ) {
+        for (int i = x1; i <= x2; i += 32 ) {
             walls.add(createStoneWall(i, y));
         }
         return walls;
@@ -259,12 +192,12 @@ public class GameLoader {
         return mapObjRepository.save(wall);
     }
 
-    private AbstractNpc createNpc() {
+    private void createNpc(Location location) {
         OldMan oldMan = new OldMan();
         oldMan
             .setX(1632)
-            .setY(1632);
-        return mapObjRepository.save(oldMan);
+            .setY(1632)
+            .setLocation(location);
     }
 
     private AbstractPortal createPortalVillage2Dungeon(Location destination) {
@@ -301,27 +234,22 @@ public class GameLoader {
         return walls;
     }
 
-    private List<AbstractRespawnPoint> createRespawnPoints() {
-        List<AbstractRespawnPoint> points = new ArrayList<>();
-
+    private void createRespawnPoints(Location location) {
         GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint();
         respawnPoint1
                 .setX(1600)
-                .setY(1728);
-        //respawnPointRepository.save(respawnPoint1);
-        points.add(respawnPointRepository.save(respawnPoint1));
+                .setY(1728)
+                .setLocation(location);
+        respawnPointRepository.save(respawnPoint1);
 
         GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
         respawnPoint2
                 .setX(1280)
                 .setY(1728);
-//        respawnPointRepository.save(respawnPoint2);
-        points.add(respawnPointRepository.save(respawnPoint2));
-
-        return points;
+        respawnPointRepository.save(respawnPoint2);
     }
 
-    public void createQuests() {
+    private void createQuests() {
         questContainer.add(context.getBean(OldManQuestKillGoblins.class));
     }
 }

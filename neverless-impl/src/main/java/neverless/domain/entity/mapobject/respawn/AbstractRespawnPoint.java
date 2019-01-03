@@ -2,6 +2,7 @@ package neverless.domain.entity.mapobject.respawn;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.PlatformShape;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
@@ -41,5 +42,9 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
     @Override
     public MapObjectMetaType getMetaType() {
         return MapObjectMetaType.TERRAIN;
+    }
+
+    public PlatformShape getPlatformShape() {
+        return PlatformShape.CUSTOM;
     }
 }
