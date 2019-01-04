@@ -1,21 +1,26 @@
 package neverless.service.screendata;
 
+import neverless.Direction;
 import neverless.context.EventContext;
 import neverless.domain.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
+import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.dto.PlayerDto;
 import neverless.dto.player.PlayerScreenDataDto;
 import neverless.repository.EnemyRepository;
+import neverless.repository.MapObjectsRepository;
 import neverless.repository.PlayerRepository;
-import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Random;
+
+import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 
 @Service
 @Transactional
@@ -28,7 +33,9 @@ public class PlayerService {
     @Autowired
     private GameService gameService;
     @Autowired
-    private SessionUtil sessionUtil;
+    private LocalMapService localMapService;
+    @Autowired
+    private MapObjectsRepository mapObjectsRepository;
     @Autowired
     private EventContext eventContext;
 
@@ -36,6 +43,87 @@ public class PlayerService {
         Game game = gameService.getGame();
         return game.getPlayer();
     }
+
+    public void goOnDirection(Direction direction) {
+        Player player = getPlayer();
+
+        int newX = player.getX();
+        int newY = player.getY();
+
+        switch (direction) {
+            case UP:
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            case DOWN:
+                newY += LOCAL_MAP_STEP_LENGTH;
+                break;
+            case LEFT:
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            case RIGHT:
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
+            case UP_LEFT: {
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case UP_RIGHT: {
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case DOWN_LEFT: {
+                newY += LOCAL_MAP_STEP_LENGTH;
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+            case DOWN_RIGHT: {
+                newY += LOCAL_MAP_STEP_LENGTH;
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
+            }
+        }
+        goOnDirection(newX, newY, direction);
+    }
+
+    private void goOnDirection(int x, int y, Direction direction) {
+        Player player = getPlayer();
+        if (localMapService.isPassable(player, x, y)) {
+            doMoving(player, x, y, direction);
+            return;
+        }
+        doImpossibleMove();
+    }
+
+    private void doMoving(Player player, int x, int y, Direction direction) {
+        player.setX(x);
+        player.setY(y);
+        playerRepository.save(player);
+        eventContext.addMapGoEvent(direction);
+    }
+
+    public void doPortalEnter(String portalId) {
+        // todo: fix it.
+        AbstractMapObject object = mapObjectsRepository.getOne(portalId);
+        AbstractPortal portal = object instanceof AbstractPortal ? (AbstractPortal) object : null;
+        if (portal == null) {
+            // todo: throw concrete exception here;
+            throw new IllegalArgumentException();
+        }
+
+        Player player = getPlayer();
+        player
+                .setLocation(portal.getDestination())
+                .setX(portal.getDestX())
+                .setY(portal.getDestY());
+        eventContext.addPortalEnterEvent(portal.getDestination().getTitle());
+    }
+
+    private void doImpossibleMove() {
+        eventContext.addMapGoImpossibleEvent();
+    }
+
 
     /**
      * Performs an attack to enemy.

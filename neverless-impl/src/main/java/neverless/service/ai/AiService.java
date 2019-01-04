@@ -18,7 +18,7 @@ public class AiService {
 
     public void handleEvents() {
         // todo: implement reaction on executed command
-        enemyService.move();
+        enemyService.processBehavior();
         enemyService.respawn();
     }
 }

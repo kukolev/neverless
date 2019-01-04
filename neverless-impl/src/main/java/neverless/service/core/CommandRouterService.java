@@ -76,21 +76,21 @@ public class CommandRouterService {
 
     public void cmdMoveDown() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.DOWN);
+        playerService.goOnDirection(Direction.DOWN);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
     public void cmdMoveDownLeft() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.DOWN_LEFT);
+        playerService.goOnDirection(Direction.DOWN_LEFT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
     public void cmdMoveDownRight() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.DOWN_RIGHT);
+        playerService.goOnDirection(Direction.DOWN_RIGHT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
@@ -98,21 +98,21 @@ public class CommandRouterService {
 
     public void cmdMoveUp() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.UP);
+        playerService.goOnDirection(Direction.UP);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
     public void cmdMoveUpLeft() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.UP_LEFT);
+        playerService.goOnDirection(Direction.UP_LEFT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
     public void cmdMoveUpRight() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.UP_RIGHT);
+        playerService.goOnDirection(Direction.UP_RIGHT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
@@ -120,14 +120,14 @@ public class CommandRouterService {
 
     public void cmdMoveLeft() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.LEFT);
+        playerService.goOnDirection(Direction.LEFT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }
 
     public void cmdMoveRight() {
         requestContext.initQuestStates();
-        localMapService.mapGo(Direction.RIGHT);
+        playerService.goOnDirection(Direction.RIGHT);
         aiService.handleEvents();
         questService.generateQuestEvents();
     }

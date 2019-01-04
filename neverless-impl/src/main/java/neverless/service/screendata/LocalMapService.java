@@ -5,13 +5,9 @@ import neverless.domain.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
-import neverless.domain.entity.mapobject.portal.AbstractPortal;
-import neverless.Direction;
 import neverless.dto.CoordinateDto;
 import neverless.dto.MapObjectDto;
 import neverless.dto.LocalMapScreenDataDto;
-import neverless.context.EventContext;
-import neverless.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +15,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
@@ -27,89 +22,7 @@ import static neverless.util.CoordinateUtils.isCurvesIntersected;
 public class LocalMapService {
 
     @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
-    private EventContext eventContext;
-    @Autowired
     private PlayerService playerService;
-
-    public void mapGo(Direction direction) {
-        Player player = playerService.getPlayer();
-
-        int newX = player.getX();
-        int newY = player.getY();
-
-        switch (direction) {
-            case UP:
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            case DOWN:
-                newY += LOCAL_MAP_STEP_LENGTH;
-                break;
-            case LEFT:
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            case RIGHT:
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            case UP_LEFT: {
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case UP_RIGHT: {
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case DOWN_LEFT: {
-                newY += LOCAL_MAP_STEP_LENGTH;
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case DOWN_RIGHT: {
-                newY += LOCAL_MAP_STEP_LENGTH;
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-        }
-        mapGo(newX, newY, direction);
-    }
-
-    private void mapGo(int x, int y, Direction direction) {
-        Player player = playerService.getPlayer();
-
-        if (isPortal(x, y, player.getLocation())) {
-            doPortalEnter(player, x, y);
-            return;
-        }
-        if (isPassable(player, x, y)) {
-            doMoving(player, x, y, direction);
-            return;
-        }
-        doImpossibleMove();
-    }
-
-    private void doMoving(Player player, int x, int y, Direction direction) {
-        player.setX(x);
-        player.setY(y);
-        playerRepository.save(player);
-        eventContext.addMapGoEvent(direction);
-    }
-
-    private void doImpossibleMove() {
-        eventContext.addMapGoImpossibleEvent();
-    }
-
-    private void doPortalEnter(Player player, int x, int y) {
-        // todo: fix it.
-        AbstractPortal portal = (AbstractPortal) getMapObjectAtPosition(x, y, player.getLocation());
-        player
-                .setLocation(portal.getDestination())
-                .setX(portal.getDestX())
-                .setY(portal.getDestY());
-        eventContext.addPortalEnterEvent(portal.getDestination().getTitle());
-    }
 
     public LocalMapScreenDataDto getScreenData() {
         LocalMapScreenDataDto localMapScreenDataDto = new LocalMapScreenDataDto();
@@ -212,17 +125,8 @@ public class LocalMapService {
         return !intersection;
     }
 
-    private boolean isPortal(int x, int y, Location location) {
+    public boolean isPortal(int x, int y, Location location) {
         // todo: fix it.
-        AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
-        return mapObject instanceof AbstractPortal;
-    }
-
-    private AbstractMapObject getMapObjectAtPosition(int x, int y, Location location) {
-        return location.getObjects()
-                .stream()
-                .filter(object -> (object.getX() == x) && (object.getY() == y))
-                .findFirst()
-                .orElse(null);
+       return false;
     }
 }

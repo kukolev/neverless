@@ -2,6 +2,7 @@ package neverless.service.screendata;
 
 import neverless.Direction;
 import neverless.domain.Location;
+import neverless.domain.entity.mapobject.EnemyBehavior;
 import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
@@ -51,62 +52,84 @@ public class EnemyService {
     private PlayerService playerService;
 
     /**
-     * Initiates a moving/attacking for all enemies.
+     * Initiates a moving/chasing/attacking for all enemies.
      */
-    public void move() {
+    public void processBehavior() {
         Player player = playerService.getPlayer();
         player.getLocation().getRespawnPoints()
                 .forEach(rp -> {
-                    if (rp.getEnemy() != null) {
-                        if (!(walk(rp.getEnemy()) || chase(rp.getEnemy()))) {
-                            attack(rp.getEnemy());
+                    AbstractEnemy enemy = rp.getEnemy();
+                    if (enemy != null) {
+                        EnemyBehavior behavior = calcBehavior(rp.getEnemy());
+                        enemy.setBehavior(behavior);
+                        switch (behavior) {
+                            case WALKING:
+                                walk(rp.getEnemy());
+                                break;
+                            case CHASING:
+                                chase(rp.getEnemy());
+                                break;
+                            case ATTACKING:
+                                attack(rp.getEnemy());
+                                break;
                         }
                     }
                 });
     }
 
     /**
+     * Returns behavior, calculated for enemy.
+     *
+     * @param enemy enemy whose behavior should be calculated
+     */
+    private EnemyBehavior calcBehavior(AbstractEnemy enemy) {
+        Player player = playerService.getPlayer();
+        boolean playerIsNear = isPlayerNear(enemy);
+        boolean playerIsInAggressiveRange = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
+
+        if (playerIsInAggressiveRange) {
+            if (playerIsNear) {
+                return EnemyBehavior.ATTACKING;
+            } else {
+                return EnemyBehavior.CHASING;
+            }
+        } else {
+            return EnemyBehavior.WALKING;
+        }
+    }
+
+
+    /**
      * Changes position of an enemy in normal mode.
-     * Enemy should move near it's respawn point.
+     * Enemy should processBehavior near it's respawn point.
      *
      * @param enemy enemy that should walking in quite manner.
      */
-    private boolean walk(AbstractEnemy enemy) {
+    private void walk(AbstractEnemy enemy) {
+        boolean needNewDirection;
+        int tryCount = 0;
+        Random random = new Random(System.currentTimeMillis());
 
-        Player player = playerService.getPlayer();
-        boolean chaseOrAttack = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
-
-        if (!chaseOrAttack) {
-            boolean needNewDirection;
-            int tryCount = 0;
-            Random random = new Random(System.currentTimeMillis());
-
-            do {
-                needNewDirection = !walkInPreviousDirection(enemy);
-                if (needNewDirection) {
-                    int directionInd = random.nextInt(Direction.values().length);
-                    Direction newDirection = Direction.values()[directionInd];
-                    if (newDirection != enemy.getWalkDirection()) {
-                        enemy
-                                .setWalkDirection(newDirection)
-                                .setWalkTime(0);
-                        tryCount++;
-                    }
+        do {
+            needNewDirection = !walkInPreviousDirection(enemy);
+            if (needNewDirection) {
+                int directionInd = random.nextInt(Direction.values().length);
+                Direction newDirection = Direction.values()[directionInd];
+                if (newDirection != enemy.getWalkDirection()) {
+                    enemy
+                            .setWalkDirection(newDirection)
+                            .setWalkTime(0);
+                    tryCount++;
                 }
-
-            } while(needNewDirection && tryCount <= Direction.values().length);
-
-            return true;
-        } else {
-            return false;
-        }
+            }
+        } while (needNewDirection && tryCount <= Direction.values().length);
     }
 
     /**
      * Returns true if enemy performed successfully moving to his previous direction.
      * Method tries to perform moving if possible.
      *
-     * @param enemy     walking enemy.
+     * @param enemy walking enemy.
      */
     private boolean walkInPreviousDirection(AbstractEnemy enemy) {
 
@@ -195,26 +218,13 @@ public class EnemyService {
      *
      * @param enemy enemy that should chasing the player.
      */
-    private boolean chase(AbstractEnemy enemy) {
-        if (!isCanAttack(enemy)) {
-            CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
-            if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
-                enemy
-                        .setX(coordinate.getX())
-                        .setY(coordinate.getY());
-            }
-            return true;
+    private void chase(AbstractEnemy enemy) {
+        CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
+        if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
+            enemy
+                    .setX(coordinate.getX())
+                    .setY(coordinate.getY());
         }
-        return false;
-    }
-
-    /**
-     * Calculates and returns if enemy is able to attack player.
-     *
-     * @param enemy enemy
-     */
-    private boolean isCanAttack(AbstractEnemy enemy) {
-        return isPlayerNear(enemy);
     }
 
     /**

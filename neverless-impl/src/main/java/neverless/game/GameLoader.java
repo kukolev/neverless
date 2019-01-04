@@ -113,7 +113,8 @@ public class GameLoader {
 
     private Location createLocationDungeon() {
         Location dungeon = new Location()
-                .setTitle("Dungeon");
+                .setTitle("Dungeon")
+                .setSignature(IMG_VILLAGE_BACKGROUND);
 
         dungeon.getObjects().addAll(createDungeonObjects());
 
