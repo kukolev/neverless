@@ -40,10 +40,18 @@ public class LocalMapService {
         int newY = player.getY();
 
         switch (direction) {
-            case UP: newY -= LOCAL_MAP_STEP_LENGTH; break;
-            case DOWN: newY += LOCAL_MAP_STEP_LENGTH; break;
-            case LEFT: newX -= LOCAL_MAP_STEP_LENGTH; break;
-            case RIGHT: newX += LOCAL_MAP_STEP_LENGTH; break;
+            case UP:
+                newY -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            case DOWN:
+                newY += LOCAL_MAP_STEP_LENGTH;
+                break;
+            case LEFT:
+                newX -= LOCAL_MAP_STEP_LENGTH;
+                break;
+            case RIGHT:
+                newX += LOCAL_MAP_STEP_LENGTH;
+                break;
             case UP_LEFT: {
                 newY -= LOCAL_MAP_STEP_LENGTH;
                 newX -= LOCAL_MAP_STEP_LENGTH;
@@ -94,6 +102,7 @@ public class LocalMapService {
     }
 
     private void doPortalEnter(Player player, int x, int y) {
+        // todo: fix it.
         AbstractPortal portal = (AbstractPortal) getMapObjectAtPosition(x, y, player.getLocation());
         player
                 .setLocation(portal.getDestination())
@@ -148,11 +157,21 @@ public class LocalMapService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns true if walker can go to new coordinates.
+     *
+     * @param walker    walker.
+     * @param newX      new horizontal coordinate where walker wants to go to
+     * @param newY      new vertical coordinate where walker wants to go to
+     */
     public boolean isPassable(AbstractMapObject walker, int newX, int newY) {
         boolean intersection = false;
 
-        for (int i = 0; i < walker.getLocation().getObjects().size(); i++) {
-            AbstractMapObject object = walker.getLocation().getObjects().get(i);
+        for (AbstractMapObject object: walker.getLocation().getObjects()) {
+            if (walker.equals(object)) {
+                continue;
+            }
+
             if (object.getPlatformShape() == PlatformShape.CUSTOM) {
                 if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {
 
@@ -163,20 +182,38 @@ public class LocalMapService {
                                     .setY(object.getY() + c.getY()))
                             .collect(Collectors.toList());
 
-                    int ellipseCenterX = newX + walker.getPlatformCenterX();
-                    int ellipseCenterY = newY + walker.getPlatformCenterY();
+                    int walkerCenterX = newX + walker.getPlatformCenterX();
+                    int walkerCenterY = newY + walker.getPlatformCenterY();
+                    int walkerRadiusX = walker.getPlatformWidth() / 2;
+                    int walkerRadiusY = walker.getPlatformHeight() / 2;
 
-                    intersection = isCurvesIntersected(ellipseCenterX, ellipseCenterY, walker.getPlatformWidth() / 2, walker.getPlatformHeight() / 2, realCoordinates);
-                    if (intersection) {
-                        break;
-                    }
+                    intersection = isCurvesIntersected(walkerCenterX, walkerCenterY, walkerRadiusX, walkerRadiusY, realCoordinates);
                 }
+            } else if (object.getPlatformShape() == PlatformShape.ELLIPSE) {
+                if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {
+                    int walkerCenterX = newX + walker.getPlatformCenterX();
+                    int walkerCenterY = newY + walker.getPlatformCenterY();
+                    int walkerRadiusX = walker.getPlatformWidth() / 2;
+                    int walkerRadiusY = walker.getPlatformHeight() / 2;
+
+                    int objectCenterX = object.getX() + object.getPlatformCenterX();
+                    int objectCenterY = object.getY() + object.getPlatformCenterY();
+                    int objectRadiusX = object.getPlatformWidth() / 2;
+                    int objectRadiusY = object.getPlatformHeight() / 2;
+
+                    intersection = isCurvesIntersected(walkerCenterX, walkerCenterY, walkerRadiusX, walkerRadiusY,
+                            objectCenterX, objectCenterY, objectRadiusX, objectRadiusY);
+                }
+            }
+            if (intersection) {
+                break;
             }
         }
         return !intersection;
     }
 
     private boolean isPortal(int x, int y, Location location) {
+        // todo: fix it.
         AbstractMapObject mapObject = getMapObjectAtPosition(x, y, location);
         return mapObject instanceof AbstractPortal;
     }

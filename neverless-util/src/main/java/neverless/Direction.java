@@ -1,6 +1,7 @@
 package neverless;
 
 public enum Direction {
+    NONE,
     UP,
     DOWN,
     LEFT,

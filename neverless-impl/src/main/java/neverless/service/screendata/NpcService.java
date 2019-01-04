@@ -13,11 +13,12 @@ import javax.transaction.Transactional;
 public class NpcService {
 
     public AbstractNpc getNpcAtPosition(int npcX, int npcY, Location location) {
+        // todo: throw exception when nothing is found
         AbstractMapObject object = location.getObjects()
                 .stream()
                 .filter(o -> o.getX() == npcX && o.getY() == npcY)
                 .findFirst()
-                .get();
+                .orElse(null);
         return (AbstractNpc) object;
     }
 }

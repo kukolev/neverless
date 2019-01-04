@@ -51,13 +51,22 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     private Integer areaY;
 
     @Column
-    private Integer agrRange = 200; // todo: should be in constants
+    private Integer agrRange = 50; // todo: should be in constants
 
     @Column
-    private Direction walkDirection;
+    private Direction walkDirection = Direction.NONE;
+
+    /**
+     * Count of turns while enemy walks in one direction (walkDirection field)
+     */
+    @Column
+    private Integer walkTime = 0;
 
     @Column
     private EnemyBehavior behavior;
+
+    @Column
+    private Integer speed;
 
     /**
      * Decreases amount of hit points.

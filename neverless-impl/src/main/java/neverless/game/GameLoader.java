@@ -198,6 +198,7 @@ public class GameLoader {
             .setX(1632)
             .setY(1632)
             .setLocation(location);
+        mapObjRepository.save(oldMan);
     }
 
     private AbstractPortal createPortalVillage2Dungeon(Location destination) {
@@ -237,8 +238,8 @@ public class GameLoader {
     private void createRespawnPoints(Location location) {
         GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint();
         respawnPoint1
-                .setX(1600)
-                .setY(1728)
+                .setX(1900)
+                .setY(1300)
                 .setLocation(location);
         respawnPointRepository.save(respawnPoint1);
 

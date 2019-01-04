@@ -15,6 +15,7 @@ import java.util.UUID;
 public class GoblinFactory extends AbstractEnemyFactory {
 
     private static final Integer GOBLIN_HP = 20;
+    private static final Integer GOBLIN_SPEED = 1;
     private static final String GOBLIN_RUST_SWORD_TITLE = "Rust sword";
     private static final Integer GOBLIN_RUST_SWORD_POWER = 1;
 
@@ -32,7 +33,8 @@ public class GoblinFactory extends AbstractEnemyFactory {
 
         Goblin goblin = new Goblin();
         goblin
-                .setHitPoints(GOBLIN_HP);
+                .setHitPoints(GOBLIN_HP)
+                .setSpeed(GOBLIN_SPEED);
         goblin
                 .getWeapons().add(sword);
         return goblin;

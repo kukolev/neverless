@@ -1,5 +1,6 @@
 package neverless.service.screendata;
 
+import neverless.Direction;
 import neverless.domain.Location;
 import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
@@ -20,7 +21,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Math.abs;
 import static java.util.stream.Collectors.toList;
+import static neverless.Constants.MOVING_IN_DIRECTION_LIMIT;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
@@ -76,26 +77,25 @@ public class EnemyService {
         boolean chaseOrAttack = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
 
         if (!chaseOrAttack) {
+            boolean needNewDirection;
+            int tryCount = 0;
+            Random random = new Random(System.currentTimeMillis());
 
-            // 1. create list of ways where enemy can go
-            List<CoordinateDto> coordinates = new ArrayList<>();
-            addWalkDirection(enemy.getX() + 1, enemy.getY(), enemy, coordinates);
-            addWalkDirection(enemy.getX() - 1, enemy.getY(), enemy, coordinates);
-            addWalkDirection(enemy.getX(), enemy.getY() + 1, enemy, coordinates);
-            addWalkDirection(enemy.getX(), enemy.getY() - 1, enemy, coordinates);
+            do {
+                needNewDirection = !walkInPreviousDirection(enemy);
+                if (needNewDirection) {
+                    int directionInd = random.nextInt(Direction.values().length);
+                    Direction newDirection = Direction.values()[directionInd];
+                    if (newDirection != enemy.getWalkDirection()) {
+                        enemy
+                                .setWalkDirection(newDirection)
+                                .setWalkTime(0);
+                        tryCount++;
+                    }
+                }
 
-            if (coordinates.size() > 0) {
-                // 2. choose random direction
-                Random random = new Random(System.currentTimeMillis());
-                int crdInd = random.nextInt(coordinates.size());
-                CoordinateDto newCoordinate = coordinates.get(crdInd);
+            } while(needNewDirection && tryCount <= Direction.values().length);
 
-                // 3. set new platformCoordinates
-                enemy.setX(newCoordinate.getX());
-                enemy.setY(newCoordinate.getY());
-
-                eventContext.addEnemyMoveEvent(enemy.getUniqueName());
-            }
             return true;
         } else {
             return false;
@@ -103,26 +103,89 @@ public class EnemyService {
     }
 
     /**
-     * Calculates possibility of walk to new platformCoordinates and add the platformCoordinates in list;
+     * Returns true if enemy performed successfully moving to his previous direction.
+     * Method tries to perform moving if possible.
      *
-     * @param newX        new X coordinate for enemy
-     * @param newY        new Y coordinate for enemy
-     * @param enemy       enemy for which new platformCoordinates are calculated
-     * @param coordinates list of new platformCoordinates
+     * @param enemy     walking enemy.
      */
-    private void addWalkDirection(int newX, int newY, AbstractEnemy enemy, List<CoordinateDto> coordinates) {
+    private boolean walkInPreviousDirection(AbstractEnemy enemy) {
+
+        // false if we are walking in same direction more then should
+        if (enemy.getWalkTime() >= MOVING_IN_DIRECTION_LIMIT) {
+            return false;
+        }
+
+        int newX = enemy.getX();
+        int newY = enemy.getY();
+        int speed = enemy.getSpeed();
+
+        switch (enemy.getWalkDirection()) {
+            case DOWN: {
+                newY += speed;
+                break;
+            }
+            case UP: {
+                newY -= speed;
+                break;
+            }
+            case RIGHT: {
+                newX += speed;
+                break;
+            }
+            case LEFT: {
+                newX -= speed;
+                break;
+            }
+            case DOWN_RIGHT: {
+                newX += speed;
+                newY += speed;
+                break;
+            }
+            case DOWN_LEFT: {
+                newX -= speed;
+                newY += speed;
+                break;
+            }
+            case UP_RIGHT: {
+                newX += speed;
+                newY -= speed;
+                break;
+            }
+            case UP_LEFT: {
+                newX -= speed;
+                newY -= speed;
+                break;
+            }
+        }
+
+        if (isPossibleToWalk(enemy, newX, newY)) {
+            enemy
+                    .setX(newX)
+                    .setY(newY);
+            int walkTime = enemy.getWalkTime();
+            walkTime++;
+            enemy.setWalkTime(walkTime);
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if enemy can go to the new coordinates.
+     *
+     * @param enemy walking enemy.
+     * @param newX  new horizontal coordinate.
+     * @param newY  new vertical coordinate.
+     */
+    private boolean isPossibleToWalk(AbstractEnemy enemy, int newX, int newY) {
         boolean isPassable = (localMapService.isPassable(enemy, newX, newY));
         boolean isNear =
                 (newX <= enemy.getBornX() + enemy.getAreaX())
                         && (newY <= enemy.getBornY() + enemy.getAreaY())
                         && (newX >= enemy.getBornX() - enemy.getAreaX())
                         && (newY >= enemy.getBornY() - enemy.getAreaY());
-
-        if (isNear && isPassable) {
-            coordinates.add(new CoordinateDto()
-                    .setX(newX)
-                    .setY(newY));
-        }
+        return (isNear && isPassable);
     }
 
     /**
@@ -215,9 +278,7 @@ public class EnemyService {
     private int calcDamage(AbstractEnemy enemy) {
         AtomicInteger damage = new AtomicInteger();
         enemy.getWeapons()
-                .forEach(w -> {
-                    damage.addAndGet(w.getPower());
-                });
+                .forEach(w -> damage.addAndGet(w.getPower()));
         return damage.get();
     }
 
@@ -260,8 +321,8 @@ public class EnemyService {
         AbstractEnemy newEnemy = factory.create();
         AbstractEnemy result = enemyRepository.save(newEnemy);
         // todo: position should be random
-        result.setX(respawnPoint.getX() + 20);
-        result.setY(respawnPoint.getY() + 20);
+        result.setX(respawnPoint.getX());
+        result.setY(respawnPoint.getY());
         result.setBornX(result.getX());
         result.setBornY(result.getY());
         result.setAreaX(respawnPoint.getAreaX());

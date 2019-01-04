@@ -18,10 +18,10 @@ import javax.persistence.OneToOne;
 public abstract class AbstractRespawnPoint extends AbstractMapObject {
 
     @Column
-    private Integer areaX = 3;
+    private Integer areaX = 100;
 
     @Column
-    private Integer areaY = 3;
+    private Integer areaY = 100;
 
     /** Turn number when the enemy is alive */
     @Column
@@ -29,7 +29,7 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
 
     /** Period, after that enemy should be respawned (turns) */
     @Column
-    private Integer respawnPeriod = 3;
+    private Integer respawnPeriod = 100;
 
     /** Enemy, created by this point */
     @OneToOne
