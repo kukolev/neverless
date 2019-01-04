@@ -66,7 +66,7 @@ public class CoordinateUtils {
      */
     public static List<Direction> line(int x1, int y1, int x2, int y2) {
 
-        List<String> actions = new ArrayList<>();
+        List<String> actions;
 
         int dx = x2 - x1;
         int dy = y2 - y1;
@@ -111,7 +111,6 @@ public class CoordinateUtils {
      * @param jump    real direction which should replace LINE_JUMP
      */
     private static List<Direction> mapLineActionsList(List<String> actions, Direction up, Direction jump) {
-        List<Direction> result = new ArrayList<>();
         return actions
                 .stream()
                 .map(a -> {
@@ -174,8 +173,8 @@ public class CoordinateUtils {
                 }
             }
 
-            for (int i = 0; i < packs.length; i++) {
-                for (int j = 0; j < packs[i]; j++) {
+            for (int pack : packs) {
+                for (int j = 0; j < pack; j++) {
                     result.add(LINE_UP);
                 }
                 result.add(LINE_JUMP);
@@ -193,12 +192,12 @@ public class CoordinateUtils {
      *
      * @param x1 horizontal coordinate of first ellipse center.
      * @param y1 vertical coordinate of first ellipse center.
-     * @param a1 horizontal platformWidth of first ellipse.
-     * @param b1 vertical platformWidth of first ellipse.
+     * @param a1 horizontal radius of first ellipse.
+     * @param b1 vertical radius of first ellipse.
      * @param x2 horizontal coordinate of second ellipse center.
      * @param y2 vertical coordinate of second ellipse center.
-     * @param a2 horizontal platformWidth of second ellipse.
-     * @param b2 vertical platformWidth of second ellipse.
+     * @param a2 horizontal radius of second ellipse.
+     * @param b2 vertical radius of second ellipse.
      */
     public static boolean isCurvesIntersected(int x1, int y1, int a1, int b1, int x2, int y2, int a2, int b2) {
         double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
@@ -255,12 +254,9 @@ public class CoordinateUtils {
             double tg = (y2 - y1) / (x2 - x1);
             double lineConst = y1 - (x1 * tg);
 
-            double a = radiusX;
-            double b = radiusY;
-
-            double A = tg * tg * a * a + b * b;
-            double B = 2 * lineConst * tg * a * a;
-            double C = lineConst * lineConst * a * a - a * a * b * b;
+            double A = tg * tg * radiusX * radiusX + radiusY * radiusY;
+            double B = 2 * lineConst * tg * radiusX * radiusX;
+            double C = lineConst * lineConst * radiusX * radiusX - radiusX * radiusX * radiusY * radiusY;
 
             double D = B * B - 4 * A * C;
             if (D >= 0) {

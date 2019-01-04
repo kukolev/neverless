@@ -27,10 +27,11 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.lang.Math.abs;
 import static java.util.stream.Collectors.toList;
+import static neverless.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
 import static neverless.Constants.MOVING_IN_DIRECTION_LIMIT;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
+import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
 @Transactional
@@ -234,9 +235,25 @@ public class EnemyService {
      */
     private boolean isPlayerNear(AbstractEnemy enemy) {
         Player player = playerService.getPlayer();
-        int deltaX = abs(enemy.getX() - player.getX());
-        int deltaY = abs(enemy.getY() - player.getY());
-        return (deltaX <= 1) && (deltaY <= 1);
+
+        // calculate radiuses for player and enemy ellipses
+        // new radiuses should be a bit wider by a little delta
+        int newPlayerRadiusX = (player.getPlatformWidth() / 2) + DELTA_BETWEEN_NEAREST_PLATFORMS;
+        int newPlayerRadiusY = (player.getPlatformHeight() / 2) + DELTA_BETWEEN_NEAREST_PLATFORMS;
+        int newEnemyRadiusX = (enemy.getPlatformWidth() / 2) + DELTA_BETWEEN_NEAREST_PLATFORMS;
+        int newEnemyRadiusY = (enemy.getPlatformHeight() / 2) + DELTA_BETWEEN_NEAREST_PLATFORMS;
+
+        // main idea - if two ellipses with radius + delta are intersected
+        // then two ellipses are close enough for attack
+        return isCurvesIntersected(
+                player.getX() + player.getPlatformCenterX(),
+                player.getY() + player.getPlatformCenterY(),
+                newPlayerRadiusX,
+                newPlayerRadiusY,
+                enemy.getX() + enemy.getPlatformCenterX(),
+                enemy.getY() + enemy.getPlatformCenterY(),
+                newEnemyRadiusX,
+                newEnemyRadiusY);
     }
 
     /**
