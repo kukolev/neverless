@@ -206,7 +206,9 @@ public class PlayerService {
                 .setHealthPoints(player.getHitPoints())
                 .setLocation(player.getLocation().getTitle())
                 .setX(player.getX())
-                .setY(player.getY());
+                .setY(player.getY())
+                .setPlatformCenterX(player.getPlatformCenterX())
+                .setPlatformCenterY(player.getPlatformCenterY());
         screenDataDto.setPlayerDto(playerDto);
         System.out.println("PlayerScreenData = " + (System.nanoTime() - t));
         return screenDataDto;

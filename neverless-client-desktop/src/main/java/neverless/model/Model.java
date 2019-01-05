@@ -97,8 +97,11 @@ public class Model extends Task {
         MapObjectMetaType metaType = getMetaTypeAtScreenPosition(screenX, screenY);
         System.out.println(metaType);
 
-        int cellX = convertToCellPosition(screenX);
-        int cellY = convertToCellPosition(screenY);
+        GameStateDto gameState = this.gameState;
+        PlayerDto player = gameState.getPlayerScreenDataDto().getPlayerDto();
+
+        int cellX = convertToCellPosition(screenX - player.getPlatformCenterX());
+        int cellY = convertToCellPosition(screenY - player.getPlatformCenterY());
 
         switch (metaType) {
             case TERRAIN: {
@@ -107,7 +110,6 @@ public class Model extends Task {
 
                 List<Direction> directions = line(centerX, centerY, cellX, cellY);
                 putCommandList(createMapGoCommands(directions));
-
             } break;
 
             case ENEMY: {
@@ -324,37 +326,5 @@ public class Model extends Task {
      */
     private int convertToCellPosition(int coordinate) {
         return  coordinate / LOCAL_MAP_STEP_LENGTH;
-    }
-
-    /**
-     * Calculates and returns direction for vector between center of screen and some x and y platformCoordinates
-     *
-     * @param x horizontal coordinate.
-     * @param y vertical coordinate.
-     */
-    private Direction calcDirection(int x, int y) {
-        int dx = x - (CANVAS_WIDTH / 2);
-        int dy = y - (CANVAS_HEIGHT / 2);
-
-        double tg;
-        if (dx != 0) {
-            tg = (double) dy / dx;
-        } else {
-            tg = Integer.MAX_VALUE;
-        }
-
-        if (tg >= -1 && tg < 1) {
-            if (dx > 0) {
-                return RIGHT;
-            } else {
-                return LEFT;
-            }
-        } else {
-            if (dy > 0) {
-                return Direction.DOWN;
-            } else {
-                return UP;
-            }
-        }
     }
 }
