@@ -22,7 +22,6 @@ import neverless.model.command.WaitCommand;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
-import neverless.view.renderer.Scene;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -184,7 +183,7 @@ public class Model extends Task {
                 long t = System.nanoTime();
 
                 // 1. Get command from queue
-                AbstractCommand command = null;
+                AbstractCommand command;
                 if (queue.size() != 0) {
                     command = queue.poll();
                 } else {
@@ -230,26 +229,13 @@ public class Model extends Task {
         long t = System.nanoTime();
         gameState = resolver.resolve(command);
         System.out.println("Resolve = " + (System.nanoTime() - t));
-        Frame gameStateFrame = renderer.processGameState(gameState);
 
+        Frame frame = renderer.calcFrame(gameState);
         updateMessage(UUID.randomUUID().toString());
-
         try {
-            frameExchanger.exchange(gameStateFrame);
+            frameExchanger.exchange(frame);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-
-        Scene scene = renderer.processScene(gameState);
-
-        for (Frame frame: scene.getFrames()) {
-            updateMessage(UUID.randomUUID().toString());
-
-            try {
-                frameExchanger.exchange(frame);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 

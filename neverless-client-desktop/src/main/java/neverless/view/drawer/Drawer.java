@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
-
 @Component
 public class Drawer implements ChangeListener<String> {
 
@@ -59,11 +57,7 @@ public class Drawer implements ChangeListener<String> {
         if (sprites.size() > 0) {
             GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
             background.draw(gc);
-
-            List<Sprite> orderedSprites = calcRenderOrder(sprites);
-            orderedSprites.forEach(s -> {
-                s.draw(gc);
-            });
+            sprites.forEach(s -> s.draw(gc));
         }
     }
 
