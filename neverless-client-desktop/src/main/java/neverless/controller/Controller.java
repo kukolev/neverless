@@ -1,7 +1,7 @@
 package neverless.controller;
 
 import javafx.scene.input.MouseEvent;
-import neverless.model.Model;
+import neverless.model.CommandCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,29 +9,29 @@ import org.springframework.stereotype.Component;
 public class Controller {
 
     @Autowired
-    private Model model;
+    private CommandCreator commandCreator;
 
     public void onClick(MouseEvent event) {
-        model.click((int) event.getX(), (int) event.getY());
+        commandCreator.click((int) event.getX(), (int) event.getY());
     }
 
     public void startNewGameBtnClick(MouseEvent event) {
-        model.cmdStartNewGame();
+        commandCreator.cmdStartNewGame();
     }
 
     public void moveDownBtnClick(MouseEvent event) {
-        model.cmdMapGoDown();
+        commandCreator.cmdMapGoDown();
     }
 
     public void moveUpBtnClick(MouseEvent event) {
-        model.cmdMapGoUp();
+        commandCreator.cmdMapGoUp();
     }
 
     public void moveLeftBtnClick(MouseEvent event) {
-        model.cmdMapGoLeft();
+        commandCreator.cmdMapGoLeft();
     }
 
     public void moveRightBtnClick(MouseEvent event) {
-        model.cmdMapGoRight();
+        commandCreator.cmdMapGoRight();
     }
 }
