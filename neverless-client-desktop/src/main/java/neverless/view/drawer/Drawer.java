@@ -38,20 +38,16 @@ public class Drawer implements ChangeListener<String> {
      * @param newValue   new value (is not used).
      */
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        try {
-            Frame frame = frameExchanger.exchange(null);
-            displayGameState(frame.getGameState());
-            displayLocalMap(frame.getBackground(), frame.getSprites());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Frame frame = frameExchanger.getFrame();
+        displayGameState(frame.getGameState());
+        displayLocalMap(frame.getBackground(), frame.getSprites());
     }
 
     /**
      * Draws graphic scene on game screen in local map pane.
      *
-     * @param background    special sprite for background.
-     * @param sprites       list of sprites for drawing.
+     * @param background special sprite for background.
+     * @param sprites    list of sprites for drawing.
      */
     private void displayLocalMap(Sprite background, List<Sprite> sprites) {
         if (sprites.size() > 0) {

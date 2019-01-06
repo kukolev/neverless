@@ -109,14 +109,16 @@ public class Model extends Task {
 
                 List<Direction> directions = line(centerX, centerY, cellX, cellY);
                 putCommandList(createMapGoCommands(directions));
-            } break;
+            }
+            break;
 
             case ENEMY: {
                 MapObjectDto object = getObjectAtScreenPosition(screenX, screenY);
                 if (object != null) {
                     cmdFightingAttack(object.getUniqueName());
                 }
-            } break;
+            }
+            break;
         }
     }
 
@@ -148,12 +150,20 @@ public class Model extends Task {
 
     private List<AbstractCommand> createMapGoCommands(Direction direction) {
         List<AbstractCommand> commands = new ArrayList<>();
-        for(int i = 0; i < LOCAL_MAP_CELL_STEPS; i++) {
+        for (int i = 0; i < LOCAL_MAP_CELL_STEPS; i++) {
             switch (direction) {
-                case DOWN: commands.add(new MapGoDownCommand()); break;
-                case UP: commands.add(new MapGoUpCommand()); break;
-                case LEFT: commands.add(new MapGoLeftCommand()); break;
-                case RIGHT: commands.add(new MapGoRightCommand()); break;
+                case DOWN:
+                    commands.add(new MapGoDownCommand());
+                    break;
+                case UP:
+                    commands.add(new MapGoUpCommand());
+                    break;
+                case LEFT:
+                    commands.add(new MapGoLeftCommand());
+                    break;
+                case RIGHT:
+                    commands.add(new MapGoRightCommand());
+                    break;
             }
         }
         return commands;
@@ -161,16 +171,32 @@ public class Model extends Task {
 
     private List<AbstractCommand> createMapGoCommands(List<Direction> directions) {
         List<AbstractCommand> commands = new ArrayList<>();
-        for(Direction direction: directions) {
+        for (Direction direction : directions) {
             switch (direction) {
-                case DOWN: commands.add(new MapGoDownCommand()); break;
-                case UP: commands.add(new MapGoUpCommand()); break;
-                case LEFT: commands.add(new MapGoLeftCommand()); break;
-                case RIGHT: commands.add(new MapGoRightCommand()); break;
-                case UP_LEFT: commands.add(new MapGoUpLeftCommand()); break;
-                case UP_RIGHT: commands.add(new MapGoUpRightCommand()); break;
-                case DOWN_LEFT: commands.add(new MapGoDownLeftCommand()); break;
-                case DOWN_RIGHT: commands.add(new MapGoDownRightCommand()); break;
+                case DOWN:
+                    commands.add(new MapGoDownCommand());
+                    break;
+                case UP:
+                    commands.add(new MapGoUpCommand());
+                    break;
+                case LEFT:
+                    commands.add(new MapGoLeftCommand());
+                    break;
+                case RIGHT:
+                    commands.add(new MapGoRightCommand());
+                    break;
+                case UP_LEFT:
+                    commands.add(new MapGoUpLeftCommand());
+                    break;
+                case UP_RIGHT:
+                    commands.add(new MapGoUpRightCommand());
+                    break;
+                case DOWN_LEFT:
+                    commands.add(new MapGoDownLeftCommand());
+                    break;
+                case DOWN_RIGHT:
+                    commands.add(new MapGoDownRightCommand());
+                    break;
             }
         }
         return commands;
@@ -226,17 +252,17 @@ public class Model extends Task {
      * @param command command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
+        // send command to backend and get response
         long t = System.nanoTime();
         gameState = resolver.resolve(command);
         System.out.println("Resolve = " + (System.nanoTime() - t));
 
+        // render frame for response
         Frame frame = renderer.calcFrame(gameState);
+
+        // store frame and send acknowledge to Drawer
+        frameExchanger.setFrame(frame);
         updateMessage(UUID.randomUUID().toString());
-        try {
-            frameExchanger.exchange(frame);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -311,6 +337,6 @@ public class Model extends Task {
      * @param coordinate coordinate of pixel on the screen.
      */
     private int convertToCellPosition(int coordinate) {
-        return  coordinate / LOCAL_MAP_STEP_LENGTH;
+        return coordinate / LOCAL_MAP_STEP_LENGTH;
     }
 }

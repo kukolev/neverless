@@ -21,7 +21,7 @@ public class Renderer {
     private SpriteRepository spriteRepository;
 
     /**
-     * Calculates and returns frames that should be painted on game screen.
+     * Calculates and returns frames should be painted on game screen.
      *
      * @param gameStateDto response from backend that include game state in concrete time.
      */
