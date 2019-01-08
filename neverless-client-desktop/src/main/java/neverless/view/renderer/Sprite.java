@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.MapObjectMetaType;
 import neverless.dto.CoordinateDto;
 import neverless.PlatformShape;
 
@@ -27,6 +28,8 @@ public class Sprite {
     private int platformShapeHeight;
     private int platformCenterX;
     private int platformCenterY;
+    private MapObjectMetaType metaType;
+    private String id;
 
 
 

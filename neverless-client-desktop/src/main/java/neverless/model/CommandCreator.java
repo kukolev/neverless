@@ -1,11 +1,8 @@
 package neverless.model;
 
-import lombok.Data;
 import neverless.Direction;
 import neverless.MapObjectMetaType;
-import neverless.dto.MapObjectDto;
 import neverless.dto.PlayerDto;
-import neverless.dto.player.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
@@ -18,11 +15,14 @@ import neverless.model.command.MapGoUpLeftCommand;
 import neverless.model.command.MapGoUpRightCommand;
 import neverless.model.command.StartNewGameCommand;
 import neverless.util.FrameExchanger;
+import neverless.view.renderer.Frame;
+import neverless.view.renderer.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static neverless.Constants.LOCAL_MAP_CELL_STEPS;
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
@@ -30,6 +30,7 @@ import static neverless.Direction.DOWN;
 import static neverless.Direction.LEFT;
 import static neverless.Direction.RIGHT;
 import static neverless.Direction.UP;
+import static neverless.MapObjectMetaType.TERRAIN;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
 import static neverless.util.CoordinateUtils.line;
@@ -43,28 +44,19 @@ public class CommandCreator {
     private Model model;
 
     /**
-     * Utility class for platformCoordinates.
-     */
-    @Data
-    private class Coordinate {
-        int x;
-        int y;
-    }
-
-    /**
-     * Evaluates a command that should be performed by clicking in some platformCoordinates.
-     * Puts the command in queue.
+     * Evaluates a command that should be performed by clicking in some coordinates.
+     * Puts the command in queue for further processing in Model.
      *
      * @param screenX horizontal cell index
      * @param screenY vertical cell index
      */
     public void click(int screenX, int screenY) {
-        // todo: remove stub and implement real code.
-        MapObjectMetaType metaType = getMetaTypeAtScreenPosition(screenX, screenY);
-        System.out.println(metaType);
+        Frame frame = frameExchanger.getFrame();
 
-        GameStateDto gameState = this.frameExchanger.getFrame().getGameState();
-        PlayerDto player = gameState.getPlayerScreenDataDto().getPlayerDto();
+        Sprite sprite = getSpriteAtScreenCoordinates(frame, screenX, screenY);
+        MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
+        System.out.println(metaType);
+        PlayerDto player = frame.getGameState().getPlayerScreenDataDto().getPlayerDto();
 
         int cellX = convertToCellPosition(screenX - player.getPlatformCenterX());
         int cellY = convertToCellPosition(screenY - player.getPlatformCenterY());
@@ -80,15 +72,15 @@ public class CommandCreator {
             break;
 
             case ENEMY: {
-                MapObjectDto object = getObjectAtScreenPosition(screenX, screenY);
-                if (object != null) {
-                    cmdFightingAttack(object.getUniqueName());
-                }
+                    cmdFightingAttack(sprite.getId());
             }
             break;
         }
     }
 
+    /**
+     * Creates command for new game start.
+     */
     public void cmdStartNewGame() {
         model.putCommand(new StartNewGameCommand());
         new Thread(model).start();
@@ -136,47 +128,18 @@ public class CommandCreator {
                 .setEnemyId(enemyId));
     }
 
-    /**
-     * Returns meta-type of object on local map with some screenX and screenY platformCoordinates.
-     *
-     * @param screenX horizontal screen coordinate.
-     * @param screenY vertical screen coordinate.
-     */
-    private MapObjectMetaType getMetaTypeAtScreenPosition(int screenX, int screenY) {
-
-        MapObjectDto object = getObjectAtScreenPosition(screenX, screenY);
-        if (object != null) {
-            return object.getMetaType();
+    private Sprite getSpriteAtScreenCoordinates(Frame frame, int screenX, int screenY) {
+        List<Sprite> sprites = frame.getSprites().stream()
+                .filter(s -> screenX >= s.getX() &&
+                        screenX <= s.getX() + s.getImage().getWidth() &&
+                        screenY >= s.getY() &&
+                        screenY <= s.getY() + s.getImage().getHeight())
+                .collect(Collectors.toList());
+        if (sprites.size() > 0) {
+            return sprites.get(sprites.size() - 1);
         } else {
-            return MapObjectMetaType.TERRAIN;
+            return null;
         }
-    }
-
-    private MapObjectDto getObjectAtScreenPosition(int screenX, int screenY) {
-        Coordinate coordinate = getObjectCoordinates(screenX, screenY);
-        List<MapObjectDto> objects = this.frameExchanger.getFrame().getGameState().getLocalMapScreenData().getObjects();
-        return objects.stream()
-                .filter(o -> isObjectAtPosition(o, coordinate.getX(), coordinate.getY()))
-                .findFirst()
-                .orElse(null);
-    }
-
-    /**
-     * Returns true if object is covering some coordinate.
-     *
-     * @param object the object for position analysis.
-     * @param x      horizontal coordinate.
-     * @param y      vertical coordinate.
-     */
-    private boolean isObjectAtPosition(MapObjectDto object, int x, int y) {
-        boolean b = (object.getX() <= x) &&
-                (object.getY() <= y) &&
-                (x < (object.getX() + object.getPlatformWidth())) &&
-                (y < (object.getY() + object.getPlatformHeight()));
-        if (b) {
-            System.out.println(object.getUniqueName());
-        }
-        return b;
     }
 
     /**
@@ -219,28 +182,5 @@ public class CommandCreator {
             }
         }
         return commands;
-    }
-
-    /**
-     * Returns game platformCoordinates for some couple of screen platformCoordinates.
-     *
-     * @param screenX horizontal screen coordinate.
-     * @param screenY vertical screen coordinate.
-     */
-    private Coordinate getObjectCoordinates(int screenX, int screenY) {
-        int cellX = convertToCellPosition(screenX);
-        int cellY = convertToCellPosition(screenY);
-
-        // Create copy of reference to avoid concurrency issues in further code.
-        GameStateDto gameState = this.frameExchanger.getFrame().getGameState();
-        PlayerDto player = gameState.getPlayerScreenDataDto().getPlayerDto();
-        int dx = player.getX() - (CANVAS_WIDTH / 2);
-        int dy = player.getY() - (CANVAS_HEIGHT / 2);
-
-        Coordinate coordinate = new Coordinate();
-        coordinate.setX(cellX + dx);
-        coordinate.setY(cellY + dy);
-
-        return coordinate;
     }
 }
