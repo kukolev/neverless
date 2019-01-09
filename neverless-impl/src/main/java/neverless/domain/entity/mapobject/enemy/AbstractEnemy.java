@@ -1,6 +1,7 @@
 package neverless.domain.entity.mapobject.enemy;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.Direction;
 import neverless.PlatformShape;
@@ -14,7 +15,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,6 +25,7 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 public abstract class AbstractEnemy extends AbstractMapObject {
 

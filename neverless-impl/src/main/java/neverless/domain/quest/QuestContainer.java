@@ -1,12 +1,7 @@
 package neverless.domain.quest;
 
-import neverless.domain.quest.AbstractQuest;
-import neverless.game.npc.OldManQuestKillGoblins;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 

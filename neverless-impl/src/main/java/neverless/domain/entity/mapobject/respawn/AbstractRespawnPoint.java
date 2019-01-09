@@ -1,6 +1,7 @@
 package neverless.domain.entity.mapobject.respawn;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
 import neverless.domain.entity.mapobject.AbstractMapObject;
@@ -8,13 +9,13 @@ import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.MapObjectMetaType;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 public abstract class AbstractRespawnPoint extends AbstractMapObject {
 

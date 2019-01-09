@@ -1,6 +1,7 @@
 package neverless.domain.entity.mapobject;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
 import neverless.Resources;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 public class Player extends AbstractMapObject {
 
