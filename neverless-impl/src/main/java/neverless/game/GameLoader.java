@@ -20,16 +20,16 @@ import neverless.game.npc.OldMan;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 
-import neverless.repository.CoordinateRepository;
-import neverless.repository.GameRepository;
-import neverless.repository.ItemRepository;
-import neverless.repository.LocationRepository;
-import neverless.repository.MapObjectsRepository;
-import neverless.repository.PlayerRepository;
-import neverless.repository.RespawnPointRepository;
-import neverless.repository.BagRepository;
-import neverless.repository.EquipmentRepository;
-import neverless.repository.InventoryRepository;
+import neverless.repository.persistence.CoordinateRepository;
+import neverless.repository.persistence.GameRepository;
+import neverless.repository.persistence.ItemRepository;
+import neverless.repository.persistence.LocationRepository;
+import neverless.repository.persistence.MapObjectsRepository;
+import neverless.repository.persistence.PlayerRepository;
+import neverless.repository.persistence.RespawnPointRepository;
+import neverless.repository.persistence.BagRepository;
+import neverless.repository.persistence.EquipmentRepository;
+import neverless.repository.persistence.InventoryRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -130,7 +130,7 @@ public class GameLoader {
         sword
                 .setPower(100)
                 .setTitle("Mega Sword of Ultra Power");
-        itemRepository.save(sword);
+        sword = itemRepository.save(sword);
 
         Equipment equipment = new Equipment();
         equipment

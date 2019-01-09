@@ -1,19 +1,19 @@
 package neverless.service.screendata;
 
 import neverless.domain.Game;
-import neverless.repository.GameRepository;
+import neverless.repository.persistence.GameRepository;
+import neverless.repository.cache.GameCache;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
 public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private GameCache gameRepository2;
     @Autowired
     private SessionUtil sessionUtil;
 
@@ -21,8 +21,6 @@ public class GameService {
      * Loads game object from repository and returns it.
      */
     public Game getGame() {
-        return gameRepository
-                .findById(sessionUtil.getGameId())
-                .orElseThrow(RuntimeException::new);
+        return gameRepository2.getGame();
     }
 }

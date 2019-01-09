@@ -8,6 +8,7 @@ import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.MapObjectMetaType;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;

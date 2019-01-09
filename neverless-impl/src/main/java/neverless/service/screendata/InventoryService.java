@@ -11,13 +11,11 @@ import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-@Transactional
 public class InventoryService {
 
     @Autowired

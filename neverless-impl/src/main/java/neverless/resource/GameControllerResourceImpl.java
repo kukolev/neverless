@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 
 @RestController
 @AllArgsConstructor
-@Transactional
 public class GameControllerResourceImpl implements GameControllerResource {
 
     private CommandRouterService commandRouterService;

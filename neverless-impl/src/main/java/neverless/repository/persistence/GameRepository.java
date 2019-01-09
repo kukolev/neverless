@@ -1,4 +1,4 @@
-package neverless.repository;
+package neverless.repository.persistence;
 
 import neverless.domain.Game;
 import org.springframework.data.jpa.repository.JpaRepository;

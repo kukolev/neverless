@@ -2,7 +2,7 @@ package neverless.domain.quest;
 
 import neverless.domain.Game;
 import neverless.dto.quest.QuestState;
-import neverless.repository.MapObjectsRepository;
+import neverless.repository.persistence.MapObjectsRepository;
 import neverless.service.screendata.GameService;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;

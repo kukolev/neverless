@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @Accessors(chain = true)
@@ -22,7 +23,5 @@ import java.util.Map;
 public abstract class AbstractGameObject implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "generic-uuid")
-    @GenericGenerator(name = "generic-uuid", strategy = "uuid")
-    private String uniqueName;
+    private String uniqueName = UUID.randomUUID().toString();
 }

@@ -11,25 +11,22 @@ import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.dto.PlayerDto;
 import neverless.dto.player.PlayerScreenDataDto;
-import neverless.repository.EnemyRepository;
-import neverless.repository.MapObjectsRepository;
-import neverless.repository.PlayerRepository;
+import neverless.repository.persistence.MapObjectsRepository;
+import neverless.repository.persistence.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Random;
 
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 
 @Service
-@Transactional
 public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
-    private EnemyRepository enemyRepository;
+    private EnemyService enemyService;
     @Autowired
     private GameService gameService;
     @Autowired
@@ -140,7 +137,7 @@ public class PlayerService {
      * @param enemyId   id of the attacked enemy.
      */
     private void doAttackToEnemy(String enemyId) {
-        AbstractEnemy enemy = enemyRepository.findById(enemyId).orElse(null);
+        AbstractEnemy enemy = enemyService.findById(enemyId);
         if (calcToHit(enemy)) {
             // Player hits.
             int damage = calcDamage(enemy);
@@ -193,7 +190,7 @@ public class PlayerService {
     private void killEnemy(AbstractEnemy enemy) {
         AbstractRespawnPoint respawnPoint = enemy.getRespawnPoint();
         respawnPoint.setEnemy(null);
-        enemyRepository.delete(enemy);
+        enemy.getLocation().getObjects().remove(enemy);
     }
 
     public PlayerScreenDataDto getScreenData() {

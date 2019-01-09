@@ -1,17 +1,13 @@
 package neverless.domain.entity.mapobject.enemy;
 
 import neverless.domain.entity.item.weapon.Sword;
-import neverless.repository.ItemRepository;
+import neverless.repository.persistence.ItemRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
-import java.util.UUID;
-
 
 @Component
-@Transactional
 public class GoblinFactory extends AbstractEnemyFactory {
 
     private static final Integer GOBLIN_HP = 20;

@@ -1,7 +1,9 @@
 package neverless.service.screendata;
 
 import neverless.Direction;
+import neverless.domain.Game;
 import neverless.domain.Location;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.EnemyBehavior;
 import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
@@ -14,14 +16,12 @@ import neverless.dto.enemy.EnemyDto;
 import neverless.dto.enemy.EnemyScreenDataDto;
 import neverless.dto.inventory.WeaponDto;
 import neverless.context.RequestContext;
-import neverless.repository.EnemyRepository;
-import neverless.repository.ItemRepository;
+import neverless.repository.persistence.ItemRepository;
 import neverless.util.CoordinateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -34,7 +34,6 @@ import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
-@Transactional
 public class EnemyService {
 
     @Autowired
@@ -44,13 +43,29 @@ public class EnemyService {
     @Autowired
     private LocalMapService localMapService;
     @Autowired
-    private EnemyRepository enemyRepository;
+    private GameService gameService;
     @Autowired
     private ApplicationContext applicationContext;
     @Autowired
     private EventContext eventContext;
     @Autowired
     private PlayerService playerService;
+
+    public AbstractEnemy findById(String id) {
+        Game game = gameService.getGame();
+        for(Location location: game.getLocations()) {
+            AbstractMapObject object = location.getObjects().stream()
+                    .filter(o -> o.getUniqueName().equals(id))
+                    .findFirst()
+                    .orElse(null);
+
+            if (object instanceof AbstractEnemy) {
+                return (AbstractEnemy) object;
+            }
+
+        }
+        return null;
+    }
 
     /**
      * Initiates a moving/chasing/attacking for all enemies.
@@ -346,21 +361,20 @@ public class EnemyService {
 
         AbstractEnemyFactory factory = getEnemyFactory(respawnPoint);
         AbstractEnemy newEnemy = factory.create();
-        AbstractEnemy result = enemyRepository.save(newEnemy);
         // todo: position should be random
-        result.setX(respawnPoint.getX());
-        result.setY(respawnPoint.getY());
-        result.setBornX(result.getX());
-        result.setBornY(result.getY());
-        result.setAreaX(respawnPoint.getAreaX());
-        result.setAreaY(respawnPoint.getAreaY());
-        result.getWeapons()
+        newEnemy.setX(respawnPoint.getX());
+        newEnemy.setY(respawnPoint.getY());
+        newEnemy.setBornX(newEnemy.getX());
+        newEnemy.setBornY(newEnemy.getY());
+        newEnemy.setAreaX(respawnPoint.getAreaX());
+        newEnemy.setAreaY(respawnPoint.getAreaY());
+        newEnemy.getWeapons()
                 .forEach(itemRepository::save);
-        result.setRespawnPoint(respawnPoint);
+        newEnemy.setRespawnPoint(respawnPoint);
 
-        result.setLocation(location);
-        location.getObjects().add(result);
-        return result;
+        newEnemy.setLocation(location);
+        location.getObjects().add(newEnemy);
+        return newEnemy;
     }
 
     /**

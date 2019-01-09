@@ -8,19 +8,14 @@ import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.dto.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
-import neverless.repository.MapObjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class DialogService {
 
-    @Autowired
-    private MapObjectsRepository mapObjectsRepository;
     @Autowired
     private PlayerService playerService;
     @Autowired

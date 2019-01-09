@@ -1,4 +1,4 @@
-package neverless.repository;
+package neverless.repository.persistence;
 
 import neverless.domain.entity.item.AbstractItem;
 import org.springframework.data.jpa.repository.JpaRepository;

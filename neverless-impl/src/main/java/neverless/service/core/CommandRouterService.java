@@ -1,7 +1,6 @@
 package neverless.service.core;
 
 import neverless.context.RequestContext;
-import neverless.domain.entity.mapobject.Player;
 import neverless.Direction;
 import neverless.dto.player.GameStateDto;
 import neverless.service.ai.AiService;
@@ -16,10 +15,7 @@ import neverless.service.screendata.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
 public class CommandRouterService {
 
     @Autowired
@@ -45,8 +41,6 @@ public class CommandRouterService {
 
     public GameStateDto getState() {
         long t = System.nanoTime();
-        Player player = playerService.getPlayer();
-
         GameStateDto dto = new GameStateDto()
                 .setLocalMapScreenData(localMapService.getScreenData())
                 .setDialogScreenDataDto(dialogService.getScreenData())
