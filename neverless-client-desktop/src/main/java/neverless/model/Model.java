@@ -26,7 +26,6 @@ public class Model extends Task {
     private FrameExchanger frameExchanger;
 
     private volatile boolean isWorking = true;
-    private volatile GameStateDto gameState;
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
 
     /**
@@ -101,7 +100,7 @@ public class Model extends Task {
     private void resolveCommand(AbstractCommand command) {
         // send command to backend and get response
         long t = System.nanoTime();
-        gameState = resolver.resolve(command);
+        GameStateDto gameState = resolver.resolve(command);
         System.out.println("Resolve = " + (System.nanoTime() - t));
 
         // render frame for response

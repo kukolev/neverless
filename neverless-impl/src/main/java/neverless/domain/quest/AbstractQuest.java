@@ -62,7 +62,7 @@ public abstract class AbstractQuest {
     public final QuestState getState() {
         QuestStep currentStep =  getSteps().stream()
                 .sorted(Comparator.comparingInt(step -> -step.getStepOrder()))
-                .filter(step -> step.isAvailable())
+                .filter(QuestStep::isAvailable)
                 .findFirst()
                 .orElse(null);
         if (currentStep != null) {
@@ -133,7 +133,7 @@ public abstract class AbstractQuest {
     public String getJournalHash() {
         StringBuilder stringBuilder = new StringBuilder();
         this.getJournal()
-                .forEach(s -> stringBuilder.append(s));
+                .forEach(stringBuilder::append);
         return DigestUtils.md5Hex(stringBuilder.toString());
     }
 }

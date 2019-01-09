@@ -40,9 +40,7 @@ public class DrawerUtils {
         Map<Sprite, RelationGraphNode> graph = new HashMap<>();
 
         // fill graph
-        sprites.forEach(sprite -> {
-            graph.put(sprite, new RelationGraphNode().setSprite(sprite));
-        });
+        sprites.forEach(sprite -> graph.put(sprite, new RelationGraphNode().setSprite(sprite)));
 
         // fill map (x -> (y -> sprite))
         sprites.forEach(sprite -> {
@@ -106,9 +104,7 @@ public class DrawerUtils {
         final int nextLevel = curLevel;
 
         root.getChildren()
-                .forEach(child -> {
-                    calcLevels(child, nextLevel + 1);
-                });
+                .forEach(child -> calcLevels(child, nextLevel + 1));
     }
 
     /**
