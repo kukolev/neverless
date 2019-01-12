@@ -11,6 +11,7 @@ import neverless.dto.event.EventType;
 @EqualsAndHashCode(callSuper = true)
 public class MapGoEvent extends AbstractEvent{
 
+    private String id;
     private Direction direction;
 
     @Override

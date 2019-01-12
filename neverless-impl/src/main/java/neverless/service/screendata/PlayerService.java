@@ -97,7 +97,7 @@ public class PlayerService {
         player.setX(x);
         player.setY(y);
         playerRepository.save(player);
-        eventContext.addMapGoEvent(direction);
+        eventContext.addMapGoEvent(player.getUniqueName(), direction);
     }
 
     public void doPortalEnter(String portalId) {

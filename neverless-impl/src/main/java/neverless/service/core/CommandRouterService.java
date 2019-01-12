@@ -1,5 +1,6 @@
 package neverless.service.core;
 
+import neverless.context.EventContext;
 import neverless.context.RequestContext;
 import neverless.Direction;
 import neverless.dto.player.GameStateDto;
@@ -38,6 +39,8 @@ public class CommandRouterService {
     private PlayerService playerService;
     @Autowired
     private EnemyService enemyService;
+    @Autowired
+    private EventContext eventContext;
 
     public GameStateDto getState() {
         long t = System.nanoTime();
@@ -62,6 +65,7 @@ public class CommandRouterService {
 
     public void cmdWait() {
         long t = System.nanoTime();
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         aiService.handleEvents();
         questService.generateQuestEvents();
@@ -69,6 +73,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveDown() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.DOWN);
         aiService.handleEvents();
@@ -76,6 +81,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveDownLeft() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.DOWN_LEFT);
         aiService.handleEvents();
@@ -83,6 +89,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveDownRight() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.DOWN_RIGHT);
         aiService.handleEvents();
@@ -91,6 +98,7 @@ public class CommandRouterService {
 
 
     public void cmdMoveUp() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.UP);
         aiService.handleEvents();
@@ -98,6 +106,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveUpLeft() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.UP_LEFT);
         aiService.handleEvents();
@@ -105,6 +114,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveUpRight() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.UP_RIGHT);
         aiService.handleEvents();
@@ -113,6 +123,7 @@ public class CommandRouterService {
 
 
     public void cmdMoveLeft() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.LEFT);
         aiService.handleEvents();
@@ -120,6 +131,7 @@ public class CommandRouterService {
     }
 
     public void cmdMoveRight() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.goOnDirection(Direction.RIGHT);
         aiService.handleEvents();
@@ -127,6 +139,7 @@ public class CommandRouterService {
     }
 
     public void cmdDialogStart(Integer npcX, Integer npcY) {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         dialogService.dialogStart(npcX, npcY);
         aiService.handleEvents();
@@ -134,6 +147,7 @@ public class CommandRouterService {
     }
 
     public void cmdDialogSelectPhrase(Integer phraseNumber) {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         dialogService.selectPhrase(phraseNumber);
         aiService.handleEvents();
@@ -141,6 +155,7 @@ public class CommandRouterService {
     }
 
     public void cmdInventoryClearRightHand() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         inventoryService.clearRightHand();
         aiService.handleEvents();
@@ -148,6 +163,7 @@ public class CommandRouterService {
     }
 
     public void cmdInventoryClearLeftHand() {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         inventoryService.clearLeftHand();
         aiService.handleEvents();
@@ -155,6 +171,7 @@ public class CommandRouterService {
     }
 
     public void cmdInventoryEquipRightHand(Integer itemId) {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         inventoryService.equipRightHand(itemId);
         aiService.handleEvents();
@@ -162,6 +179,7 @@ public class CommandRouterService {
     }
 
     public void cmdInventoryEquipLeftHand(Integer itemId) {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         inventoryService.equipLeftHand(itemId);
         aiService.handleEvents();
@@ -169,6 +187,7 @@ public class CommandRouterService {
     }
 
     public void cmdFightingAttack(String enemyId) {
+        eventContext.clearEvents();
         requestContext.initQuestStates();
         playerService.attack(enemyId);
         aiService.handleEvents();

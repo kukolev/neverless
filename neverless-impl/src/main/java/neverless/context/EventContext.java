@@ -4,7 +4,6 @@ import lombok.Getter;
 import neverless.domain.event.AbstractEvent;
 import neverless.domain.event.DialogSelectPhraseEvent;
 import neverless.domain.event.DialogStartEvent;
-import neverless.domain.event.EnemyMoveEvent;
 import neverless.domain.event.FightingEnemyHitEvent;
 import neverless.domain.event.FightingEnemyKillEvent;
 import neverless.domain.event.FightingEnemyMissEvent;
@@ -46,8 +45,13 @@ public class EventContext {
         return eventsCache.computeIfAbsent(sessionId, k -> new ArrayList<>());
     }
 
-    public void addMapGoEvent(Direction direction) {
+    public void clearEvents() {
+        getEvents().clear();
+    }
+
+    public void addMapGoEvent(String id, Direction direction) {
         addEvent(new MapGoEvent()
+                .setId(id)
                 .setDirection(direction));
     }
 
@@ -108,10 +112,5 @@ public class EventContext {
     public void addFightingEnemyKillEvent(String enemyId) {
         addEvent(new FightingEnemyKillEvent()
         .setEnemyId(enemyId));
-    }
-
-    public void addEnemyMoveEvent(String enemyId) {
-        addEvent(new EnemyMoveEvent()
-                .setEnemyId(enemyId));
     }
 }

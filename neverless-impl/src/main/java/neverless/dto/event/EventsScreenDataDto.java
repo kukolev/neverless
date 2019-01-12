@@ -2,16 +2,14 @@ package neverless.dto.event;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.domain.event.AbstractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Accessors(chain = true)
 public class EventsScreenDataDto {
 
-    private List<Map<String, Object>> events = new ArrayList<>();
+    private List<AbstractEvent> events = new ArrayList<>();
 }
-
-
