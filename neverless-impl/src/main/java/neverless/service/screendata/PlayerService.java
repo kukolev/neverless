@@ -2,7 +2,7 @@ package neverless.service.screendata;
 
 import neverless.Direction;
 import neverless.context.EventContext;
-import neverless.domain.Game;
+import neverless.domain.entity.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Player;

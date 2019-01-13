@@ -1,6 +1,6 @@
 package neverless.repository.persistence;
 
-import neverless.domain.Game;
+import neverless.domain.entity.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

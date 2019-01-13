@@ -1,6 +1,6 @@
 package neverless.repository.cache;
 
-import neverless.domain.Game;
+import neverless.domain.entity.Game;
 import neverless.repository.persistence.GameRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class GameCache {
 
     /**
      * Returns game object from cache.
-     * Loads game object from persistence layer it the object is absent in cache.
+     * Loads game object from persistence layer if the object is absent in cache.
      */
     public Game getGame() {
         String id = sessionUtil.getGameId();

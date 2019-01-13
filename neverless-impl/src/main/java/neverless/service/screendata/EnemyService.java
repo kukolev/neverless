@@ -1,8 +1,8 @@
 package neverless.service.screendata;
 
 import neverless.Direction;
-import neverless.domain.Game;
-import neverless.domain.Location;
+import neverless.domain.entity.Game;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.EnemyBehavior;
 import neverless.dto.CoordinateDto;

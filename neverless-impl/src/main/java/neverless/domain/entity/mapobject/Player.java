@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
 import neverless.Resources;
-import neverless.domain.Location;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.MapObjectMetaType;
 

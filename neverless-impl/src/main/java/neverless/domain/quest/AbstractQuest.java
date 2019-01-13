@@ -1,6 +1,6 @@
 package neverless.domain.quest;
 
-import neverless.domain.Game;
+import neverless.domain.entity.Game;
 import neverless.dto.quest.QuestState;
 import neverless.repository.persistence.MapObjectsRepository;
 import neverless.service.screendata.GameService;

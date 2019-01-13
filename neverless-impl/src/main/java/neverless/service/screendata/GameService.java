@@ -1,6 +1,6 @@
 package neverless.service.screendata;
 
-import neverless.domain.Game;
+import neverless.domain.entity.Game;
 import neverless.repository.persistence.GameRepository;
 import neverless.repository.cache.GameCache;
 import neverless.util.SessionUtil;

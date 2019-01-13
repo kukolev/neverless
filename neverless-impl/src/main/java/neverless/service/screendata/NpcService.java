@@ -1,6 +1,6 @@
 package neverless.service.screendata;
 
-import neverless.domain.Location;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import org.springframework.stereotype.Service;

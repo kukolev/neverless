@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
-import neverless.domain.Location;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.MapObjectMetaType;
 import org.hibernate.annotations.Cache;

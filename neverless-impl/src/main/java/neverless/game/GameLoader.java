@@ -1,7 +1,7 @@
 package neverless.game;
 
-import neverless.domain.Game;
-import neverless.domain.Location;
+import neverless.domain.entity.Game;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;

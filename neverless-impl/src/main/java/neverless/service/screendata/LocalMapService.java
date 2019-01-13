@@ -1,7 +1,7 @@
 package neverless.service.screendata;
 
 import neverless.PlatformShape;
-import neverless.domain.Location;
+import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
