@@ -2,7 +2,7 @@ package neverless.view.renderer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.player.GameStateDto;
+import neverless.dto.GameStateDto;
 
 import java.util.ArrayList;
 import java.util.List;

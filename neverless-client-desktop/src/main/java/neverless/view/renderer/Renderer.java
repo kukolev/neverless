@@ -3,10 +3,10 @@ package neverless.view.renderer;
 import javafx.scene.image.Image;
 import lombok.Data;
 import neverless.PlatformShape;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.event.MapGoEvent;
-import neverless.dto.MapObjectDto;
 import neverless.dto.event.EventsScreenDataDto;
-import neverless.dto.player.GameStateDto;
+import neverless.dto.GameStateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,18 +60,18 @@ public class Renderer {
      * @param gameStateDto response from backend that include game state in concrete time.
      */
     public Frame calcFrame(GameStateDto gameStateDto) {
-        double playerX = gameStateDto.getPlayerScreenDataDto().getPlayerDto().getX();
-        double playerY = gameStateDto.getPlayerScreenDataDto().getPlayerDto().getY();
+        double playerX = gameStateDto.getGame().getPlayer().getX();
+        double playerY = gameStateDto.getGame().getPlayer().getY();
 
         Frame frame = new Frame();
 
-        String backSignature = gameStateDto.getLocalMapScreenData().getSignature();
+        String backSignature = gameStateDto.getGame().getPlayer().getLocation().getSignature();
         Sprite background = calcBackground(backSignature, playerX, playerY);
         frame.setBackground(background);
 
-        List<MapObjectDto> objects = gameStateDto.getLocalMapScreenData().getObjects();
+        List<AbstractMapObject> objects = gameStateDto.getGame().getPlayer().getLocation().getObjects();
         List<Sprite> sprites = new ArrayList<>();
-        for (MapObjectDto o : objects) {
+        for (AbstractMapObject o : objects) {
             Sprite sprite = calcSprite(o, gameStateDto.getEventsScreenDataDto(), playerX, playerY);
             sprites.add(sprite);
         }
@@ -95,7 +95,7 @@ public class Renderer {
                 .setPlatformShape(PlatformShape.CUSTOM);
     }
 
-    private Sprite calcSprite(MapObjectDto object, EventsScreenDataDto events, double playerX, double playerY) {
+    private Sprite calcSprite(AbstractMapObject object, EventsScreenDataDto events, double playerX, double playerY) {
         int centerX = CANVAS_WIDTH / 2;
         int centerY = CANVAS_HEIGHT / 2;
 
@@ -118,7 +118,7 @@ public class Renderer {
                 .setId(object.getUniqueName());
     }
 
-    private String calcFileName(MapObjectDto object, EventsScreenDataDto events) {
+    private String calcFileName(AbstractMapObject object, EventsScreenDataDto events) {
         Phase phase = cache.get(object.getUniqueName());
         if (phase == null) {
             phase = new Phase();

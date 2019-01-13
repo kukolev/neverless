@@ -2,7 +2,7 @@ package neverless.model;
 
 import neverless.Direction;
 import neverless.MapObjectMetaType;
-import neverless.dto.PlayerDto;
+import neverless.domain.entity.mapobject.Player;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
@@ -56,7 +56,7 @@ public class CommandCreator {
         Sprite sprite = getSpriteAtScreenCoordinates(frame, screenX, screenY);
         MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
         System.out.println(metaType);
-        PlayerDto player = frame.getGameState().getPlayerScreenDataDto().getPlayerDto();
+        Player player = frame.getGameState().getGame().getPlayer();
 
         int cellX = convertToCellPosition(screenX - player.getPlatformCenterX());
         int cellY = convertToCellPosition(screenY - player.getPlatformCenterY());

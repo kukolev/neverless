@@ -1,7 +1,6 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.dto.CoordinateDto;
 import neverless.Direction;
 import org.testng.annotations.Test;
 
@@ -21,35 +20,35 @@ public class CoordinateUtilsTest {
 
     @Test
     public void testPlayer1010Enemy2020() {
-        CoordinateDto coordinate = getNextCoordinatesForLos(10, 10, 20, 20);
+        Coordinate coordinate = getNextCoordinatesForLos(10, 10, 20, 20);
         assertEquals(coordinate.getX(), 19);
         assertEquals(coordinate.getY(), 19);
     }
 
     @Test
     public void testPlayer2020Enemy1010() {
-        CoordinateDto coordinate = getNextCoordinatesForLos(20, 20, 10, 10);
+        Coordinate coordinate = getNextCoordinatesForLos(20, 20, 10, 10);
         assertEquals(coordinate.getX(), 11);
         assertEquals(coordinate.getY(), 11);
     }
 
     @Test
     public void testPlayer1010Enemy1020() {
-        CoordinateDto coordinate = getNextCoordinatesForLos(10, 10, 10, 20);
+        Coordinate coordinate = getNextCoordinatesForLos(10, 10, 10, 20);
         assertEquals(coordinate.getX(), 10);
         assertEquals(coordinate.getY(), 19);
     }
 
     @Test
     public void testPlayer1010Enemy2010() {
-        CoordinateDto coordinate = getNextCoordinatesForLos(10, 10, 20, 10);
+        Coordinate coordinate = getNextCoordinatesForLos(10, 10, 20, 10);
         assertEquals(coordinate.getX(), 19);
         assertEquals(coordinate.getY(), 10);
     }
 
     @Test
     public void testPlayer1010Enemy1012() {
-        CoordinateDto coordinate = getNextCoordinatesForLos(10, 10, 10, 12);
+        Coordinate coordinate = getNextCoordinatesForLos(10, 10, 10, 12);
         assertEquals(coordinate.getX(), 10);
         assertEquals(coordinate.getY(), 11);
     }

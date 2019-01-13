@@ -9,8 +9,6 @@ import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.dto.PlayerDto;
-import neverless.dto.player.PlayerScreenDataDto;
 import neverless.repository.persistence.MapObjectsRepository;
 import neverless.repository.persistence.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,23 +189,5 @@ public class PlayerService {
         AbstractRespawnPoint respawnPoint = enemy.getRespawnPoint();
         respawnPoint.setEnemy(null);
         enemy.getLocation().getObjects().remove(enemy);
-    }
-
-    public PlayerScreenDataDto getScreenData() {
-        long t = System.nanoTime();
-        PlayerDto playerDto = new PlayerDto();
-        PlayerScreenDataDto screenDataDto = new PlayerScreenDataDto();
-
-        Player player = getPlayer();
-        playerDto
-                .setHealthPoints(player.getHitPoints())
-                .setLocation(player.getLocation().getTitle())
-                .setX(player.getX())
-                .setY(player.getY())
-                .setPlatformCenterX(player.getPlatformCenterX())
-                .setPlatformCenterY(player.getPlatformCenterY());
-        screenDataDto.setPlayerDto(playerDto);
-        System.out.println("PlayerScreenData = " + (System.nanoTime() - t));
-        return screenDataDto;
     }
 }

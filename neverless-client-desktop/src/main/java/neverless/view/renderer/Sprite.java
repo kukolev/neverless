@@ -7,7 +7,7 @@ import javafx.scene.shape.ArcType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.MapObjectMetaType;
-import neverless.dto.CoordinateDto;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.PlatformShape;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class Sprite {
     private int y;
 
     private PlatformShape platformShape;
-    private List<CoordinateDto> platformCoordinates = new ArrayList<>();
+    private List<Coordinate> platformCoordinates = new ArrayList<>();
     private int platformShapeWidth;
     private int platformShapeHeight;
     private int platformCenterX;
@@ -76,8 +76,8 @@ public class Sprite {
 
             case CUSTOM: {
                 for (int i = 0; i < platformCoordinates.size(); i++) {
-                    CoordinateDto point1 = platformCoordinates.get(i);
-                    CoordinateDto point2;
+                    Coordinate point1 = platformCoordinates.get(i);
+                    Coordinate point2;
                     if (i == platformCoordinates.size() - 1) {
                         point2 = platformCoordinates.get(0);
                     } else {

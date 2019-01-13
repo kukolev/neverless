@@ -4,17 +4,13 @@ import neverless.Direction;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.EnemyBehavior;
-import neverless.dto.CoordinateDto;
 import neverless.context.EventContext;
-import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.dto.enemy.EnemyDto;
-import neverless.dto.enemy.EnemyScreenDataDto;
-import neverless.dto.inventory.WeaponDto;
 import neverless.context.RequestContext;
 import neverless.repository.persistence.ItemRepository;
 import neverless.util.CoordinateUtils;
@@ -23,11 +19,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.stream.Collectors.toList;
 import static neverless.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
 import static neverless.Constants.MOVING_IN_DIRECTION_LIMIT;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
@@ -235,7 +229,7 @@ public class EnemyService {
      * @param enemy enemy that should chasing the player.
      */
     private void chase(AbstractEnemy enemy) {
-        CoordinateDto coordinate = getNextCoordinatesForLos(enemy);
+        Coordinate coordinate = getNextCoordinatesForLos(enemy);
         if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
             enemy
                     .setX(coordinate.getX())
@@ -276,7 +270,7 @@ public class EnemyService {
      *
      * @param enemy enemy.
      */
-    private CoordinateDto getNextCoordinatesForLos(AbstractEnemy enemy) {
+    private Coordinate getNextCoordinatesForLos(AbstractEnemy enemy) {
         Player player = playerService.getPlayer();
         int playerX = player.getX();
         int playerY = player.getY();
@@ -385,50 +379,5 @@ public class EnemyService {
     private AbstractEnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
         Class<? extends AbstractEnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
         return applicationContext.getBean(factoryClass);
-    }
-
-    /**
-     * Returns list of enemies in the player's location
-     */
-    public EnemyScreenDataDto getScreenData() {
-        EnemyScreenDataDto screenDataDto = new EnemyScreenDataDto();
-        Player player = playerService.getPlayer();
-
-        // find all enemies on sane location with player
-        List<AbstractEnemy> enemies = player.getLocation()
-                .getRespawnPoints()
-                .stream()
-                .map(AbstractRespawnPoint::getEnemy)
-                .filter(Objects::nonNull)
-                .collect(toList());
-
-        enemies.forEach(e -> {
-            EnemyDto enemyDto = new EnemyDto()
-                    .setHealthPoints(e.getHitPoints())
-                    .setUniqueName(e.getUniqueName())
-                    .setName(e.getUniqueName())
-                    .setX(e.getX())
-                    .setY(e.getY());
-
-            List<WeaponDto> weaponDtos = e.getWeapons()
-                    .stream()
-                    .map(this::mapWeaponToDto)
-                    .collect(toList());
-
-            enemyDto.setWeapons(weaponDtos);
-            screenDataDto.getEnemies().add(enemyDto);
-        });
-        return screenDataDto;
-    }
-
-    /**
-     * Converts domain weapon to DTO.
-     *
-     * @param meleeWeapon melee weapon that should be converted.
-     */
-    private WeaponDto mapWeaponToDto(AbstractMeleeWeapon meleeWeapon) {
-        return new WeaponDto()
-                .setPower(meleeWeapon.getPower())
-                .setTitle(meleeWeapon.getTitle());
     }
 }

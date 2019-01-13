@@ -3,8 +3,8 @@ package neverless.view.drawer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
-import neverless.dto.PlayerDto;
-import neverless.dto.player.GameStateDto;
+import neverless.domain.entity.mapobject.Player;
+import neverless.dto.GameStateDto;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
@@ -64,8 +64,8 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayGameState(GameStateDto gameState) {
         if (gameState != null) {
-            PlayerDto playerDto = gameState.getPlayerScreenDataDto().getPlayerDto();
-            String health = "Health points: " + playerDto.getHealthPoints().toString();
+            Player player = gameState.getGame().getPlayer();
+            String health = "Health points: " + player.getHitPoints();
             context.getInfoArea().setText(health);
         }
     }

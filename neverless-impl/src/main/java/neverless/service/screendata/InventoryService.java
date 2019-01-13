@@ -1,19 +1,11 @@
 package neverless.service.screendata;
 
 import neverless.domain.entity.inventory.Inventory;
-import neverless.domain.entity.item.civil.AbstractCivilItem;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
-import neverless.dto.inventory.InventoryScreenDataDto;
-import neverless.dto.inventory.ItemDto;
-import neverless.dto.inventory.WeaponDto;
 import neverless.context.EventContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class InventoryService {
@@ -76,60 +68,6 @@ public class InventoryService {
             inventory.getBag().addLast(curWeapon);
         }
         inventory.getEquipment().setLeftHand(null);
-    }
-
-    /**
-     * Returns screen data, presents current state of the inventory.
-     */
-    public InventoryScreenDataDto getScreenData() {
-        InventoryScreenDataDto screenData = new InventoryScreenDataDto();
-        Inventory inventory = loadInventory();
-
-        // Right and left hands
-        screenData.setRightHand(mapWeaponToDto(inventory.getEquipment().getRightHand()));
-        screenData.setLeftHand(mapWeaponToDto(inventory.getEquipment().getLeftHand()));
-
-        // Items in the bag
-        Map<Integer, WeaponDto> weaponsDto = new HashMap<>();
-        Map<Integer, ItemDto> itemsDto = new HashMap<>();
-        AtomicInteger counter = new AtomicInteger(-1);
-        inventory.getBag().getItems()
-            .forEach(item -> {
-                    int index = counter.incrementAndGet();
-                    if (item instanceof AbstractCivilItem) {
-                        ItemDto dto = mapItemToDto((AbstractCivilItem) item);
-                        itemsDto.put(index, dto);
-                    }
-                    if (item instanceof AbstractHandEquipment) {
-                        WeaponDto dto = mapWeaponToDto((AbstractHandEquipment) item);
-                        weaponsDto.put(index, dto);
-                    }
-                });
-        screenData.setWeapons(weaponsDto);
-        screenData.setItems(itemsDto);
-
-        return screenData;
-    }
-
-    /**
-     * Maps and returns DTO for weapon.
-     * @param weapon    weapon that should be mapped to DTO.
-     */
-    private WeaponDto mapWeaponToDto(AbstractHandEquipment weapon) {
-        if (weapon == null) return new WeaponDto();
-        return new WeaponDto()
-                .setTitle(weapon.getTitle())
-                .setPower(weapon.getPower());
-    }
-
-    /**
-     * Maps and returns DTO for item.
-     * @param item  item that should be mapped to DTO.
-     */
-    private ItemDto mapItemToDto(AbstractCivilItem item) {
-        if (item == null) return new ItemDto();
-        return new ItemDto()
-                .setTitle(item.getTitle());
     }
 
     /**

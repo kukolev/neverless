@@ -1,7 +1,7 @@
 package neverless.model;
 
 import javafx.concurrent.Task;
-import neverless.dto.player.GameStateDto;
+import neverless.dto.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.WaitCommand;
 import neverless.util.FrameExchanger;

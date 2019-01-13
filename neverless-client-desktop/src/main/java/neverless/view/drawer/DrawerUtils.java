@@ -2,7 +2,7 @@ package neverless.view.drawer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.CoordinateDto;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.view.renderer.Sprite;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class DrawerUtils {
 
         // fill map (x -> (y -> sprite))
         sprites.forEach(sprite -> {
-            List<CoordinateDto> coordinates = calcAllPerimeterCoordinates(sprite);
+            List<Coordinate> coordinates = calcAllPerimeterCoordinates(sprite);
             coordinates.forEach(c -> {
                 Map<Integer, Sprite> locMap = xySpriteMap.computeIfAbsent(c.getX(), k -> new TreeMap<>());
                 locMap.put(c.getY(), sprite);
@@ -125,7 +125,7 @@ public class DrawerUtils {
      *
      * @param sprite    sprite for calculation
      */
-    private static List<CoordinateDto> calcAllPerimeterCoordinates(Sprite sprite) {
+    private static List<Coordinate> calcAllPerimeterCoordinates(Sprite sprite) {
         switch (sprite.getPlatformShape()) {
             case ELLIPSE: {
                 return calcAllPerimeterCoordinatesEllipse(sprite.getPlatformShapeWidth(), sprite.getPlatformShapeHeight(), sprite.getX(), sprite.getY(), sprite.getPlatformCenterX(), sprite.getPlatformCenterY());
@@ -140,8 +140,8 @@ public class DrawerUtils {
         return null;
     }
 
-    private static List<CoordinateDto> calcAllPerimeterCoordinatesEllipse(int width, int height, int objectX, int objectY, int platformCenterX, int platformCenterY) {
-        List<CoordinateDto> coordinates = new ArrayList<>();
+    private static List<Coordinate> calcAllPerimeterCoordinatesEllipse(int width, int height, int objectX, int objectY, int platformCenterX, int platformCenterY) {
+        List<Coordinate> coordinates = new ArrayList<>();
 
         double radX = width / 2;
         double radY = height / 2;
@@ -149,22 +149,22 @@ public class DrawerUtils {
         for(int i = 0; i < radX; i++) {
             int x = i;
             int y = (int) sqrt ((radY * radY * (1 - (x * x) / (radX * radX))));
-            coordinates.add(new CoordinateDto().setX(objectX + x + platformCenterX).setY(objectY + y + platformCenterY));
-            coordinates.add(new CoordinateDto().setX(objectX - x + platformCenterX).setY(objectY + y + platformCenterY));
+            coordinates.add(new Coordinate().setX(objectX + x + platformCenterX).setY(objectY + y + platformCenterY));
+            coordinates.add(new Coordinate().setX(objectX - x + platformCenterX).setY(objectY + y + platformCenterY));
         }
         return coordinates;
     }
 
-    private static List<CoordinateDto> calcAllPerimeterCoordinatesRectangle(int width, int height) {
+    private static List<Coordinate> calcAllPerimeterCoordinatesRectangle(int width, int height) {
         return new ArrayList<>();
     }
 
-    private static List<CoordinateDto> calcAllPerimeterCoordinatesCustom(List<CoordinateDto> customCoordinates, int objectX, int objectY) {
-        List<CoordinateDto> coordinates = new ArrayList<>();
+    private static List<Coordinate> calcAllPerimeterCoordinatesCustom(List<Coordinate> customCoordinates, int objectX, int objectY) {
+        List<Coordinate> coordinates = new ArrayList<>();
 
         for (int i = 0; i < customCoordinates.size(); i++) {
-            CoordinateDto c1 = customCoordinates.get(i);
-            CoordinateDto c2;
+            Coordinate c1 = customCoordinates.get(i);
+            Coordinate c2;
             if (i < customCoordinates.size() - 1) {
                 c2 = customCoordinates.get(i + 1);
             } else {
@@ -185,7 +185,7 @@ public class DrawerUtils {
             for (int j = 0; j < xCount; j++) {
                 int curX = x1 + dx * j;
                 int curY = (int) (y1 + dy * j);
-                coordinates.add(new CoordinateDto().setX(curX).setY(curY));
+                coordinates.add(new Coordinate().setX(curX).setY(curY));
             }
         }
         return coordinates;

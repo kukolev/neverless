@@ -1,6 +1,6 @@
 package neverless.model;
 
-import neverless.dto.player.GameStateDto;
+import neverless.dto.GameStateDto;
 import neverless.model.command.AbstractCommand;
 import neverless.model.command.FightingAttackCommand;
 import neverless.model.command.MapGoDownCommand;
@@ -14,7 +14,7 @@ import neverless.model.command.MapGoUpRightCommand;
 import neverless.model.command.StartNewGameCommand;
 import neverless.model.command.WaitCommand;
 import neverless.model.exception.UnsupportedCommandException;
-import neverless.resource.GameControllerResource;
+import neverless.service.core.BackendService;
 import neverless.view.RootPane;
 import neverless.view.ViewState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 class ResolverRouterService {
 
     @Autowired
-    private GameControllerResource backend;
+    private BackendService backendService;
     @Autowired
     private RootPane rootPane;
 
@@ -83,48 +83,48 @@ class ResolverRouterService {
     }
 
     private GameStateDto resolve(StartNewGameCommand command) {
-        GameStateDto gameStateDto = backend.cmdStartNewGame();
+        GameStateDto gameStateDto = backendService.cmdStartNewGame();
         rootPane.setViewState(ViewState.LOCAL_MAP);
         return gameStateDto;
     }
 
     private GameStateDto resolve(WaitCommand command) {
-        return backend.cmdWait();    }
+        return backendService.cmdWait();    }
 
     private GameStateDto resolve(MapGoDownCommand command) {
-        return backend.cmdMoveDown();
+        return backendService.cmdMoveDown();
     }
 
     private GameStateDto resolve(MapGoDownRightCommand command) {
-        return backend.cmdMoveDownRight();
+        return backendService.cmdMoveDownRight();
     }
 
     private GameStateDto resolve(MapGoDownLeftCommand command) {
-        return backend.cmdMoveDownLeft();
+        return backendService.cmdMoveDownLeft();
     }
 
     private GameStateDto resolve(MapGoUpCommand command) {
-        return backend.cmdMoveUp();
+        return backendService.cmdMoveUp();
     }
 
     private GameStateDto resolve(MapGoUpRightCommand command) {
-        return backend.cmdMoveUpRight();
+        return backendService.cmdMoveUpRight();
     }
 
     private GameStateDto resolve(MapGoUpLeftCommand command) {
-        return backend.cmdMoveUpLeft();
+        return backendService.cmdMoveUpLeft();
     }
 
     private GameStateDto resolve(MapGoLeftCommand command) {
-        return backend.cmdMoveLeft();
+        return backendService.cmdMoveLeft();
     }
 
     private GameStateDto resolve(MapGoRightCommand command) {
-        return backend.cmdMoveRight();
+        return backendService.cmdMoveRight();
     }
 
 
     private GameStateDto resolve(FightingAttackCommand command) {
-        return backend.cmdFightingAttack(command.getEnemyId());
+        return backendService.cmdFightingAttack(command.getEnemyId());
     }
 }

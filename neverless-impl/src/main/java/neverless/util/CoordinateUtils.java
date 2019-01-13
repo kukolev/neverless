@@ -1,7 +1,6 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.dto.CoordinateDto;
 import neverless.Direction;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class CoordinateUtils {
     private final static String LINE_JUMP = "\\";
 
 
-    public static CoordinateDto getNextCoordinatesForLos(int playerX, int playerY, int enemyX, int enemyY) {
+    public static Coordinate getNextCoordinatesForLos(int playerX, int playerY, int enemyX, int enemyY) {
         // draw LoS to player
         int deltaX = playerX - enemyX;
         int deltaY = playerY - enemyY;
@@ -45,7 +44,7 @@ public class CoordinateUtils {
             dX = ceil(abs(deltaX / deltaY));
         }
 
-        return new CoordinateDto()
+        return new Coordinate()
                 .setX((int) (enemyX + dX * directionX))
                 .setY((int) (enemyY + dY * directionY));
     }
