@@ -123,7 +123,6 @@ class ResolverRouterService {
         return backendService.cmdMoveRight();
     }
 
-
     private GameStateDto resolve(FightingAttackCommand command) {
         return backendService.cmdFightingAttack(command.getEnemyId());
     }
