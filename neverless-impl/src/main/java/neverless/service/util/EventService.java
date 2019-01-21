@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.domain.event.AbstractEvent;
 import neverless.dto.event.EventsScreenDataDto;

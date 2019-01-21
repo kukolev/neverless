@@ -3,7 +3,7 @@ package neverless.domain.quest;
 import neverless.domain.entity.Game;
 import neverless.dto.quest.QuestState;
 import neverless.repository.persistence.MapObjectsRepository;
-import neverless.service.screendata.GameService;
+import neverless.service.util.GameService;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public abstract class AbstractQuest {
     public abstract List<QuestStep> getSteps();
 
     /**
-     * Returns a unique quest identifier. Identifier is class canonical name.
+     * Returns a unique quest identifier. Identifier canProcessObject class canonical name.
      * Identifier should not be persisted and should be used only in runtime.
      */
     public final String getQuestId() {
@@ -41,7 +41,7 @@ public abstract class AbstractQuest {
 
     /**
      * Calculates and returns list that represents quest journal.
-     * Journal is a function of quest-state.
+     * Journal canProcessObject a function of quest-state.
      */
     public final List<String> getJournal() {
         List<String> journal = new ArrayList<>();
@@ -128,7 +128,7 @@ public abstract class AbstractQuest {
 
     /**
      * Calculates and returns md5 hash of full quest journal.
-     * It is needed for trigger journal updating and events raising.
+     * It canProcessObject needed for trigger journal updating and events raising.
      */
     public String getJournalHash() {
         StringBuilder stringBuilder = new StringBuilder();

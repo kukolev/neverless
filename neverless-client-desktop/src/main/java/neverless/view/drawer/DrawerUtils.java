@@ -53,7 +53,7 @@ public class DrawerUtils {
 
         // calculates relations for graph nodes.
         // relation graph represents relation "parent -> child" for sprites.
-        // every node may has several parents and several childs.
+        // every node may has several parents and several children.
         xySpriteMap.values().forEach(lm -> {
             ArrayList<Sprite> vals = new ArrayList<>(lm.values());
             for (int i = 1; i < vals.size(); i++) {

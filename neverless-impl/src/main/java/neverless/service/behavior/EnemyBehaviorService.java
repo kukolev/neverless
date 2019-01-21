@@ -1,18 +1,16 @@
-package neverless.service.screendata;
+package neverless.service.behavior;
 
-import neverless.Direction;
-import neverless.domain.entity.Game;
+import neverless.domain.entity.mapobject.Direction;
 import neverless.domain.entity.Location;
-import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.domain.entity.mapobject.EnemyBehavior;
+import neverless.domain.entity.mapobject.BehaviorStage;
 import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.context.RequestContext;
-import neverless.repository.persistence.ItemRepository;
+import neverless.service.util.LocalMapService;
 import neverless.util.CoordinateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,51 +26,37 @@ import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
-public class EnemyService {
+public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy> {
 
     @Autowired
     private RequestContext requestContext;
     @Autowired
-    private ItemRepository itemRepository;
-    @Autowired
     private LocalMapService localMapService;
-    @Autowired
-    private GameService gameService;
     @Autowired
     private ApplicationContext applicationContext;
     @Autowired
     private EventContext eventContext;
     @Autowired
-    private PlayerService playerService;
+    private PlayerBehaviorService playerService;
 
-    public AbstractEnemy findById(String id) {
-        Game game = gameService.getGame();
-        for(Location location: game.getLocations()) {
-            AbstractMapObject object = location.getObjects().stream()
-                    .filter(o -> o.getUniqueName().equals(id))
-                    .findFirst()
-                    .orElse(null);
-
-            if (object instanceof AbstractEnemy) {
-                return (AbstractEnemy) object;
-            }
-
-        }
-        return null;
+    @Override
+    public void processObject(AbstractEnemy object) {
+        //todo: implement
     }
 
     /**
      * Initiates a moving/chasing/attacking for all enemies.
      */
     public void processBehavior() {
+        // todo: refactor it using command approach
         Player player = playerService.getPlayer();
         player.getLocation().getRespawnPoints()
                 .forEach(rp -> {
                     AbstractEnemy enemy = rp.getEnemy();
                     if (enemy != null) {
-                        EnemyBehavior behavior = calcBehavior(rp.getEnemy());
-                        enemy.setBehavior(behavior);
-                        switch (behavior) {
+                        BehaviorStage behaviorStage = calcBehavior(rp.getEnemy());
+                        enemy.setBehaviorStage(behaviorStage);
+                        switch (behaviorStage) {
                             case WALKING:
                                 walk(rp.getEnemy());
                                 break;
@@ -88,23 +72,23 @@ public class EnemyService {
     }
 
     /**
-     * Returns behavior, calculated for enemy.
+     * Returns behaviorStage, calculated for enemy.
      *
-     * @param enemy enemy whose behavior should be calculated
+     * @param enemy enemy whose behaviorStage should be calculated
      */
-    private EnemyBehavior calcBehavior(AbstractEnemy enemy) {
+    private BehaviorStage calcBehavior(AbstractEnemy enemy) {
         Player player = playerService.getPlayer();
         boolean playerIsNear = isPlayerNear(enemy);
         boolean playerIsInAggressiveRange = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
 
         if (playerIsInAggressiveRange) {
             if (playerIsNear) {
-                return EnemyBehavior.ATTACKING;
+                return BehaviorStage.ATTACKING;
             } else {
-                return EnemyBehavior.CHASING;
+                return BehaviorStage.CHASING;
             }
         } else {
-            return EnemyBehavior.WALKING;
+            return BehaviorStage.WALKING;
         }
     }
 
@@ -238,7 +222,7 @@ public class EnemyService {
     }
 
     /**
-     * Returns true if enemy position is close to player.
+     * Returns true if enemy position canProcessObject close to player.
      *
      * @param enemy checked enemy.
      */
@@ -277,7 +261,7 @@ public class EnemyService {
         int enemyX = enemy.getX();
         int enemyY = enemy.getY();
 
-        return CoordinateUtils.getNextCoordinatesForLos(playerX, playerY, enemyX, enemyY);
+        return CoordinateUtils.calcNextStep(playerX, playerY, enemyX, enemyY);
     }
 
     /**
@@ -320,7 +304,7 @@ public class EnemyService {
 
     /**
      * Creates enemies, related to respawn points.
-     * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
+     * Respawn point canProcessObject able to recreate an enemy if there no live enemy in the respawn point.
      */
     public void respawn() {
         Player player = playerService.getPlayer();
@@ -329,7 +313,7 @@ public class EnemyService {
         points.forEach(p -> {
 
             // Guarantee that new enemy would not be created
-            // until current is alive
+            // until current canProcessObject alive
             if (p.getEnemy() != null) {
                 p.setLastTurnInLife(requestContext.getTurnNumber());
             }
@@ -362,8 +346,6 @@ public class EnemyService {
         newEnemy.setBornY(newEnemy.getY());
         newEnemy.setAreaX(respawnPoint.getAreaX());
         newEnemy.setAreaY(respawnPoint.getAreaY());
-        newEnemy.getWeapons()
-                .forEach(itemRepository::save);
         newEnemy.setRespawnPoint(respawnPoint);
 
         newEnemy.setLocation(location);

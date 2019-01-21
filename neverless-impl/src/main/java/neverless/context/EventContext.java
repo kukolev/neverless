@@ -15,7 +15,7 @@ import neverless.domain.event.JournalUpdateEvent;
 import neverless.domain.event.MapGoEvent;
 import neverless.domain.event.MapGoImpossibleEvent;
 import neverless.domain.event.PortalEnterEvent;
-import neverless.Direction;
+import neverless.domain.entity.mapobject.Direction;
 import neverless.dto.quest.QuestState;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;

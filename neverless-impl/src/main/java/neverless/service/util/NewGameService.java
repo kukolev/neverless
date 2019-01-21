@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.game.GameLoader;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -106,6 +106,7 @@ public class Renderer {
         int imgY = (int) (centerY - (playerY - object.getY()));
 
         return new Sprite(image)
+                .setMapObject(object)
                 .setX(imgX)
                 .setY(imgY)
                 .setPlatformCoordinates(object.getPlatformCoordinates())

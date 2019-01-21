@@ -3,11 +3,11 @@ package neverless.domain.entity.mapobject.enemy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.Direction;
+import neverless.domain.entity.mapobject.Direction;
 import neverless.PlatformShape;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.EnemyBehavior;
+import neverless.domain.entity.mapobject.BehaviorStage;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.MapObjectMetaType;
 import org.hibernate.annotations.Cache;
@@ -65,7 +65,7 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     private Integer walkTime = 0;
 
     @Column
-    private EnemyBehavior behavior;
+    private BehaviorStage behaviorStage;
 
     @Column
     private Integer speed;

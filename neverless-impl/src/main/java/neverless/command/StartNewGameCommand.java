@@ -1,4 +1,4 @@
-package neverless.model.command;
+package neverless.command;
 
 public class StartNewGameCommand extends AbstractCommand {
 

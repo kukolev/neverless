@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
@@ -8,6 +8,7 @@ import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.dto.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
+import neverless.service.behavior.PlayerBehaviorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class DialogService {
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerBehaviorService playerService;
     @Autowired
     private NpcService npcService;
     @Autowired

@@ -33,9 +33,9 @@ public class Drawer implements ChangeListener<String> {
     /**
      * Receives message from renderer and invokes other methods for displaying information.
      *
-     * @param observable observable (is not used).
-     * @param oldValue   old value of message (is not used).
-     * @param newValue   new value (is not used).
+     * @param observable observable (canProcessObject not used).
+     * @param oldValue   old value of message (canProcessObject not used).
+     * @param newValue   new value (canProcessObject not used).
      */
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         Frame frame = frameExchanger.getFrame();

@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.PlatformShape;
 import neverless.domain.entity.Location;

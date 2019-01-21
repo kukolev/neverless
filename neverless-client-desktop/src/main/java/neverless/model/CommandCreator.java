@@ -1,19 +1,12 @@
 package neverless.model;
 
-import neverless.Direction;
+import neverless.domain.entity.mapobject.Direction;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
-import neverless.model.command.AbstractCommand;
-import neverless.model.command.FightingAttackCommand;
-import neverless.model.command.MapGoDownCommand;
-import neverless.model.command.MapGoDownLeftCommand;
-import neverless.model.command.MapGoDownRightCommand;
-import neverless.model.command.MapGoLeftCommand;
-import neverless.model.command.MapGoRightCommand;
-import neverless.model.command.MapGoUpCommand;
-import neverless.model.command.MapGoUpLeftCommand;
-import neverless.model.command.MapGoUpRightCommand;
-import neverless.model.command.StartNewGameCommand;
+import neverless.command.AbstractCommand;
+import neverless.command.player.FightingAttackCommand;
+import neverless.command.MapGoCommand;
+import neverless.command.StartNewGameCommand;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
@@ -24,16 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static neverless.Constants.LOCAL_MAP_CELL_STEPS;
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
-import static neverless.Direction.DOWN;
-import static neverless.Direction.LEFT;
-import static neverless.Direction.RIGHT;
-import static neverless.Direction.UP;
+import static neverless.domain.entity.mapobject.Direction.DOWN;
+import static neverless.domain.entity.mapobject.Direction.LEFT;
+import static neverless.domain.entity.mapobject.Direction.RIGHT;
+import static neverless.domain.entity.mapobject.Direction.UP;
 import static neverless.MapObjectMetaType.TERRAIN;
-import static neverless.util.Constants.CANVAS_HEIGHT;
-import static neverless.util.Constants.CANVAS_WIDTH;
-import static neverless.util.CoordinateUtils.line;
+import static neverless.util.Constants.CANVAS_CENTER_X;
+import static neverless.util.Constants.CANVAS_CENTER_Y;
 
 @Component
 public class CommandCreator {
@@ -58,16 +49,19 @@ public class CommandCreator {
         System.out.println(metaType);
         Player player = frame.getGameState().getGame().getPlayer();
 
-        int cellX = convertToCellPosition(screenX - player.getPlatformCenterX());
-        int cellY = convertToCellPosition(screenY - player.getPlatformCenterY());
-
         switch (metaType) {
             case TERRAIN: {
-                int centerX = convertToCellPosition(CANVAS_WIDTH / 2);
-                int centerY = convertToCellPosition(CANVAS_HEIGHT / 2);
 
-                List<Direction> directions = line(centerX, centerY, cellX, cellY);
-                model.putCommandList(createMapGoCommands(directions));
+                int dx = alignToGrid(screenX) - alignToGrid(CANVAS_CENTER_X);
+                int dy = alignToGrid(screenY) - alignToGrid(CANVAS_CENTER_Y);
+
+                int newGameX = player.getX() + dx;
+                int newGameY = player.getY() + dy;
+
+                MapGoCommand mapGoCommand = new MapGoCommand()
+                        .setX(newGameX)
+                        .setY(newGameY);
+                model.putCommand(mapGoCommand);
             }
             break;
 
@@ -104,22 +98,7 @@ public class CommandCreator {
 
     private List<AbstractCommand> createMapGoCommands(Direction direction) {
         List<AbstractCommand> commands = new ArrayList<>();
-        for (int i = 0; i < LOCAL_MAP_CELL_STEPS; i++) {
-            switch (direction) {
-                case DOWN:
-                    commands.add(new MapGoDownCommand());
-                    break;
-                case UP:
-                    commands.add(new MapGoUpCommand());
-                    break;
-                case LEFT:
-                    commands.add(new MapGoLeftCommand());
-                    break;
-                case RIGHT:
-                    commands.add(new MapGoRightCommand());
-                    break;
-            }
-        }
+        // todo: implement
         return commands;
     }
 
@@ -143,44 +122,12 @@ public class CommandCreator {
     }
 
     /**
-     * Converts and returns cell number, converted from screen pixel coordinate
+     * Converts and returns coordinate, aligned to coordinates grid, defined via LOCAL_MAP_STEP_LENGTH.
      *
-     * @param coordinate coordinate of pixel on the screen.
+     * @param coordinate aligned coordinate.
      */
-    private int convertToCellPosition(int coordinate) {
-        return coordinate / LOCAL_MAP_STEP_LENGTH;
+    private int alignToGrid(int coordinate) {
+        return LOCAL_MAP_STEP_LENGTH * (coordinate / LOCAL_MAP_STEP_LENGTH);
     }
 
-    private List<AbstractCommand> createMapGoCommands(List<Direction> directions) {
-        List<AbstractCommand> commands = new ArrayList<>();
-        for (Direction direction : directions) {
-            switch (direction) {
-                case DOWN:
-                    commands.add(new MapGoDownCommand());
-                    break;
-                case UP:
-                    commands.add(new MapGoUpCommand());
-                    break;
-                case LEFT:
-                    commands.add(new MapGoLeftCommand());
-                    break;
-                case RIGHT:
-                    commands.add(new MapGoRightCommand());
-                    break;
-                case UP_LEFT:
-                    commands.add(new MapGoUpLeftCommand());
-                    break;
-                case UP_RIGHT:
-                    commands.add(new MapGoUpRightCommand());
-                    break;
-                case DOWN_LEFT:
-                    commands.add(new MapGoDownLeftCommand());
-                    break;
-                case DOWN_RIGHT:
-                    commands.add(new MapGoDownRightCommand());
-                    break;
-            }
-        }
-        return commands;
-    }
 }

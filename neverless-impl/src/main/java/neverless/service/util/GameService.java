@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.domain.entity.Game;
 import neverless.repository.persistence.GameRepository;

@@ -2,7 +2,7 @@ package neverless.context;
 
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestContainer;
-import neverless.service.screendata.PlayerService;
+import neverless.service.behavior.PlayerBehaviorService;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RequestContext {
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerBehaviorService playerService;
     @Autowired
     private QuestContainer questContainer;
     @Autowired

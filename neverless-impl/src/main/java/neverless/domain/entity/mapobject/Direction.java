@@ -1,4 +1,4 @@
-package neverless;
+package neverless.domain.entity.mapobject;
 
 public enum Direction {
     NONE,

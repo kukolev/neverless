@@ -1,6 +1,6 @@
 package neverless.domain.entity.mapobject;
 
-public enum EnemyBehavior {
+public enum BehaviorStage {
 
     WALKING,
     CHASING,

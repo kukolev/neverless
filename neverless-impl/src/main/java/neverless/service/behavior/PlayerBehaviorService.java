@@ -1,6 +1,9 @@
-package neverless.service.screendata;
+package neverless.service.behavior;
 
-import neverless.Direction;
+import neverless.domain.entity.mapobject.Coordinate;
+import neverless.domain.entity.mapobject.Direction;
+import neverless.command.AbstractCommand;
+import neverless.command.MapGoCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
@@ -10,21 +13,21 @@ import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.repository.persistence.MapObjectsRepository;
-import neverless.repository.persistence.PlayerRepository;
+import neverless.service.util.GameService;
+import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
+import static neverless.util.CoordinateUtils.calcNextStep;
 
 @Service
-public class PlayerService {
+public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
     @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
-    private EnemyService enemyService;
+    private EnemyBehaviorService enemyService;
     @Autowired
     private GameService gameService;
     @Autowired
@@ -39,63 +42,34 @@ public class PlayerService {
         return game.getPlayer();
     }
 
-    public void goOnDirection(Direction direction) {
-        Player player = getPlayer();
+    @Override
+    public void processObject(Player player) {
 
-        int newX = player.getX();
-        int newY = player.getY();
+        AbstractCommand abstractCommand = player.getCommand();
+        if (abstractCommand instanceof MapGoCommand) {
+            MapGoCommand mapGoCommand = (MapGoCommand) abstractCommand;
 
-        switch (direction) {
-            case UP:
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            case DOWN:
-                newY += LOCAL_MAP_STEP_LENGTH;
-                break;
-            case LEFT:
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            case RIGHT:
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            case UP_LEFT: {
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case UP_RIGHT: {
-                newY -= LOCAL_MAP_STEP_LENGTH;
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case DOWN_LEFT: {
-                newY += LOCAL_MAP_STEP_LENGTH;
-                newX -= LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
-            case DOWN_RIGHT: {
-                newY += LOCAL_MAP_STEP_LENGTH;
-                newX += LOCAL_MAP_STEP_LENGTH;
-                break;
-            }
+            // calculate directions to move;
+            Coordinate coordinate =  calcNextStep(player.getX(), player.getY(), mapGoCommand.getX(), mapGoCommand.getY());
+
+            // step at direction
+            stepAtDirection(coordinate.getX(), coordinate.getY());
         }
-        goOnDirection(newX, newY, direction);
     }
 
-    private void goOnDirection(int x, int y, Direction direction) {
+    private void stepAtDirection(int x, int y) {
         Player player = getPlayer();
         if (localMapService.isPassable(player, x, y)) {
-            doMoving(player, x, y, direction);
+            doMoving(player, x, y);
             return;
         }
         doImpossibleMove();
     }
 
-    private void doMoving(Player player, int x, int y, Direction direction) {
+    private void doMoving(Player player, int x, int y) {
         player.setX(x);
         player.setY(y);
-        playerRepository.save(player);
-        eventContext.addMapGoEvent(player.getUniqueName(), direction);
+        eventContext.addMapGoEvent(player.getUniqueName(), Direction.DOWN);
     }
 
     public void doPortalEnter(String portalId) {
@@ -123,33 +97,32 @@ public class PlayerService {
     /**
      * Performs an attack to enemy.
      *
-     * @param enemyId   id of the attacked enemy.
+     * @param enemy   enemy that should be attacked by player.
      */
-    public void attack(String enemyId) {
-        doAttackToEnemy(enemyId);
+    public void attack(AbstractEnemy enemy) {
+        doAttackToEnemy(enemy);
     }
 
     /**
      * Performs all orchestration of attack to enemy.
      *
-     * @param enemyId   id of the attacked enemy.
+     * @param enemy enemy that should be attacked by player.
      */
-    private void doAttackToEnemy(String enemyId) {
-        AbstractEnemy enemy = enemyService.findById(enemyId);
+    private void doAttackToEnemy(AbstractEnemy enemy) {
         if (calcToHit(enemy)) {
             // Player hits.
             int damage = calcDamage(enemy);
             enemy.decreaseHitPoints(damage);
             if (enemy.getHitPoints() <= 0) {
                 killEnemy(enemy);
-                eventContext.addFightingEnemyKillEvent(enemyId);
+                eventContext.addFightingEnemyKillEvent(enemy.getUniqueName());
             } else {
-                eventContext.addFightingPlayerHitEvent(enemyId, damage);
+                eventContext.addFightingPlayerHitEvent(enemy.getUniqueName(), damage);
             }
         } else
         {
             // Player misses.
-            eventContext.addFightingPlayerMissEvent(enemyId);
+            eventContext.addFightingPlayerMissEvent(enemy.getUniqueName());
         }
     }
 

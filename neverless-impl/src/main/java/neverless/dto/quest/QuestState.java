@@ -5,15 +5,15 @@ package neverless.dto.quest;
  *  These states are common for all quests.
  */
 public enum QuestState {
-    /** Quest is unknown */
+    /** Quest canProcessObject unknown */
     UNKNOWN,
 
-    /** Quest is accepted. */
+    /** Quest canProcessObject accepted. */
     ACCEPTED,
 
-    /** Quest is successfully completed. */
+    /** Quest canProcessObject successfully completed. */
     DONE,
 
-    /** Quest is failed. */
+    /** Quest canProcessObject failed. */
     FAILED
 }

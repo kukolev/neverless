@@ -25,7 +25,7 @@ public class GameCache {
 
     /**
      * Returns game object from cache.
-     * Loads game object from persistence layer if the object is absent in cache.
+     * Loads game object from persistence layer if the object canProcessObject absent in cache.
      */
     public Game getGame() {
         String id = sessionUtil.getGameId();

@@ -1,17 +1,19 @@
 package neverless.service.core;
 
+import neverless.command.AbstractCommand;
+import neverless.command.player.WaitCommand;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
-import neverless.Direction;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.dto.GameStateDto;
 import neverless.service.ai.AiService;
-import neverless.service.screendata.DialogService;
-import neverless.service.screendata.EventService;
-import neverless.service.screendata.GameService;
-import neverless.service.screendata.InventoryService;
-import neverless.service.screendata.NewGameService;
-import neverless.service.screendata.PlayerService;
-import neverless.service.screendata.QuestService;
+import neverless.service.util.DialogService;
+import neverless.service.util.EventService;
+import neverless.service.util.GameService;
+import neverless.service.util.InventoryService;
+import neverless.service.util.NewGameService;
+import neverless.service.behavior.PlayerBehaviorService;
+import neverless.service.util.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +31,17 @@ public class BackendService {
     @Autowired
     private InventoryService inventoryService;
     @Autowired
-    private NewGameService newGameService;
-    @Autowired
     private RequestContext requestContext;
     @Autowired
-    private PlayerService playerService;
+    private PlayerBehaviorService playerService;
     @Autowired
     private EventContext eventContext;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private CommandHandler commandHandler;
 
+    // todo: DRY
     private GameStateDto getState() {
         long t = System.nanoTime();
         GameStateDto dto = new GameStateDto()
@@ -51,93 +54,15 @@ public class BackendService {
         return dto;
     }
 
-    // todo: DRY
-    public GameStateDto cmdStartNewGame() {
-        newGameService.startNewGame();
-        return getState();
-    }
-
-    public GameStateDto cmdWait() {
+    public GameStateDto resolveCommand(AbstractCommand command) {
         long t = System.nanoTime();
         eventContext.clearEvents();
         requestContext.initQuestStates();
+        commandHandler.processCommand(command);
         aiService.handleEvents();
         questService.generateQuestEvents();
-        System.out.println("cmdWait = " + (System.nanoTime() - t));
-        return getState();
-    }
+        System.out.println("resolveCommand = " + (System.nanoTime() - t));
 
-    public GameStateDto cmdMoveDown() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.DOWN);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-    public GameStateDto cmdMoveDownLeft() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.DOWN_LEFT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-    public GameStateDto cmdMoveDownRight() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.DOWN_RIGHT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-
-    public GameStateDto cmdMoveUp() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.UP);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-    public GameStateDto cmdMoveUpLeft() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.UP_LEFT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-    public GameStateDto cmdMoveUpRight() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.UP_RIGHT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-
-    public GameStateDto cmdMoveLeft() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.LEFT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
-
-    public GameStateDto cmdMoveRight() {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.goOnDirection(Direction.RIGHT);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
         return getState();
     }
 
@@ -195,10 +120,10 @@ public class BackendService {
         return getState();
     }
 
-    public GameStateDto cmdFightingAttack(String enemyId) {
+    public GameStateDto cmdFightingAttack(AbstractEnemy enemy) {
         eventContext.clearEvents();
         requestContext.initQuestStates();
-        playerService.attack(enemyId);
+        playerService.attack(enemy);
         aiService.handleEvents();
         questService.generateQuestEvents();
         return getState();

@@ -19,7 +19,7 @@ public class QuestContainer {
     }
 
     public AbstractQuest finaById(String questId) {
-        // todo: throw exception when nothing is found
+        // todo: throw exception when nothing canProcessObject found
         return questList.stream()
                 .filter(q -> q.getQuestId().equals(questId))
                 .findFirst()

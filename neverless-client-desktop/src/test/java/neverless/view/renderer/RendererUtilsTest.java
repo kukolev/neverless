@@ -14,7 +14,7 @@ public class RendererUtilsTest {
 
 
     /**
-     * Checks that list returned by DrawerUtils::calcRenderOrder is sorted properly.
+     * Checks that list returned by DrawerUtils::calcRenderOrder canProcessObject sorted properly.
      * Geometry interpretation of the scene:
      *
      *      8

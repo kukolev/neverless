@@ -25,12 +25,7 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Accessors(chain = true)
-public class Location {
-
-    @Id
-    @GeneratedValue(generator = "generic-uuid")
-    @GenericGenerator(name = "generic-uuid", strategy = "uuid")
-    private String id;
+public class Location extends AbstractGameObject{
 
     @Column
     private String title;

@@ -5,8 +5,10 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.MapObjectMetaType;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.PlatformShape;
 
@@ -15,8 +17,10 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(exclude = "mapObject")
 public class Sprite {
 
+    private AbstractMapObject mapObject;
     private Image image;
 
     private int x;

@@ -45,7 +45,7 @@ public class DialogBuilder {
      *
      * @param level         level in which npc's phrase places.
      * @param text          Player's phrase text.
-     * @param activator     predicate for consider of could this phrase is able to be selected by Player.
+     * @param activator     predicate for consider of could this phrase canProcessObject able to be selected by Player.
      * @param event         event, that should happened if Player will select this phrase.
      * @return              reference to this.
      */

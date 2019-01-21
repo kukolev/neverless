@@ -1,54 +1,70 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.Direction;
+import neverless.domain.entity.mapobject.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
-import static neverless.Direction.DOWN;
-import static neverless.Direction.DOWN_LEFT;
-import static neverless.Direction.DOWN_RIGHT;
-import static neverless.Direction.LEFT;
-import static neverless.Direction.RIGHT;
-import static neverless.Direction.UP;
-import static neverless.Direction.UP_LEFT;
-import static neverless.Direction.UP_RIGHT;
+import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
+import static neverless.domain.entity.mapobject.Direction.DOWN;
+import static neverless.domain.entity.mapobject.Direction.DOWN_LEFT;
+import static neverless.domain.entity.mapobject.Direction.DOWN_RIGHT;
+import static neverless.domain.entity.mapobject.Direction.LEFT;
+import static neverless.domain.entity.mapobject.Direction.RIGHT;
+import static neverless.domain.entity.mapobject.Direction.UP;
+import static neverless.domain.entity.mapobject.Direction.UP_LEFT;
+import static neverless.domain.entity.mapobject.Direction.UP_RIGHT;
 
 public class CoordinateUtils {
 
     private final static String LINE_UP = "+";
     private final static String LINE_JUMP = "\\";
 
+    /**
+     * Calculates and returns coordinates in direction, defined by target coordinates.
+     *
+     * @param playerX   start horizontal coordinate.
+     * @param playerY   start vertical coordinate.
+     * @param targetX   finish horizontal coordinate.
+     * @param targetY   finish vertical coordinate.
+     */
+    public static Coordinate calcNextStep(int playerX, int playerY, int targetX, int targetY) {
 
-    public static Coordinate getNextCoordinatesForLos(int playerX, int playerY, int enemyX, int enemyY) {
-        // draw LoS to player
-        int deltaX = playerX - enemyX;
-        int deltaY = playerY - enemyY;
+        double length = sqrt(pow(targetX - playerX, 2) + pow(targetY - playerY, 2));
 
-        double dX;
-        double dY;
-        int directionX = deltaX != 0 ? deltaX / abs(deltaX) : 0;
-        int directionY = deltaY != 0 ? deltaY / abs(deltaY) : 0;
+        double sin = (targetY - playerY) / length;
+        double cos = (targetX - playerX) / length;
 
-        if (abs(deltaX) > abs(deltaY)) {
-            dX = 1;
-            dY = ceil(abs(deltaY / deltaX));
+        int newX;
+        int newY;
+
+        if (length > LOCAL_MAP_STEP_LENGTH) {
+            newX = playerX + (int) (LOCAL_MAP_STEP_LENGTH * cos);
+            newY = playerY + (int) (LOCAL_MAP_STEP_LENGTH * sin);
         } else {
-            dY = 1;
-            dX = ceil(abs(deltaX / deltaY));
+            newX = targetX;
+            newY = targetY;
         }
 
         return new Coordinate()
-                .setX((int) (enemyX + dX * directionX))
-                .setY((int) (enemyY + dY * directionY));
+                .setX(newX)
+                .setY(newY);
     }
 
+    /**
+     * Returns true if length of segment, defined by coordinates less than value.
+     *
+     * @param x1        first horizontal coordinate.
+     * @param y1        first vertical coordinate.
+     * @param x2        second horizontal coordinate.
+     * @param y2        second vertical coordinate.
+     * @param range     range for compare.
+     */
     public static boolean isCoordinatesInRange(int x1, int y1, int x2, int y2, int range) {
         double realRange = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
         return realRange <= range;

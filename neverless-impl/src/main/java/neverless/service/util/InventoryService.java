@@ -1,9 +1,10 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
 import neverless.context.EventContext;
+import neverless.service.behavior.PlayerBehaviorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerBehaviorService playerService;
     @Autowired
     private EventContext eventContext;
 

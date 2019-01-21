@@ -1,4 +1,4 @@
-package neverless.service.screendata;
+package neverless.service.util;
 
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestContainer;

@@ -2,8 +2,8 @@ package neverless.model;
 
 import javafx.concurrent.Task;
 import neverless.dto.GameStateDto;
-import neverless.model.command.AbstractCommand;
-import neverless.model.command.WaitCommand;
+import neverless.command.AbstractCommand;
+import neverless.command.player.WaitCommand;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
@@ -98,16 +98,16 @@ public class Model extends Task {
      * @param command command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
-        // send command to backend and get response
-        long t = System.nanoTime();
-        GameStateDto gameState = resolver.resolve(command);
-        System.out.println("Resolve = " + (System.nanoTime() - t));
+            // send command to backend and get response
+            long t = System.nanoTime();
+            GameStateDto gameState = resolver.resolve(command);
+            System.out.println("Resolve = " + (System.nanoTime() - t));
 
-        // render frame for response
-        Frame frame = renderer.calcFrame(gameState);
+            // render frame for response
+            Frame frame = renderer.calcFrame(gameState);
 
-        // store frame and send acknowledge to Drawer
-        frameExchanger.setFrame(frame);
-        updateMessage(UUID.randomUUID().toString());
+            // store frame and send acknowledge to Drawer
+            frameExchanger.setFrame(frame);
+            updateMessage(UUID.randomUUID().toString());
     }
 }

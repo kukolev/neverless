@@ -18,8 +18,8 @@ public class QuestStep {
     private QuestStepPredicate predicate;
 
     /**
-     * Calculates and returns true/false if this step is available.
-     * Step is available when available any of previous steps AND available this step.
+     * Calculates and returns true/false if this step canProcessObject available.
+     * Step canProcessObject available when available any of previous steps AND available this step.
      *
      * @return calculated availability.
      */
