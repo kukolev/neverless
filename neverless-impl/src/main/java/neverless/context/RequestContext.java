@@ -40,8 +40,7 @@ public class RequestContext {
      */
     private Map<String, String> getQuestStates() {
         String session = sessionUtil.getGameId();
-        Map<String, String> questStates = questCache.computeIfAbsent(session, k -> new HashMap<>());
-        return questStates;
+        return questCache.computeIfAbsent(session, k -> new HashMap<>());
     }
 
     /**

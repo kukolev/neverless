@@ -30,14 +30,12 @@ public class BehaviorRouterService {
     public void processObjects() {
 
         Game game = gameService.getGame();
-        game.getLocations().forEach(l -> {
-            l.getObjects().forEach(o -> {
-                services.forEach(s -> {
-                    if (s.canProcessObject(o)) {
-                        s.processObject(o);
-                    }
-                } );
-            });
-        });
+        game.getLocations().forEach(location ->
+                location.getObjects().forEach(object ->
+                        services.forEach(service -> {
+                            if (service.canProcessObject(object)) {
+                                service.processObject(object);
+                            }
+                        })));
     }
 }

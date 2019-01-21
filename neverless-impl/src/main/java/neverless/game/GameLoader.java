@@ -19,18 +19,9 @@ import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
-
-import neverless.repository.persistence.CoordinateRepository;
-import neverless.repository.persistence.GameRepository;
-import neverless.repository.persistence.ItemRepository;
-import neverless.repository.persistence.LocationRepository;
-import neverless.repository.persistence.MapObjectsRepository;
-import neverless.repository.persistence.PlayerRepository;
-import neverless.repository.persistence.RespawnPointRepository;
-import neverless.repository.persistence.BagRepository;
-import neverless.repository.persistence.EquipmentRepository;
-import neverless.repository.persistence.InventoryRepository;
+import neverless.repository.cache.GameCache;
 import neverless.util.SessionUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -46,31 +37,14 @@ import static neverless.Resources.IMG_VILLAGE_BACKGROUND;
 public class GameLoader {
 
     @Autowired
-    private GameRepository gameRepository;
-    @Autowired
-    private MapObjectsRepository mapObjRepository;
-    @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
-    private ItemRepository itemRepository;
-    @Autowired
-    private BagRepository bagRepository;
-    @Autowired
-    private EquipmentRepository equipmentRepository;
-    @Autowired
-    private InventoryRepository inventoryRepository;
-    @Autowired
-    private RespawnPointRepository respawnPointRepository;
+    private GameCache cache;
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
     private QuestContainer questContainer;
     @Autowired
     private ApplicationContext context;
-    @Autowired
-    private LocationRepository locationRepository;
-    @Autowired
-    private CoordinateRepository coordinateRepository;
+
 
     public void createNewGame() {
         createGame();
@@ -78,8 +52,9 @@ public class GameLoader {
     }
 
     private void createGame() {
-        Game game = gameRepository.save(new Game()
-                .setId(sessionUtil.getGameId()));
+        Game game = new Game()
+                .setId(sessionUtil.getGameId());
+        cache.save(game);
 
         Location village = createLocationVillage();
         Location dungeon = createLocationDungeon();
@@ -89,12 +64,11 @@ public class GameLoader {
 
         Player player = createPlayer();
         player.setLocation(village);
-        playerRepository.save(player);
+        village.getObjects().add(player);
 
         game.getLocations().add(village);
         game.getLocations().add(dungeon);
         game.setPlayer(player);
-        gameRepository.save(game);
     }
 
     private Location createLocationVillage() {
@@ -102,7 +76,6 @@ public class GameLoader {
         Location village = new Location()
                 .setTitle("Village")
                 .setSignature(IMG_VILLAGE_BACKGROUND);
-        village = locationRepository.save(village);
 
         createNpc(village);
         createRespawnPoints(village);
@@ -118,37 +91,33 @@ public class GameLoader {
 
         dungeon.getObjects().addAll(createDungeonObjects());
 
-        return locationRepository.save(dungeon);
+        return dungeon;
     }
 
 
     private Player createPlayer() {
         Bag bag = new Bag();
-        bagRepository.save(bag);
 
         Sword sword = new Sword();
         sword
                 .setPower(100)
                 .setTitle("Mega Sword of Ultra Power");
-        sword = itemRepository.save(sword);
 
         Equipment equipment = new Equipment();
         equipment
                 .setRightHand(sword);
-        equipmentRepository.save(equipment);
 
         Inventory inventory = new Inventory();
         inventory
                 .setBag(bag)
                 .setEquipment(equipment);
-        inventoryRepository.save(inventory);
 
         Player player = new Player();
         player
                 .setInventory(inventory)
                 .setX(1600)
                 .setY(1600);
-        return playerRepository.save(player);
+        return player;
     }
 
     private void createHouse(Location location) {
@@ -157,6 +126,7 @@ public class GameLoader {
                 .setX(1900)
                 .setY(1400)
                 .setLocation(location);
+        location.getObjects().add(building);
         List<Coordinate> coordinates = new ArrayList<>();
         coordinates.add(new Coordinate().setX(68).setY(156));
         coordinates.add(new Coordinate().setX(92).setY(156));
@@ -164,9 +134,6 @@ public class GameLoader {
         coordinates.add(new Coordinate().setX(92).setY(86));
         coordinates.add(new Coordinate().setX(6).setY(116));
         building.setPlatformCoordinates(coordinates);
-
-        coordinates.forEach(c -> coordinateRepository.save(c));
-        mapObjRepository.save(building);
     }
 
     private List<AbstractWall> drawStoneWallVertical(int x, int y1, int y2) {
@@ -190,7 +157,7 @@ public class GameLoader {
         wall
                 .setX(x)
                 .setY(y);
-        return mapObjRepository.save(wall);
+        return wall;
     }
 
     private void createNpc(Location location) {
@@ -199,7 +166,6 @@ public class GameLoader {
             .setX(1632)
             .setY(1632)
             .setLocation(location);
-        mapObjRepository.save(oldMan);
     }
 
     private AbstractPortal createPortalVillage2Dungeon(Location destination) {
@@ -210,7 +176,7 @@ public class GameLoader {
                 .setDestY(160)
                 .setX(1632)
                 .setY(1696);
-        return mapObjRepository.save(portal);
+        return portal;
     }
 
     private AbstractPortal createPortalDungeon2Village(Location destination) {
@@ -221,7 +187,7 @@ public class GameLoader {
                 .setDestY(1664)
                 .setX(32)
                 .setY(160);
-        return mapObjRepository.save(portal);
+        return portal;
     }
 
     private List<AbstractMapObject> createDungeonObjects() {
@@ -242,13 +208,14 @@ public class GameLoader {
                 .setX(1900)
                 .setY(1300)
                 .setLocation(location);
-        respawnPointRepository.save(respawnPoint1);
 
         GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
         respawnPoint2
                 .setX(1280)
-                .setY(1728);
-        respawnPointRepository.save(respawnPoint2);
+                .setY(1728)
+                .setLocation(location);
+        location.getObjects().add(respawnPoint1);
+        location.getObjects().add(respawnPoint2);
     }
 
     private void createQuests() {

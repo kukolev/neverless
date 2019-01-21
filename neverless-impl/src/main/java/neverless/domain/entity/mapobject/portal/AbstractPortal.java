@@ -8,21 +8,14 @@ import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.MapObjectMetaType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public class AbstractPortal extends AbstractMapObject {
 
-    @OneToOne
     private Location destination;
-    @Column
     private Integer destX;
-    @Column
     private Integer destY;
 
     @Override

@@ -78,7 +78,6 @@ public class DialogBuilder {
      *
      * @param level         level of Player's parent answer.
      * @param text          NPC's root phrase text.
-     * @return
      */
     public DialogBuilder addNpcAnswer(int level,
                                       String text) {

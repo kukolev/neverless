@@ -1,11 +1,7 @@
 package neverless.domain.entity.mapobject.enemy;
 
 import neverless.domain.entity.item.weapon.Sword;
-import neverless.repository.persistence.ItemRepository;
-import neverless.util.SessionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class GoblinFactory extends AbstractEnemyFactory {
@@ -14,11 +10,6 @@ public class GoblinFactory extends AbstractEnemyFactory {
     private static final Integer GOBLIN_SPEED = 1;
     private static final String GOBLIN_RUST_SWORD_TITLE = "Rust sword";
     private static final Integer GOBLIN_RUST_SWORD_POWER = 1;
-
-    @Autowired
-    private SessionUtil sessionUtil;
-    @Autowired
-    private ItemRepository itemRepository;
 
     /**
      * Creates and returns Goblin with weapon.

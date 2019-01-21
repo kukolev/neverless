@@ -100,7 +100,7 @@ public class CoordinateUtils {
             } else {
                 return mapLineActionsList(actions, DOWN, DOWN_LEFT);
             }
-        } else if (x2 >= x1 && y2 < y1) {
+        } else if (x2 >= x1) {
             actions = commonLine(dx, -dy);
 
             if (abs(dx) > abs(dy)) {

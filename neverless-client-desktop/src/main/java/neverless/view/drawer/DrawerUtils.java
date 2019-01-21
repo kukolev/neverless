@@ -45,10 +45,12 @@ public class DrawerUtils {
         // fill map (x -> (y -> sprite))
         sprites.forEach(sprite -> {
             List<Coordinate> coordinates = calcAllPerimeterCoordinates(sprite);
-            coordinates.forEach(c -> {
-                Map<Integer, Sprite> locMap = xySpriteMap.computeIfAbsent(c.getX(), k -> new TreeMap<>());
-                locMap.put(c.getY(), sprite);
-            });
+            if (coordinates != null) {
+                coordinates.forEach(c -> {
+                    Map<Integer, Sprite> locMap = xySpriteMap.computeIfAbsent(c.getX(), k -> new TreeMap<>());
+                    locMap.put(c.getY(), sprite);
+                });
+            }
         });
 
         // calculates relations for graph nodes.
@@ -143,11 +145,10 @@ public class DrawerUtils {
     private static List<Coordinate> calcAllPerimeterCoordinatesEllipse(int width, int height, int objectX, int objectY, int platformCenterX, int platformCenterY) {
         List<Coordinate> coordinates = new ArrayList<>();
 
-        double radX = width / 2;
-        double radY = height / 2;
+        double radX = (double) (width / 2);
+        double radY = (double) (height / 2);
 
-        for(int i = 0; i < radX; i++) {
-            int x = i;
+        for(int x = 0; x < radX; x++) {
             int y = (int) sqrt ((radY * radY * (1 - (x * x) / (radX * radX))));
             coordinates.add(new Coordinate().setX(objectX + x + platformCenterX).setY(objectY + y + platformCenterY));
             coordinates.add(new Coordinate().setX(objectX - x + platformCenterX).setY(objectY + y + platformCenterY));

@@ -10,6 +10,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 @Profile("logs")
@@ -23,7 +25,7 @@ public class InvocationLogger {
     @Before("execution(* neverless..*.*(..))")
     public void logMethodAccessBefore(JoinPoint joinPoint) {
 
-        log.info("***** Starting: " + joinPoint.getSignature().getName() + " with args = " + joinPoint.getArgs());
+        log.info("***** Starting: " + joinPoint.getSignature().getName() + " with args = " + Arrays.toString(joinPoint.getArgs()));
     }
 
     @AfterReturning(pointcut = "execution(* neverless..*.*(..))", returning = "result")

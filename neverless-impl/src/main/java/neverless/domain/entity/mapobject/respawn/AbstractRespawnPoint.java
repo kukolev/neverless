@@ -9,32 +9,21 @@ import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.MapObjectMetaType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public abstract class AbstractRespawnPoint extends AbstractMapObject {
 
-    @Column
     private Integer areaX = 100;
-
-    @Column
     private Integer areaY = 100;
 
     /** Turn number when the enemy canProcessObject alive */
-    @Column
     private Integer lastTurnInLife = 0;
 
     /** Period, after that enemy should be respawned (turns) */
-    @Column
     private Integer respawnPeriod = 100;
 
     /** Enemy, created by this point */
-    @OneToOne
     private AbstractEnemy enemy;
 
     /** Returns a factory which able to create enemies for this point. */

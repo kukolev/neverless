@@ -100,9 +100,7 @@ public class CommandCreator {
     }
 
     private List<AbstractCommand> createMapGoCommands(Direction direction) {
-        List<AbstractCommand> commands = new ArrayList<>();
-        // todo: implement
-        return commands;
+        return new ArrayList<>();
     }
 
     private void cmdFightingAttack(AbstractEnemy enemy) {

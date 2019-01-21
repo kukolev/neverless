@@ -10,64 +10,30 @@ import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.BehaviorStage;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.MapObjectMetaType;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public abstract class AbstractEnemy extends AbstractMapObject {
 
-    @Column
     private Integer hitPoints;
-
-    @OneToOne
     private AbstractRespawnPoint respawnPoint;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<AbstractMeleeWeapon> weapons = new ArrayList<>();
-
-    @Column
     private Integer bornX;
-
-    @Column
     private Integer bornY;
-
-    @Column
     private Integer areaX;
-
-    @Column
     private Integer areaY;
-
-    @Column
     private Integer agrRange = 50; // todo: should be in constants
-
-    @Column
     private Direction walkDirection = Direction.NONE;
 
     /**
      * Count of turns while enemy walks in one direction (walkDirection field)
      */
-    @Column
     private Integer walkTime = 0;
-
-    @Column
     private BehaviorStage behaviorStage;
-
-    @Column
     private Integer speed;
 
     /**

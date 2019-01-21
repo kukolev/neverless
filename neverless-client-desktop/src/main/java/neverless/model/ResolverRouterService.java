@@ -2,11 +2,7 @@ package neverless.model;
 
 import neverless.dto.GameStateDto;
 import neverless.command.AbstractCommand;
-import neverless.command.player.FightingAttackCommand;
-import neverless.command.MapGoCommand;
 import neverless.command.StartNewGameCommand;
-import neverless.command.player.WaitCommand;
-import neverless.model.exception.UnsupportedCommandException;
 import neverless.service.core.BackendService;
 import neverless.view.RootPane;
 import neverless.view.ViewState;

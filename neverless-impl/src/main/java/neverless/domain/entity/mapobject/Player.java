@@ -9,23 +9,13 @@ import neverless.domain.entity.Location;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.MapObjectMetaType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public class Player extends AbstractMapObject {
 
-    @Column
     private Integer hitPoints = 100;
-
-    @OneToOne
     private Inventory inventory;
-
-    @OneToOne
     private Location location;
 
     @Override

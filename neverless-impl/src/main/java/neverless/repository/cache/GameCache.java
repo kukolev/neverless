@@ -1,7 +1,6 @@
 package neverless.repository.cache;
 
 import neverless.domain.entity.Game;
-import neverless.repository.persistence.GameRepository;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,8 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GameCache {
 
     @Autowired
-    private GameRepository repository;
-    @Autowired
     private SessionUtil sessionUtil;
 
     private Map<String, Game> cache = new ConcurrentHashMap<>();
@@ -29,12 +26,10 @@ public class GameCache {
      */
     public Game getGame() {
         String id = sessionUtil.getGameId();
-        Game game = cache.get(id);
-        if (game == null) {
-            game = repository.findById(sessionUtil.getGameId())
-                    .orElseThrow(RuntimeException::new);
-            cache.put(id, game);
-        }
-        return game;
+        return cache.get(id);
+    }
+
+    public void save(Game game) {
+        cache.put(sessionUtil.getGameId(), game);
     }
 }

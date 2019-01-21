@@ -8,12 +8,10 @@ import neverless.command.MapGoCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
-import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.repository.persistence.MapObjectsRepository;
 import neverless.service.util.GameService;
 import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +28,6 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
     private GameService gameService;
     @Autowired
     private LocalMapService localMapService;
-    @Autowired
-    private MapObjectsRepository mapObjectsRepository;
     @Autowired
     private EventContext eventContext;
 
@@ -82,10 +78,8 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         }
     }
 
-    public void doPortalEnter(String portalId) {
+    public void doPortalEnter(AbstractPortal portal) {
         // todo: fix it.
-        AbstractMapObject object = mapObjectsRepository.getOne(portalId);
-        AbstractPortal portal = object instanceof AbstractPortal ? (AbstractPortal) object : null;
         if (portal == null) {
             // todo: throw concrete exception here;
             throw new IllegalArgumentException();

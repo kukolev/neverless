@@ -2,9 +2,7 @@ package neverless.domain.quest;
 
 import neverless.domain.entity.Game;
 import neverless.dto.quest.QuestState;
-import neverless.repository.persistence.MapObjectsRepository;
 import neverless.service.util.GameService;
-import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,10 +18,6 @@ public abstract class AbstractQuest {
     private static final String DEFAULT_STRING = "";
     private static final String DEFAULT_INTEGER = "false";
 
-    @Autowired
-    private MapObjectsRepository repository;
-    @Autowired
-    private SessionUtil sessionUtil;
     @Autowired
     private GameService gameService;
 

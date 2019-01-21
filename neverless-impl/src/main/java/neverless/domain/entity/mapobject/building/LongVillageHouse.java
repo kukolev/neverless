@@ -2,9 +2,6 @@ package neverless.domain.entity.mapobject.building;
 
 import neverless.Resources;
 
-import javax.persistence.Entity;
-
-@Entity
 public final class LongVillageHouse extends AbstractBuilding {
 
     @Override

@@ -7,13 +7,10 @@ import neverless.Resources;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.GoblinFactory;
 
-import javax.persistence.Entity;
-
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 public class GoblinRespawnPoint extends AbstractRespawnPoint {
 
     /** {@inheritDoc} */
