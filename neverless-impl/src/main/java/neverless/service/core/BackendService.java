@@ -119,13 +119,4 @@ public class BackendService {
         questService.generateQuestEvents();
         return getState();
     }
-
-    public GameStateDto cmdFightingAttack(AbstractEnemy enemy) {
-        eventContext.clearEvents();
-        requestContext.initQuestStates();
-        playerService.attack(enemy);
-        aiService.handleEvents();
-        questService.generateQuestEvents();
-        return getState();
-    }
 }

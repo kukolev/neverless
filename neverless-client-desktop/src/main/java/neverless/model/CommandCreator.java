@@ -7,6 +7,7 @@ import neverless.command.AbstractCommand;
 import neverless.command.player.FightingAttackCommand;
 import neverless.command.MapGoCommand;
 import neverless.command.StartNewGameCommand;
+import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
@@ -66,7 +67,9 @@ public class CommandCreator {
             break;
 
             case ENEMY: {
-                    cmdFightingAttack(sprite.getId());
+                if (sprite.getMapObject() instanceof AbstractEnemy) {
+                    cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
+                }
             }
             break;
         }
@@ -102,9 +105,9 @@ public class CommandCreator {
         return commands;
     }
 
-    private void cmdFightingAttack(String enemyId) {
+    private void cmdFightingAttack(AbstractEnemy enemy) {
         model.putCommand(new FightingAttackCommand()
-                .setEnemyId(enemyId));
+                .setEnemy(enemy));
     }
 
     private Sprite getSpriteAtScreenCoordinates(Frame frame, int screenX, int screenY) {

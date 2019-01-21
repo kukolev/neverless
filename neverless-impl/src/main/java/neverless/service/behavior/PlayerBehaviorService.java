@@ -1,5 +1,6 @@
 package neverless.service.behavior;
 
+import neverless.command.player.FightingAttackCommand;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.command.AbstractCommand;
@@ -20,14 +21,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 import static neverless.util.CoordinateUtils.calcNextStep;
 
 @Service
 public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
-    @Autowired
-    private EnemyBehaviorService enemyService;
     @Autowired
     private GameService gameService;
     @Autowired
@@ -47,29 +45,41 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
         AbstractCommand abstractCommand = player.getCommand();
         if (abstractCommand instanceof MapGoCommand) {
-            MapGoCommand mapGoCommand = (MapGoCommand) abstractCommand;
-
-            // calculate directions to move;
-            Coordinate coordinate =  calcNextStep(player.getX(), player.getY(), mapGoCommand.getX(), mapGoCommand.getY());
-
-            // step at direction
-            stepAtDirection(coordinate.getX(), coordinate.getY());
+            performCommand((MapGoCommand) abstractCommand);
+        } else if (abstractCommand instanceof FightingAttackCommand) {
+            performCommand((FightingAttackCommand) abstractCommand);
         }
     }
 
-    private void stepAtDirection(int x, int y) {
+    private void performCommand(MapGoCommand mapGoCommand) {
         Player player = getPlayer();
-        if (localMapService.isPassable(player, x, y)) {
-            doMoving(player, x, y);
-            return;
+        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), mapGoCommand.getX(), mapGoCommand.getY());
+        if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
+            player.setX(coordinate.getX());
+            player.setY(coordinate.getY());
+            eventContext.addMapGoEvent(player.getUniqueName(), Direction.DOWN);
+        } else {
+            eventContext.addMapGoImpossibleEvent();
         }
-        doImpossibleMove();
     }
 
-    private void doMoving(Player player, int x, int y) {
-        player.setX(x);
-        player.setY(y);
-        eventContext.addMapGoEvent(player.getUniqueName(), Direction.DOWN);
+    private void performCommand(FightingAttackCommand fightingAttackCommand) {
+        AbstractEnemy enemy = fightingAttackCommand.getEnemy();
+        if (calcToHit(enemy)) {
+            // Player hits.
+            int damage = calcDamage(enemy);
+            enemy.decreaseHitPoints(damage);
+            if (enemy.getHitPoints() <= 0) {
+                killEnemy(enemy);
+                eventContext.addFightingEnemyKillEvent(enemy.getUniqueName());
+            } else {
+                eventContext.addFightingPlayerHitEvent(enemy.getUniqueName(), damage);
+            }
+        } else
+        {
+            // Player misses.
+            eventContext.addFightingPlayerMissEvent(enemy.getUniqueName());
+        }
     }
 
     public void doPortalEnter(String portalId) {
@@ -87,43 +97,6 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
                 .setX(portal.getDestX())
                 .setY(portal.getDestY());
         eventContext.addPortalEnterEvent(portal.getDestination().getTitle());
-    }
-
-    private void doImpossibleMove() {
-        eventContext.addMapGoImpossibleEvent();
-    }
-
-
-    /**
-     * Performs an attack to enemy.
-     *
-     * @param enemy   enemy that should be attacked by player.
-     */
-    public void attack(AbstractEnemy enemy) {
-        doAttackToEnemy(enemy);
-    }
-
-    /**
-     * Performs all orchestration of attack to enemy.
-     *
-     * @param enemy enemy that should be attacked by player.
-     */
-    private void doAttackToEnemy(AbstractEnemy enemy) {
-        if (calcToHit(enemy)) {
-            // Player hits.
-            int damage = calcDamage(enemy);
-            enemy.decreaseHitPoints(damage);
-            if (enemy.getHitPoints() <= 0) {
-                killEnemy(enemy);
-                eventContext.addFightingEnemyKillEvent(enemy.getUniqueName());
-            } else {
-                eventContext.addFightingPlayerHitEvent(enemy.getUniqueName(), damage);
-            }
-        } else
-        {
-            // Player misses.
-            eventContext.addFightingPlayerMissEvent(enemy.getUniqueName());
-        }
     }
 
     /**

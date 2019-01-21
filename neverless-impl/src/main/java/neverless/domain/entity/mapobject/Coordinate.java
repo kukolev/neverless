@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Utility class for platformCoordinates
+ * Utility class for coordinates
  */
 @Data
 @Entity

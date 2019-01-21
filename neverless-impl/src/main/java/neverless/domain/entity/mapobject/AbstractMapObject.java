@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
-import neverless.command.AbstractCommand;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.MapObjectMetaType;
@@ -18,8 +17,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
