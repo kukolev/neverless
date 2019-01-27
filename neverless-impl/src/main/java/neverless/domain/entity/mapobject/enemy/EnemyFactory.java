@@ -1,27 +1,34 @@
 package neverless.domain.entity.mapobject.enemy;
 
+import neverless.command.EnemyCommandFactory;
 import neverless.domain.entity.item.weapon.Sword;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static neverless.Constants.ENEMY_DEFAULT_WAIT_TIME;
+
 @Component
-public class GoblinFactory extends AbstractEnemyFactory {
+public class EnemyFactory {
 
     private static final Integer GOBLIN_HP = 20;
     private static final Integer GOBLIN_SPEED = 1;
     private static final String GOBLIN_RUST_SWORD_TITLE = "Rust sword";
     private static final Integer GOBLIN_RUST_SWORD_POWER = 1;
 
+    @Autowired
+    private EnemyCommandFactory commandFactory;
+
     /**
      * Creates and returns Goblin with weapon.
      */
-    @Override
     public AbstractEnemy create() {
         Sword sword = createGoblinSword();
 
-        Goblin goblin = new Goblin();
+        AbstractEnemy goblin = new AbstractEnemy();
         goblin
                 .setHitPoints(GOBLIN_HP)
-                .setSpeed(GOBLIN_SPEED);
+                .setSpeed(GOBLIN_SPEED)
+                .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
         goblin
                 .getWeapons().add(sword);
         return goblin;

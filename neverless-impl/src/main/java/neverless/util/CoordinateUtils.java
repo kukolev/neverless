@@ -28,24 +28,24 @@ public class CoordinateUtils {
     /**
      * Calculates and returns coordinates in direction, defined by target coordinates.
      *
-     * @param playerX   start horizontal coordinate.
-     * @param playerY   start vertical coordinate.
+     * @param startX   start horizontal coordinate.
+     * @param startY   start vertical coordinate.
      * @param targetX   finish horizontal coordinate.
      * @param targetY   finish vertical coordinate.
      */
-    public static Coordinate calcNextStep(int playerX, int playerY, int targetX, int targetY) {
+    public static Coordinate calcNextStep(int startX, int startY, int targetX, int targetY) {
 
-        double length = sqrt(pow(targetX - playerX, 2) + pow(targetY - playerY, 2));
+        double length = sqrt(pow(targetX - startX, 2) + pow(targetY - startY, 2));
 
-        double sin = (targetY - playerY) / length;
-        double cos = (targetX - playerX) / length;
+        double sin = (targetY - startY) / length;
+        double cos = (targetX - startX) / length;
 
         int newX;
         int newY;
 
         if (length > LOCAL_MAP_STEP_LENGTH) {
-            newX = playerX + (int) (LOCAL_MAP_STEP_LENGTH * cos);
-            newY = playerY + (int) (LOCAL_MAP_STEP_LENGTH * sin);
+            newX = startX + (int) (LOCAL_MAP_STEP_LENGTH * cos);
+            newY = startY + (int) (LOCAL_MAP_STEP_LENGTH * sin);
         } else {
             newX = targetX;
             newY = targetY;
@@ -245,6 +245,29 @@ public class CoordinateUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns true if segment and curve intersected.
+     *
+     * @param x1                first segment horizontal coordinate.
+     * @param y1                first segment vertical coordinate.
+     * @param x2                second segment horizontal coordinate.
+     * @param y2                second segment vertical coordinate.
+     * @param curveCoordinates  list of coordinates for curve approximation.
+     */
+    public static boolean isSegmentAndCurveIntersected(int x1, int y1, int x2, int y2, List<Coordinate> curveCoordinates) {
+        Coordinate segmentPoint1 = new Coordinate()
+                .setX(x1)
+                .setY(y1);
+        Coordinate segmentPoint2 = new Coordinate()
+                .setX(x2)
+                .setY(y2);
+        List<Coordinate> segmentCoordinates = new ArrayList<>();
+        segmentCoordinates.add(segmentPoint1);
+        segmentCoordinates.add(segmentPoint2);
+
+        return isCurvesIntersected(segmentCoordinates, curveCoordinates);
     }
 
     /**

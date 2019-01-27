@@ -1,9 +1,9 @@
 package neverless.model;
 
 import javafx.concurrent.Task;
+import neverless.command.PlayerCommandFactory;
 import neverless.dto.GameStateDto;
-import neverless.command.AbstractCommand;
-import neverless.command.player.WaitCommand;
+import neverless.command.Command;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
@@ -24,16 +24,18 @@ public class Model extends Task {
     private Renderer renderer;
     @Autowired
     private FrameExchanger frameExchanger;
+    @Autowired
+    private PlayerCommandFactory playerCommandFactory;
 
     private volatile boolean isWorking = true;
-    private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
+    private Queue<Command> queue = new ConcurrentLinkedQueue<>();
 
     /**
      * Clears command queue and adds list of commands.
      *
      * @param commandList list of command added to queue.
      */
-    public void putCommandList(List<AbstractCommand> commandList) {
+    public void putCommandList(List<Command> commandList) {
         queue.clear();
         queue.addAll(commandList);
     }
@@ -43,7 +45,7 @@ public class Model extends Task {
      *
      * @param command command added to queue.
      */
-    public void putCommand(AbstractCommand command) {
+    public void putCommand(Command command) {
         queue.clear();
         queue.add(command);
     }
@@ -55,11 +57,11 @@ public class Model extends Task {
                 long t = System.nanoTime();
 
                 // 1. Get command from queue
-                AbstractCommand command;
+                Command command;
                 if (queue.size() != 0) {
                     command = queue.poll();
                 } else {
-                    command = new WaitCommand();
+                    command = playerCommandFactory.createPlayerContinueCommand();
                 }
                 // 2. Send command to engine + receive data from last one
                 if (command != null) {
@@ -97,11 +99,9 @@ public class Model extends Task {
      *
      * @param command command that should be resolved.
      */
-    private void resolveCommand(AbstractCommand command) {
+    private void resolveCommand(Command command) {
             // send command to backend and get response
-            long t = System.nanoTime();
             GameStateDto gameState = resolver.resolve(command);
-            System.out.println("Resolve = " + (System.nanoTime() - t));
 
             // render frame for response
             Frame frame = renderer.calcFrame(gameState);

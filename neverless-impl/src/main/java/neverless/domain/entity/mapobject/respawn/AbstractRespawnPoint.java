@@ -5,9 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.MapObjectMetaType;
+import neverless.domain.entity.mapobject.enemy.EnemyFactory;
 
 @Data
 @Accessors(chain = true)
@@ -27,7 +27,7 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
     private AbstractEnemy enemy;
 
     /** Returns a factory which able to create enemies for this point. */
-    public abstract Class<? extends AbstractEnemyFactory> getEnemyFactory();
+    public abstract Class<? extends EnemyFactory> getEnemyFactory();
 
     /** {@inheritDoc} */
     @Override

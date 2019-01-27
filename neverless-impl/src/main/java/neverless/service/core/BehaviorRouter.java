@@ -1,16 +1,19 @@
-package neverless.service.behavior;
+package neverless.service.core;
 
 import neverless.domain.entity.Game;
+import neverless.service.behavior.AbstractBehaviorService;
+import neverless.service.behavior.EnemyBehaviorService;
+import neverless.service.behavior.PlayerBehaviorService;
 import neverless.service.util.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class BehaviorRouterService {
+@Component
+public class BehaviorRouter {
 
     @Autowired
     private GameService gameService;

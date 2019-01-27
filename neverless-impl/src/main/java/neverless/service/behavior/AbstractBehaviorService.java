@@ -11,6 +11,11 @@ public abstract class AbstractBehaviorService<T extends AbstractGameObject> {
     private final Class typeClass = (Class) ((ParameterizedType)getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
 
+    /**
+     * Processes command for object.
+     *
+     * @param object    object whose command should be processed.
+     */
     public abstract void processObject(T object);
 
     /**

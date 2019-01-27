@@ -1,15 +1,22 @@
 package neverless.service.behavior;
 
+import neverless.command.Command;
+import neverless.command.CommandType;
+import neverless.command.EnemyCommandFactory;
+import neverless.command.enemy.EnemyMapGoPayload;
+import neverless.command.enemy.EnemyWaitPayload;
+import neverless.domain.entity.Game;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.domain.entity.mapobject.BehaviorStage;
 import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
-import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
+import neverless.domain.entity.mapobject.enemy.EnemyFactory;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.context.RequestContext;
+import neverless.service.util.GameService;
 import neverless.service.util.LocalMapService;
 import neverless.util.CoordinateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +27,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.Math.sin;
+import static java.lang.StrictMath.cos;
 import static neverless.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
+import static neverless.Constants.ENEMY_DEFAULT_WAIT_TIME;
+import static neverless.Constants.ENEMY_DEFAULT_WALK_LENGTH;
 import static neverless.Constants.MOVING_IN_DIRECTION_LIMIT;
+import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
+import static neverless.util.CoordinateUtils.isSegmentAndCurveIntersected;
 
 @Service
 public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy> {
@@ -38,10 +51,40 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
     private EventContext eventContext;
     @Autowired
     private PlayerBehaviorService playerService;
+    @Autowired
+    private GameService gameService;
+    @Autowired
+    private EnemyCommandFactory commandFactory;
 
     @Override
-    public void processObject(AbstractEnemy object) {
+    public void processObject(AbstractEnemy enemy) {
         //todo: implement
+        // calculate next command
+        Command command = calcNewCommand(enemy);
+        switch (command.getCommandType()) {
+            case ENEMY_WAIT:
+                performCommandWait(enemy, command);
+                break;
+            case ENEMY_WALK:
+                performCommandWalk(enemy, command);
+                break;
+        }
+    }
+
+    private void performCommandWait(AbstractEnemy enemy, Command command) {
+        EnemyWaitPayload payload = (EnemyWaitPayload) command.getPayload();
+        payload.setWaitTime(payload.getWaitTime() - 1);
+    }
+
+    private void performCommandWalk(AbstractEnemy enemy, Command command) {
+        // todo: implement;
+        EnemyMapGoPayload payload = (EnemyMapGoPayload) command.getPayload();
+        Coordinate coordinate = calcNextStep(enemy.getX(), enemy.getY(), payload.getX(), payload.getY());
+        if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
+            enemy.setX(coordinate.getX());
+            enemy.setY(coordinate.getY());
+            eventContext.addMapGoEvent(enemy.getUniqueName(), Direction.DOWN);
+        }
     }
 
     /**
@@ -49,49 +92,101 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
      */
     public void processBehavior() {
         // todo: refactor it using command approach
-        Player player = playerService.getPlayer();
-        player.getLocation().getRespawnPoints()
-                .forEach(rp -> {
-                    AbstractEnemy enemy = rp.getEnemy();
-                    if (enemy != null) {
-                        BehaviorStage behaviorStage = calcBehavior(rp.getEnemy());
-                        enemy.setBehaviorStage(behaviorStage);
-                        switch (behaviorStage) {
-                            case WALKING:
-                                walk(rp.getEnemy());
-                                break;
-                            case CHASING:
-                                chase(rp.getEnemy());
-                                break;
-                            case ATTACKING:
-                                attack(rp.getEnemy());
-                                break;
-                        }
-                    }
-                });
+//        Player player = playerService.getPlayer();
+//        player.getLocation().getRespawnPoints()
+//                .forEach(rp -> {
+//                    AbstractEnemy enemy = rp.getEnemy();
+//                    if (enemy != null) {
+//                        BehaviorStage behaviorStage = calcNewCommand(rp.getEnemy());
+//                        enemy.setBehaviorStage(behaviorStage);
+//                        switch (behaviorStage) {
+//                            case WALKING:
+//                                walk(rp.getEnemy());
+//                                break;
+//                            case CHASING:
+//                                chase(rp.getEnemy());
+//                                break;
+//                            case ATTACKING:
+//                                attack(rp.getEnemy());
+//                                break;
+//                        }
+//                    }
+//                });
     }
 
     /**
-     * Returns behaviorStage, calculated for enemy.
+     * Returns new command, calculated for enemy.
      *
-     * @param enemy enemy whose behaviorStage should be calculated
+     * @param enemy enemy whose command should be calculated
      */
-    private BehaviorStage calcBehavior(AbstractEnemy enemy) {
-        Player player = playerService.getPlayer();
-        boolean playerIsNear = isPlayerNear(enemy);
-        boolean playerIsInAggressiveRange = isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
+    private Command calcNewCommand(AbstractEnemy enemy) {
+        boolean isNeedToAttack = false; // todo: check range and if already attacking
+        boolean isWaitingEnough = isWaitingEnough(enemy);
+        boolean isEndOfMove = isEndOfMove(enemy);
 
-        if (playerIsInAggressiveRange) {
-            if (playerIsNear) {
-                return BehaviorStage.ATTACKING;
-            } else {
-                return BehaviorStage.CHASING;
+        Command command = enemy.getCommand();
+        if (isNeedToAttack) {
+            command = commandFactory.createEnemyAttackCommand();
+        } else if (isWaitingEnough) {
+            Random random = new Random(System.currentTimeMillis());
+
+            double alfa = random.nextInt(628) / 100.0;
+            int tryCount = 0;
+            boolean canGo;
+            int newX;
+            int newY;
+
+            do {
+                alfa = alfa + tryCount * 0.01;
+                newX = enemy.getX() + (int) (ENEMY_DEFAULT_WALK_LENGTH * cos(alfa));
+                newY = enemy.getY() + (int) (ENEMY_DEFAULT_WALK_LENGTH * sin(alfa));
+
+                canGo = isCanGoNewPosition(enemy, newX, newY);
+                tryCount++;
+            } while (!(canGo || tryCount == 628));
+
+            if (canGo) {
+                command = commandFactory.createEnemyMapGoCommand(newX, newY);
             }
-        } else {
-            return BehaviorStage.WALKING;
+        } else if (isEndOfMove) {
+            command = commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME);
         }
+        enemy.setCommand(command);
+        return command;
     }
 
+    private boolean isCanGoNewPosition(AbstractEnemy enemy, int newX, int newY) {
+        List<AbstractMapObject> objects = enemy.getLocation().getObjects();
+        for(AbstractMapObject object: objects) {
+            if (isSegmentAndCurveIntersected(enemy.getX(), enemy.getY(), newX, newY, object.getPlatformCoordinates())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isAggressiveRange(AbstractEnemy enemy) {
+        Player player = playerService.getPlayer();
+        return isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
+    }
+
+    private boolean isWaitingEnough(AbstractEnemy enemy) {
+        if (enemy.getCommand().getCommandType() == CommandType.ENEMY_WAIT) {
+            EnemyWaitPayload payload = (EnemyWaitPayload) enemy.getCommand().getPayload();
+            return payload.getWaitTime() <= 0;
+        }
+        return false;
+    }
+
+    private boolean isEndOfMove(AbstractEnemy enemy) {
+        if (enemy.getCommand().getCommandType() == CommandType.ENEMY_WALK) {
+            EnemyMapGoPayload payload = (EnemyMapGoPayload) enemy.getCommand().getPayload();
+            boolean isArrived = payload.getX() == enemy.getX() && payload.getY() == enemy.getY();
+            boolean isCantMove = false; // todo: implement it.
+            return isArrived || isCantMove;
+        }
+        return false;
+    }
 
     /**
      * Changes position of an enemy in normal mode.
@@ -337,7 +432,7 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
      */
     private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint, Location location) {
 
-        AbstractEnemyFactory factory = getEnemyFactory(respawnPoint);
+        EnemyFactory factory = getEnemyFactory(respawnPoint);
         AbstractEnemy newEnemy = factory.create();
         // todo: position should be random
         newEnemy.setX(respawnPoint.getX());
@@ -358,8 +453,8 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
      *
      * @param respawnPoint respawn point for which enemy factory should be returned.
      */
-    private AbstractEnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
-        Class<? extends AbstractEnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
+    private EnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
+        Class<? extends EnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
         return applicationContext.getBean(factoryClass);
     }
 }

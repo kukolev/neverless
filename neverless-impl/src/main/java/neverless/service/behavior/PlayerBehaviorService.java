@@ -1,10 +1,10 @@
 package neverless.service.behavior;
 
-import neverless.command.player.FightingAttackCommand;
+import neverless.command.player.PlayerAttackPayload;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Direction;
-import neverless.command.AbstractCommand;
-import neverless.command.MapGoCommand;
+import neverless.command.Command;
+import neverless.command.player.PlayerMapGoPayload;
 import neverless.context.EventContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
@@ -39,17 +39,25 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
     @Override
     public void processObject(Player player) {
 
-        AbstractCommand abstractCommand = player.getCommand();
-        if (abstractCommand instanceof MapGoCommand) {
-            performCommand((MapGoCommand) abstractCommand);
-        } else if (abstractCommand instanceof FightingAttackCommand) {
-            performCommand((FightingAttackCommand) abstractCommand);
+        Command abstractCommand = player.getCommand();
+        if (abstractCommand == null) {
+            return;
+        }
+
+        switch (player.getCommand().getCommandType()) {
+            case PLAYER_WALK:
+                performCommandMapGo(player.getCommand());
+                break;
+            case PLAYER_ATTACK:
+                performCommandAttack(player.getCommand());
+                break;
         }
     }
 
-    private void performCommand(MapGoCommand mapGoCommand) {
+    private void performCommandMapGo(Command command) {
         Player player = getPlayer();
-        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), mapGoCommand.getX(), mapGoCommand.getY());
+        PlayerMapGoPayload payload = (PlayerMapGoPayload) command.getPayload();
+        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), payload.getX(), payload.getY());
         if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
             player.setX(coordinate.getX());
             player.setY(coordinate.getY());
@@ -59,8 +67,9 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         }
     }
 
-    private void performCommand(FightingAttackCommand fightingAttackCommand) {
-        AbstractEnemy enemy = fightingAttackCommand.getEnemy();
+    private void performCommandAttack(Command command) {
+        PlayerAttackPayload payload = (PlayerAttackPayload) command.getPayload();
+        AbstractEnemy enemy = payload.getEnemy();
         if (calcToHit(enemy)) {
             // Player hits.
             int damage = calcDamage(enemy);

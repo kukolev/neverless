@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractEnemy extends AbstractMapObject {
+public class AbstractEnemy extends AbstractMapObject {
 
     private Integer hitPoints;
     private AbstractRespawnPoint respawnPoint;
@@ -26,6 +26,7 @@ public abstract class AbstractEnemy extends AbstractMapObject {
     private Integer bornY;
     private Integer areaX;
     private Integer areaY;
+    private String signature;
     private Integer agrRange = 50; // todo: should be in constants
     private Direction walkDirection = Direction.NONE;
 

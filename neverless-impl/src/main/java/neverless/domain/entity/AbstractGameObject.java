@@ -2,7 +2,7 @@ package neverless.domain.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.command.AbstractCommand;
+import neverless.command.Command;
 import neverless.domain.entity.mapobject.BehaviorStage;
 
 import java.util.UUID;
@@ -12,6 +12,6 @@ import java.util.UUID;
 public abstract class AbstractGameObject {
 
     private String uniqueName = UUID.randomUUID().toString();
-    private AbstractCommand command;
+    private Command command;
     private BehaviorStage behaviorStage;
 }

@@ -11,6 +11,7 @@ import static neverless.domain.entity.mapobject.Direction.DOWN;
 import static neverless.domain.entity.mapobject.Direction.DOWN_RIGHT;
 import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
+import static neverless.util.CoordinateUtils.isSegmentAndCurveIntersected;
 import static neverless.util.CoordinateUtils.line;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -121,5 +122,31 @@ public class CoordinateUtilsTest {
 
         assertFalse(CoordinateUtils.isCurvesIntersected(firstCoordinates, secondCoordinates));
         assertFalse(CoordinateUtils.isCurvesIntersected(secondCoordinates, firstCoordinates));
+    }
+
+    @Test
+    public void testIsSegmentAndCurveIntersectedPositive() {
+        List<Coordinate> curveCoordinates = new ArrayList<>();
+        curveCoordinates.add(new Coordinate().setX(0).setY(0));
+        curveCoordinates.add(new Coordinate().setX(100).setY(0));
+        curveCoordinates.add(new Coordinate().setX(100).setY(100));
+        curveCoordinates.add(new Coordinate().setX(0).setY(100));
+
+        boolean result = isSegmentAndCurveIntersected(50, 50, 50, 150, curveCoordinates);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsSegmentAndCurveIntersectedNegative() {
+        List<Coordinate> curveCoordinates = new ArrayList<>();
+        curveCoordinates.add(new Coordinate().setX(0).setY(0));
+        curveCoordinates.add(new Coordinate().setX(100).setY(0));
+        curveCoordinates.add(new Coordinate().setX(100).setY(100));
+        curveCoordinates.add(new Coordinate().setX(0).setY(100));
+
+        boolean result = isSegmentAndCurveIntersected(150, 150, 50, 150, curveCoordinates);
+
+        assertFalse(result);
     }
 }

@@ -4,8 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.Resources;
-import neverless.domain.entity.mapobject.enemy.AbstractEnemyFactory;
-import neverless.domain.entity.mapobject.enemy.GoblinFactory;
+import neverless.domain.entity.mapobject.enemy.EnemyFactory;
 
 
 @Data
@@ -15,8 +14,8 @@ public class GoblinRespawnPoint extends AbstractRespawnPoint {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends AbstractEnemyFactory> getEnemyFactory() {
-        return GoblinFactory.class;
+    public Class<? extends EnemyFactory> getEnemyFactory() {
+        return EnemyFactory.class;
     }
 
     /** {@inheritDoc} */

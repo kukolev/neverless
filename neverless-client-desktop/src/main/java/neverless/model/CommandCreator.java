@@ -1,12 +1,11 @@
 package neverless.model;
 
+import neverless.command.GameCommandFactory;
+import neverless.command.PlayerCommandFactory;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
-import neverless.command.AbstractCommand;
-import neverless.command.player.FightingAttackCommand;
-import neverless.command.MapGoCommand;
-import neverless.command.StartNewGameCommand;
+import neverless.command.Command;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
@@ -34,6 +33,10 @@ public class CommandCreator {
     private FrameExchanger frameExchanger;
     @Autowired
     private Model model;
+    @Autowired
+    private PlayerCommandFactory commandFactory;
+    @Autowired
+    private GameCommandFactory gameCommandFactory;
 
     /**
      * Evaluates a command that should be performed by clicking in some coordinates.
@@ -47,7 +50,6 @@ public class CommandCreator {
 
         Sprite sprite = getSpriteAtScreenCoordinates(frame, screenX, screenY);
         MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
-        System.out.println(metaType);
         Player player = frame.getGameState().getGame().getPlayer();
 
         switch (metaType) {
@@ -59,10 +61,7 @@ public class CommandCreator {
                 int newGameX = player.getX() + dx;
                 int newGameY = player.getY() + dy;
 
-                MapGoCommand mapGoCommand = new MapGoCommand()
-                        .setX(newGameX)
-                        .setY(newGameY);
-                model.putCommand(mapGoCommand);
+                model.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
             }
             break;
 
@@ -79,7 +78,7 @@ public class CommandCreator {
      * Creates command for new game start.
      */
     public void cmdStartNewGame() {
-        model.putCommand(new StartNewGameCommand());
+        model.putCommand(gameCommandFactory.createStartNewGameCommand());
         new Thread(model).start();
     }
 
@@ -99,13 +98,12 @@ public class CommandCreator {
         model.putCommandList(createMapGoCommands(RIGHT));
     }
 
-    private List<AbstractCommand> createMapGoCommands(Direction direction) {
+    private List<Command> createMapGoCommands(Direction direction) {
         return new ArrayList<>();
     }
 
     private void cmdFightingAttack(AbstractEnemy enemy) {
-        model.putCommand(new FightingAttackCommand()
-                .setEnemy(enemy));
+        model.putCommand(commandFactory.createPlayerAttackCommand(enemy));
     }
 
     private Sprite getSpriteAtScreenCoordinates(Frame frame, int screenX, int screenY) {

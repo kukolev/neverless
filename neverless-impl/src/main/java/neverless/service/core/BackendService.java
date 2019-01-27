@@ -1,6 +1,6 @@
 package neverless.service.core;
 
-import neverless.command.AbstractCommand;
+import neverless.command.Command;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
 import neverless.dto.GameStateDto;
@@ -9,7 +9,6 @@ import neverless.service.util.DialogService;
 import neverless.service.util.EventService;
 import neverless.service.util.GameService;
 import neverless.service.util.InventoryService;
-import neverless.service.behavior.PlayerBehaviorService;
 import neverless.service.util.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,36 +29,29 @@ public class BackendService {
     @Autowired
     private RequestContext requestContext;
     @Autowired
-    private PlayerBehaviorService playerService;
-    @Autowired
     private EventContext eventContext;
     @Autowired
     private GameService gameService;
     @Autowired
-    private CommandHandler commandHandler;
+    private CommandRouter commandHandler;
 
     // todo: DRY
     private GameStateDto getState() {
-        long t = System.nanoTime();
         GameStateDto dto = new GameStateDto()
                 .setGame(gameService.getGame())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())
                 .setEventsScreenDataDto(eventService.getEventScreenData())
                 .setTurnNumber(requestContext.incTurnNumber());
-        System.out.println("getState = " + (System.nanoTime() - t));
         return dto;
     }
 
-    public GameStateDto resolveCommand(AbstractCommand command) {
-        long t = System.nanoTime();
+    public GameStateDto resolveCommand(Command command) {
         eventContext.clearEvents();
         requestContext.initQuestStates();
         commandHandler.processCommand(command);
         aiService.handleEvents();
         questService.generateQuestEvents();
-        System.out.println("resolveCommand = " + (System.nanoTime() - t));
-
         return getState();
     }
 
