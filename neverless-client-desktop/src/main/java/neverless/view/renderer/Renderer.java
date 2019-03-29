@@ -3,6 +3,7 @@ package neverless.view.renderer;
 import javafx.scene.image.Image;
 import lombok.Data;
 import neverless.PlatformShape;
+import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.event.MapGoEvent;
 import neverless.dto.event.EventsScreenDataDto;
@@ -24,6 +25,8 @@ public class Renderer {
 
     @Autowired
     private SpriteRepository spriteRepository;
+    @Autowired
+    private EventContext eventContext;
 
     private Map<String, Phase> cache = new HashMap<>();
 
@@ -140,7 +143,7 @@ public class Renderer {
 
     private SpriteState calcSpriteState(String id, EventsScreenDataDto events) {
         // todo: implement sprite state calculation
-        MapGoEvent event = events.getEvents().stream()
+        MapGoEvent event = eventContext.getEvents(id).stream()
                 .filter(e -> e instanceof MapGoEvent)
                 .map(e -> (MapGoEvent) e)
                 .findFirst()

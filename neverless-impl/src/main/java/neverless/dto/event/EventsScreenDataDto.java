@@ -6,10 +6,12 @@ import neverless.domain.event.AbstractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @Accessors(chain = true)
 public class EventsScreenDataDto {
 
-    private List<AbstractEvent> events = new ArrayList<>();
+    private Map<String, List<AbstractEvent>> events = new ConcurrentHashMap<>();
 }

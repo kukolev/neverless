@@ -3,11 +3,11 @@ package neverless.domain.entity.mapobject.enemy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import neverless.domain.entity.BehaviorState;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.PlatformShape;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.BehaviorStage;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.MapObjectMetaType;
 
@@ -34,7 +34,7 @@ public class AbstractEnemy extends AbstractMapObject {
      * Count of turns while enemy walks in one direction (walkDirection field)
      */
     private Integer walkTime = 0;
-    private BehaviorStage behaviorStage;
+    private BehaviorState behaviorState;
     private Integer speed;
 
     /**

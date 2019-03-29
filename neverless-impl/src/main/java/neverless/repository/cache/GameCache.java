@@ -1,6 +1,7 @@
 package neverless.repository.cache;
 
 import neverless.domain.entity.Game;
+import neverless.domain.entity.mapobject.Player;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,10 @@ public class GameCache {
     public Game getGame() {
         String id = sessionUtil.getGameId();
         return cache.get(id);
+    }
+
+    public Player getPlayer() {
+        return getGame().getPlayer();
     }
 
     public void save(Game game) {

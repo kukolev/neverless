@@ -17,8 +17,7 @@ public class EventService {
     /** Renders and returns DTO with happened events. */
     public EventsScreenDataDto getEventScreenData() {
         EventsScreenDataDto eventsScreenDataDto = new EventsScreenDataDto();
-        List<AbstractEvent> events = eventContext.getEvents();
-        eventsScreenDataDto.setEvents(events);
+        eventsScreenDataDto.setEvents(eventContext.getEventsCache());
         return eventsScreenDataDto;
     }
 }

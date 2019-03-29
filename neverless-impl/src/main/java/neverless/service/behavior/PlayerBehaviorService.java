@@ -1,8 +1,8 @@
 package neverless.service.behavior;
 
 import neverless.command.player.PlayerAttackPayload;
+import neverless.command.player.PlayerEnterPortalPayload;
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.domain.entity.mapobject.Direction;
 import neverless.command.Command;
 import neverless.command.player.PlayerMapGoPayload;
 import neverless.context.EventContext;
@@ -12,7 +12,7 @@ import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.service.util.GameService;
+import neverless.repository.cache.GameCache;
 import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,11 @@ import static neverless.util.CoordinateUtils.calcNextStep;
 public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
     @Autowired
-    private GameService gameService;
+    private GameCache gameCache;
     @Autowired
     private LocalMapService localMapService;
     @Autowired
     private EventContext eventContext;
-
-    public Player getPlayer() {
-        Game game = gameService.getGame();
-        return game.getPlayer();
-    }
 
     @Override
     public void processObject(Player player) {
@@ -46,29 +41,34 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
         switch (player.getCommand().getCommandType()) {
             case PLAYER_WALK:
-                performCommandMapGo(player.getCommand());
+                performCommandMapGo();
                 break;
             case PLAYER_ATTACK:
-                performCommandAttack(player.getCommand());
+                performCommandAttack();
                 break;
         }
     }
 
-    private void performCommandMapGo(Command command) {
-        Player player = getPlayer();
+    private void performCommandMapGo() {
+        Player player = gameCache.getPlayer();
+        Command command = player.getCommand();
         PlayerMapGoPayload payload = (PlayerMapGoPayload) command.getPayload();
+
         Coordinate coordinate = calcNextStep(player.getX(), player.getY(), payload.getX(), payload.getY());
         if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
             player.setX(coordinate.getX());
             player.setY(coordinate.getY());
-            eventContext.addMapGoEvent(player.getUniqueName(), Direction.DOWN);
+            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY());
         } else {
-            eventContext.addMapGoImpossibleEvent();
+            eventContext.addMapGoImpossibleEvent(player.getUniqueName());
         }
     }
 
-    private void performCommandAttack(Command command) {
+    private void performCommandAttack() {
+        Player player = gameCache.getPlayer();
+        Command command = player.getCommand();
         PlayerAttackPayload payload = (PlayerAttackPayload) command.getPayload();
+
         AbstractEnemy enemy = payload.getEnemy();
         if (calcToHit(enemy)) {
             // Player hits.
@@ -76,30 +76,32 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
             enemy.decreaseHitPoints(damage);
             if (enemy.getHitPoints() <= 0) {
                 killEnemy(enemy);
-                eventContext.addFightingEnemyKillEvent(enemy.getUniqueName());
+                eventContext.addFightingEnemyKillEvent(player.getUniqueName(), enemy.getUniqueName());
             } else {
-                eventContext.addFightingPlayerHitEvent(enemy.getUniqueName(), damage);
+                eventContext.addFightingPlayerHitEvent(player.getUniqueName(), enemy.getUniqueName(), damage);
             }
         } else
         {
             // Player misses.
-            eventContext.addFightingPlayerMissEvent(enemy.getUniqueName());
+            eventContext.addFightingPlayerMissEvent(player.getUniqueName(), enemy.getUniqueName());
         }
     }
 
-    public void doPortalEnter(AbstractPortal portal) {
+    private void performCommandPortalEnter() {
+        Player player = gameCache.getPlayer();
+        Command command = player.getCommand();
+        PlayerEnterPortalPayload payload = (PlayerEnterPortalPayload) command.getPayload();
         // todo: fix it.
-        if (portal == null) {
+        if (payload.getPortal() == null) {
             // todo: throw concrete exception here;
             throw new IllegalArgumentException();
         }
 
-        Player player = getPlayer();
         player
-                .setLocation(portal.getDestination())
-                .setX(portal.getDestX())
-                .setY(portal.getDestY());
-        eventContext.addPortalEnterEvent(portal.getDestination().getTitle());
+                .setLocation(payload.getPortal().getDestination())
+                .setX(payload.getPortal().getDestX())
+                .setY(payload.getPortal().getDestY());
+        eventContext.addPortalEnterEvent(player.getUniqueName(), payload.getPortal().getDestination().getTitle());
     }
 
     /**
@@ -119,7 +121,7 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
      * @param enemy enemy attacked by the player.
      */
     private int calcDamage(AbstractEnemy enemy) {
-        Player player = getPlayer();
+        Player player = gameCache.getPlayer();
         AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
         AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
 

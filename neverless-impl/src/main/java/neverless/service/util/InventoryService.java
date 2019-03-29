@@ -4,7 +4,7 @@ import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
 import neverless.context.EventContext;
-import neverless.service.behavior.PlayerBehaviorService;
+import neverless.repository.cache.GameCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
 
     @Autowired
-    private PlayerBehaviorService playerService;
+    private GameCache gameCache;
     @Autowired
     private EventContext eventContext;
 
@@ -29,7 +29,8 @@ public class InventoryService {
         AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
         inventory.getEquipment().setRightHand(newWeapon);
         inventory.getBag().remove(newWeapon);
-        eventContext.addInventoryRightHandEquipEvent();
+        Player player = gameCache.getPlayer();
+        eventContext.addInventoryRightHandEquipEvent(player.getUniqueName());
     }
 
     /**
@@ -44,7 +45,8 @@ public class InventoryService {
         AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
         inventory.getEquipment().setLeftHand(newWeapon);
         inventory.getBag().remove(newWeapon);
-        eventContext.addInventoryLeftHandEquipEvent();
+        Player player = gameCache.getPlayer();
+        eventContext.addInventoryLeftHandEquipEvent(player.getUniqueName());
     }
 
     /**
@@ -77,7 +79,7 @@ public class InventoryService {
      * @return inventory.
      */
     private Inventory loadInventory() {
-        Player player = playerService.getPlayer();
+        Player player = gameCache.getPlayer();
         return player.getInventory();
     }
 }

@@ -3,8 +3,9 @@ package neverless.service.core;
 import neverless.command.Command;
 import neverless.command.CommandType;
 import neverless.domain.entity.mapobject.Player;
-import neverless.service.util.GameService;
+import neverless.repository.cache.GameCache;
 import neverless.service.util.NewGameService;
+import neverless.service.util.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class CommandRouter {
 
     @Autowired
-    private GameService gameService;
+    private PlayerService playerService;
     @Autowired
     private BehaviorRouter behaviorRouterService;
     @Autowired
@@ -26,10 +27,7 @@ public class CommandRouter {
                 break;
 
             default: {
-                if (command.getCommandType() != CommandType.PLAYER_CONTINUE) {
-                    Player player = gameService.getGame().getPlayer();
-                    player.setCommand(command);
-                }
+                playerService.setCommand(command);
                 behaviorRouterService.processObjects();
             }
         }

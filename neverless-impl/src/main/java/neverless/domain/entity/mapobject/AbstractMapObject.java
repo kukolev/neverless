@@ -57,7 +57,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
     public abstract String getSignature();
 
     /**
-     * Returns meta-type of object. Meta-type describe main behaviorStage of the object from Player perspective.
+     * Returns meta-type of object. Meta-type describe main behaviorState of the object from Player perspective.
      */
     public abstract MapObjectMetaType getMetaType();
 

@@ -4,10 +4,10 @@ import neverless.command.Command;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
 import neverless.dto.GameStateDto;
+import neverless.repository.cache.GameCache;
 import neverless.service.ai.AiService;
 import neverless.service.util.DialogService;
 import neverless.service.util.EventService;
-import neverless.service.util.GameService;
 import neverless.service.util.InventoryService;
 import neverless.service.util.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ public class BackendService {
     @Autowired
     private EventContext eventContext;
     @Autowired
-    private GameService gameService;
+    private GameCache gameCache;
     @Autowired
-    private CommandRouter commandHandler;
+    private CommandRouter commandRouter;
 
     // todo: DRY
     private GameStateDto getState() {
         GameStateDto dto = new GameStateDto()
-                .setGame(gameService.getGame())
+                .setGame(gameCache.getGame())
                 .setDialogScreenDataDto(dialogService.getScreenData())
                 .setQuestScreenDataDto(questService.getScreenData())
                 .setEventsScreenDataDto(eventService.getEventScreenData())
@@ -49,7 +49,7 @@ public class BackendService {
     public GameStateDto resolveCommand(Command command) {
         eventContext.clearEvents();
         requestContext.initQuestStates();
-        commandHandler.processCommand(command);
+        commandRouter.processCommand(command);
         aiService.handleEvents();
         questService.generateQuestEvents();
         return getState();

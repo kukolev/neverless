@@ -8,7 +8,7 @@ import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.dto.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
-import neverless.service.behavior.PlayerBehaviorService;
+import neverless.repository.cache.GameCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class DialogService {
 
     @Autowired
-    private PlayerBehaviorService playerService;
+    private GameCache gameCache;
     @Autowired
     private NpcService npcService;
     @Autowired
@@ -27,7 +27,7 @@ public class DialogService {
     private DialogContext dialogContext;
 
     public void dialogStart(int npcX, int npcY) {
-        Player player = playerService.getPlayer();
+        Player player = gameCache.getPlayer();
 
         // find NPC
         AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
@@ -42,7 +42,7 @@ public class DialogService {
         dialogContext.add(dialog);
         dialogContext.add(npcPhrase);
 
-        eventContext.addDialogStartEvent(npc.getUniqueName(), npcX, npcY);
+        eventContext.addDialogStartEvent(player.getUniqueName(), npc.getUniqueName(), npcX, npcY);
     }
 
     private NpcPhrase getStartPhrase(Dialog dialog) {
@@ -81,6 +81,7 @@ public class DialogService {
             dialogContext.clearDialog();
             dialogContext.clearNpcPhrase();
         }
-        eventContext.addDialogSelectPhraseEvent(phraseNumber);
+        Player player = gameCache.getPlayer();
+        eventContext.addDialogSelectPhraseEvent(player.getUniqueName(), phraseNumber);
     }
 }

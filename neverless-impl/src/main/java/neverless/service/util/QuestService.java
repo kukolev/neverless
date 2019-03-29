@@ -1,11 +1,13 @@
 package neverless.service.util;
 
+import neverless.domain.entity.mapobject.Player;
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestContainer;
 import neverless.dto.quest.QuestInfoDto;
 import neverless.dto.quest.QuestScreenDataDto;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
+import neverless.repository.cache.GameCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class QuestService {
     private RequestContext requestContext;
     @Autowired
     private EventContext eventContext;
+    @Autowired
+    private GameCache gameCache;
 
     public QuestScreenDataDto getScreenData() {
         QuestScreenDataDto screenDataDto = new QuestScreenDataDto();
@@ -29,10 +33,12 @@ public class QuestService {
     }
 
     public void generateQuestEvents() {
+        Player player = gameCache.getPlayer();
         requestContext.findUpdatedQuests()
                 .forEach(id -> {
                     AbstractQuest quest = repository.finaById(id);
                     eventContext.addJournalUpdateEvent(
+                            player.getUniqueName(),
                             quest.getTitle(),
                             quest.getState());
                 });

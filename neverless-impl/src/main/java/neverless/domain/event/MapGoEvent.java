@@ -3,7 +3,6 @@ package neverless.domain.event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.domain.entity.mapobject.Direction;
 import neverless.dto.event.EventType;
 
 @Data
@@ -12,7 +11,8 @@ import neverless.dto.event.EventType;
 public class MapGoEvent extends AbstractEvent{
 
     private String id;
-    private Direction direction;
+    private int x;
+    private int y;
 
     @Override
     public EventType getEventType() {

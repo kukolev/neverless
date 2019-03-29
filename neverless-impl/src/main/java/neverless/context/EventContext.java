@@ -15,7 +15,6 @@ import neverless.domain.event.JournalUpdateEvent;
 import neverless.domain.event.MapGoEvent;
 import neverless.domain.event.MapGoImpossibleEvent;
 import neverless.domain.event.PortalEnterEvent;
-import neverless.domain.entity.mapobject.Direction;
 import neverless.dto.quest.QuestState;
 import neverless.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,82 +34,84 @@ public class EventContext {
     @Getter
     private Map<String, List<AbstractEvent>> eventsCache = new ConcurrentHashMap<>();
 
-    private void addEvent(AbstractEvent event) {
-        List<AbstractEvent> events = getEvents();
+    private void addEvent(String objectId, AbstractEvent event) {
+        List<AbstractEvent> events = getEvents(objectId);
         events.add(event);
     }
 
-    public List<AbstractEvent> getEvents() {
+    public List<AbstractEvent> getEvents(String objectId) {
         String sessionId = sessionUtil.getGameId();
         return eventsCache.computeIfAbsent(sessionId, k -> new ArrayList<>());
     }
 
     public void clearEvents() {
-        getEvents().clear();
+        eventsCache.clear();
     }
 
-    public void addMapGoEvent(String id, Direction direction) {
-        addEvent(new MapGoEvent()
-                .setId(id)
-                .setDirection(direction));
+    public void addMapGoEvent(String objectId, int x, int y) {
+        addEvent(objectId, new MapGoEvent()
+                .setId(objectId)
+                .setX(x)
+                .setY(y));
     }
 
-    public void addMapGoImpossibleEvent() {
-        addEvent(new MapGoImpossibleEvent());
+    public void addMapGoImpossibleEvent(String objectId) {
+        addEvent(objectId, new MapGoImpossibleEvent().setId(objectId));
     }
 
-    public void addDialogSelectPhraseEvent(Integer phraseNumber) {
-        addEvent(new DialogSelectPhraseEvent()
+    public void addDialogSelectPhraseEvent(String objectId, Integer phraseNumber) {
+        addEvent(objectId, new DialogSelectPhraseEvent()
                 .setPhraseNumber(phraseNumber));
     }
 
-    public void addDialogStartEvent(String npcName, Integer npcX, Integer npcY) {
-        addEvent(new DialogStartEvent()
+    public void addDialogStartEvent(String objectId, String npcName, Integer npcX, Integer npcY) {
+        addEvent(objectId, new DialogStartEvent()
                 .setNpcName(npcName));
     }
 
-    public void addJournalUpdateEvent(String questTitle, QuestState state) {
-        addEvent(new JournalUpdateEvent()
+    public void addJournalUpdateEvent(String objectId, String questTitle, QuestState state) {
+        addEvent(objectId,
+                new JournalUpdateEvent()
                 .setQuestTitle(questTitle)
                 .setState(state));
     }
 
-    public void addInventoryRightHandEquipEvent() {
-        addEvent(new InventoryRightHandEquipEvent());
+    public void addInventoryRightHandEquipEvent(String objectId) {
+        addEvent(objectId, new InventoryRightHandEquipEvent());
     }
 
-    public void addInventoryLeftHandEquipEvent() {
-        addEvent(new InventoryLeftHandEquipEvent());
+    public void addInventoryLeftHandEquipEvent(String objectId) {
+        addEvent(objectId, new InventoryLeftHandEquipEvent());
     }
 
-    public void addPortalEnterEvent(String location) {
-        addEvent(new PortalEnterEvent());
+    public void addPortalEnterEvent(String objectId, String location) {
+        addEvent(objectId, new PortalEnterEvent());
     }
 
     public void addFightingEnemyHitEvent(String enemyId, Integer damage) {
-        addEvent(new FightingEnemyHitEvent()
+        addEvent(enemyId, new FightingEnemyHitEvent()
                 .setEnemyId(enemyId)
                 .setDamage(damage));
     }
 
     public void addFightingEnemyMissEvent(String enemyId) {
-        addEvent(new FightingEnemyMissEvent()
+        addEvent(enemyId, new FightingEnemyMissEvent()
                 .setEnemyId(enemyId));
     }
 
-    public void addFightingPlayerHitEvent(String enemyId, Integer damage) {
-        addEvent(new FightingPlayerHitEvent()
+    public void addFightingPlayerHitEvent(String playerId, String enemyId, Integer damage) {
+        addEvent(playerId, new FightingPlayerHitEvent()
                 .setEnemyId(enemyId)
                 .setDamage(damage));
     }
 
-    public void addFightingPlayerMissEvent(String enemyId) {
-        addEvent(new FightingPlayerMissEvent()
+    public void addFightingPlayerMissEvent(String playerId, String enemyId) {
+        addEvent(playerId, new FightingPlayerMissEvent()
                 .setEnemyId(enemyId));
     }
 
-    public void addFightingEnemyKillEvent(String enemyId) {
-        addEvent(new FightingEnemyKillEvent()
+    public void addFightingEnemyKillEvent(String playerId, String enemyId) {
+        addEvent(playerId, new FightingEnemyKillEvent()
         .setEnemyId(enemyId));
     }
 }
