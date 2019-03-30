@@ -16,7 +16,7 @@ public class EnemyCommandFactory {
 
     public Command createEnemyMapGoCommand(int x, int y) {
         return new Command()
-                .setCommandType(CommandType.ENEMY_WALK)
+                .setCommandType(CommandType.ENEMY_MOVE)
                 .setPayload(new EnemyMapGoPayload()
                         .setX(x)
                         .setY(y));

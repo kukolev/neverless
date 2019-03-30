@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static neverless.Constants.ENEMY_DEFAULT_WAIT_TIME;
+import static neverless.Resources.IMG_GOBLIN;
 
 @Component
 public class EnemyFactory {
@@ -28,6 +29,7 @@ public class EnemyFactory {
         goblin
                 .setHitPoints(GOBLIN_HP)
                 .setSpeed(GOBLIN_SPEED)
+                .setSignature(IMG_GOBLIN)
                 .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
         goblin
                 .getWeapons().add(sword);

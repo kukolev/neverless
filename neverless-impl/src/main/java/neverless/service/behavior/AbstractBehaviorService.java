@@ -1,12 +1,13 @@
 package neverless.service.behavior;
 
-import neverless.domain.entity.AbstractGameObject;
+import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.mapobject.AbstractMapObject;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 
 @Service
-public abstract class AbstractBehaviorService<T extends AbstractGameObject> {
+public abstract class AbstractBehaviorService<T extends AbstractMapObject> {
 
     private final Class typeClass = (Class) ((ParameterizedType)getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
@@ -16,7 +17,12 @@ public abstract class AbstractBehaviorService<T extends AbstractGameObject> {
      *
      * @param object    object whose command should be processed.
      */
-    public abstract void processObject(T object);
+    public final void processObject(T object) {
+        BehaviorState newState = onProcess(object);
+        object.getBehavior().changeState(newState);
+    }
+
+    protected abstract BehaviorState onProcess(T object);
 
     /**
      * Returns true if current service is able to process object.
@@ -24,7 +30,7 @@ public abstract class AbstractBehaviorService<T extends AbstractGameObject> {
      *
      * @param object    object that should be analyzed.
      */
-    public boolean canProcessObject(AbstractGameObject object) {
+    public boolean canProcessObject(AbstractMapObject object) {
         return typeClass == object.getClass();
     }
 }

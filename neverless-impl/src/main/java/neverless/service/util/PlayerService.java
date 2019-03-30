@@ -14,7 +14,7 @@ public class PlayerService {
     private GameCache gameCache;
 
     public void setCommand(Command command) {
-        if (command.getCommandType() != CommandType.PLAYER_CONTINUE) {
+        if (command.getCommandType() != CommandType.PLAYER_DO_NOTHING) {
             Player player = gameCache.getPlayer();
             player.setCommand(command);
         }

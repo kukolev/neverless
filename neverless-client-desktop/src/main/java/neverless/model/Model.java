@@ -79,7 +79,7 @@ public class Model extends Task {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return null;

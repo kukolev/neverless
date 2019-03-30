@@ -18,7 +18,7 @@ public class PlayerCommandFactory {
 
     public Command createPlayerMapGoCommand(int x, int y) {
         return new Command()
-                .setCommandType(CommandType.PLAYER_WALK)
+                .setCommandType(CommandType.PLAYER_MOVE)
                 .setPayload(new PlayerMapGoPayload()
                         .setX(x)
                         .setY(y));
@@ -26,7 +26,7 @@ public class PlayerCommandFactory {
 
     public Command createPlayerContinueCommand() {
         return new Command()
-                .setCommandType(CommandType.PLAYER_CONTINUE)
+                .setCommandType(CommandType.PLAYER_DO_NOTHING)
                 .setPayload(new PlayerContinuePayload());
     }
 }

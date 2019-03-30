@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class BehaviorRouter {
+public class BehaviorProcessor {
 
     @Autowired
     private GameCache gameCache;

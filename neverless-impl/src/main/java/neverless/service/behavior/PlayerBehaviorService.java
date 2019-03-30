@@ -2,15 +2,14 @@ package neverless.service.behavior;
 
 import neverless.command.player.PlayerAttackPayload;
 import neverless.command.player.PlayerEnterPortalPayload;
+import neverless.domain.entity.BehaviorState;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.command.Command;
 import neverless.command.player.PlayerMapGoPayload;
 import neverless.context.EventContext;
-import neverless.domain.entity.Game;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
-import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.repository.cache.GameCache;
 import neverless.service.util.LocalMapService;
@@ -32,24 +31,27 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
     private EventContext eventContext;
 
     @Override
-    public void processObject(Player player) {
+    public BehaviorState onProcess(Player player) {
 
+        BehaviorState newState = BehaviorState.IDLE;
         Command abstractCommand = player.getCommand();
         if (abstractCommand == null) {
-            return;
+            return newState;
         }
 
         switch (player.getCommand().getCommandType()) {
-            case PLAYER_WALK:
-                performCommandMapGo();
+            case PLAYER_MOVE:
+                newState = performCommandMapGo();
                 break;
             case PLAYER_ATTACK:
-                performCommandAttack();
+                newState = performCommandAttack();
                 break;
         }
+        finishCommand();
+        return newState;
     }
 
-    private void performCommandMapGo() {
+    private BehaviorState performCommandMapGo() {
         Player player = gameCache.getPlayer();
         Command command = player.getCommand();
         PlayerMapGoPayload payload = (PlayerMapGoPayload) command.getPayload();
@@ -62,9 +64,10 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         } else {
             eventContext.addMapGoImpossibleEvent(player.getUniqueName());
         }
+        return BehaviorState.MOVE;
     }
 
-    private void performCommandAttack() {
+    private BehaviorState performCommandAttack() {
         Player player = gameCache.getPlayer();
         Command command = player.getCommand();
         PlayerAttackPayload payload = (PlayerAttackPayload) command.getPayload();
@@ -85,9 +88,10 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
             // Player misses.
             eventContext.addFightingPlayerMissEvent(player.getUniqueName(), enemy.getUniqueName());
         }
+        return BehaviorState.ATTACK;
     }
 
-    private void performCommandPortalEnter() {
+    private BehaviorState performCommandPortalEnter() {
         Player player = gameCache.getPlayer();
         Command command = player.getCommand();
         PlayerEnterPortalPayload payload = (PlayerEnterPortalPayload) command.getPayload();
@@ -102,6 +106,26 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
                 .setX(payload.getPortal().getDestX())
                 .setY(payload.getPortal().getDestY());
         eventContext.addPortalEnterEvent(player.getUniqueName(), payload.getPortal().getDestination().getTitle());
+        return BehaviorState.MOVE;
+    }
+
+    private void finishCommand() {
+        Player player = gameCache.getPlayer();
+        Command command = player.getCommand();
+        switch (command.getCommandType()) {
+            case PLAYER_MOVE:
+                PlayerMapGoPayload payloadWalk = (PlayerMapGoPayload) command.getPayload();
+                if (payloadWalk.getX() == player.getX() && payloadWalk.getY() == player.getY()) {
+                    player.setCommand(null);
+                }
+                break;
+            case PLAYER_ATTACK:
+                PlayerAttackPayload payloadAttack = (PlayerAttackPayload) command.getPayload();
+                if (payloadAttack.getEnemy().getHitPoints() <= 0) {
+                    player.setCommand(null);
+                }
+                break;
+        }
     }
 
     /**

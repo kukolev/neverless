@@ -4,8 +4,8 @@ import javafx.scene.image.Image;
 import lombok.Data;
 import neverless.PlatformShape;
 import neverless.context.EventContext;
+import neverless.domain.entity.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.event.MapGoEvent;
 import neverless.dto.event.EventsScreenDataDto;
 import neverless.dto.GameStateDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class Renderer {
     private class Phase {
         private String signature;
         private int phaseNumber = 1;
-        private SpriteState state = SpriteState.IDLE;
+        private BehaviorState state = BehaviorState.IDLE;
 
         public String getFileName() {
             return signature + "_" + state + "_" + phaseNumber + ".png";
@@ -49,12 +49,6 @@ public class Renderer {
         public void defPhaseNumber() {
             phaseNumber = 1;
         }
-    }
-
-    private enum SpriteState {
-        MOVE,
-        ATTACK,
-        IDLE
     }
 
     /**
@@ -130,7 +124,7 @@ public class Renderer {
             cache.put(object.getUniqueName(), phase);
         }
 
-        SpriteState newState = calcSpriteState(object.getUniqueName(), events);
+        BehaviorState newState = object.getBehavior().getState();
         if (phase.getState() != newState) {
             phase.defPhaseNumber();
             phase.setState(newState);
@@ -141,17 +135,4 @@ public class Renderer {
         return phase.getFileName();
     }
 
-    private SpriteState calcSpriteState(String id, EventsScreenDataDto events) {
-        // todo: implement sprite state calculation
-        MapGoEvent event = eventContext.getEvents(id).stream()
-                .filter(e -> e instanceof MapGoEvent)
-                .map(e -> (MapGoEvent) e)
-                .findFirst()
-                .orElse(null);
-        if (event != null) {
-            return SpriteState.MOVE;
-        } else {
-            return SpriteState.IDLE;
-        }
-    }
 }

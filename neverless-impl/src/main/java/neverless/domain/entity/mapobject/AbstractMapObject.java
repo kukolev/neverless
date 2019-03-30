@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
+import neverless.command.Command;
+import neverless.domain.entity.Behavior;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.MapObjectMetaType;
@@ -19,6 +21,8 @@ public abstract class AbstractMapObject extends AbstractGameObject {
     private Integer x;
     private Integer y;
     private Location location;
+    private Behavior behavior = new Behavior();
+    private Command command;
 
     /**
      * Returns default value for

@@ -5,6 +5,7 @@ import neverless.command.CommandType;
 import neverless.command.EnemyCommandFactory;
 import neverless.command.enemy.EnemyMapGoPayload;
 import neverless.command.enemy.EnemyWaitPayload;
+import neverless.domain.entity.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.domain.entity.Location;
@@ -56,25 +57,28 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
     private EnemyCommandFactory commandFactory;
 
     @Override
-    public void processObject(AbstractEnemy enemy) {
+    public BehaviorState onProcess(AbstractEnemy enemy) {
+        BehaviorState newState = BehaviorState.IDLE;
         switch (enemy.getCommand().getCommandType()) {
             case ENEMY_WAIT:
-                performCommandWait(enemy, enemy.getCommand());
+                newState = performCommandWait(enemy, enemy.getCommand());
                 break;
-            case ENEMY_WALK:
-                performCommandWalk(enemy, enemy.getCommand());
+            case ENEMY_MOVE:
+                newState = performCommandWalk(enemy, enemy.getCommand());
                 break;
         }
         // calculate next command
         calcNewCommand(enemy);
+        return newState;
     }
 
-    private void performCommandWait(AbstractEnemy enemy, Command command) {
+    private BehaviorState performCommandWait(AbstractEnemy enemy, Command command) {
         EnemyWaitPayload payload = (EnemyWaitPayload) command.getPayload();
         payload.setWaitTime(payload.getWaitTime() - 1);
+        return BehaviorState.IDLE;
     }
 
-    private void performCommandWalk(AbstractEnemy enemy, Command command) {
+    private BehaviorState performCommandWalk(AbstractEnemy enemy, Command command) {
         // todo: implement;
         EnemyMapGoPayload payload = (EnemyMapGoPayload) command.getPayload();
         Coordinate coordinate = calcNextStep(enemy.getX(), enemy.getY(), payload.getX(), payload.getY());
@@ -85,6 +89,7 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
         } else {
             eventContext.addMapGoImpossibleEvent(enemy.getUniqueName());
         }
+        return BehaviorState.MOVE;
     }
 
     /**
@@ -100,13 +105,13 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
 //                        BehaviorState behaviorState = calcNewCommand(rp.getEnemy());
 //                        enemy.setBehaviorState(behaviorState);
 //                        switch (behaviorState) {
-//                            case WALKING:
+//                            case MOVE:
 //                                walk(rp.getEnemy());
 //                                break;
-//                            case CHASING:
+//                            case CHASE:
 //                                chase(rp.getEnemy());
 //                                break;
-//                            case ATTACKING:
+//                            case ATTACK:
 //                                attack(rp.getEnemy());
 //                                break;
 //                        }
@@ -178,7 +183,7 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
     }
 
     private boolean isEndOfMove(AbstractEnemy enemy) {
-        if (enemy.getCommand().getCommandType() == CommandType.ENEMY_WALK) {
+        if (enemy.getCommand().getCommandType() == CommandType.ENEMY_MOVE) {
             EnemyMapGoPayload payload = (EnemyMapGoPayload) enemy.getCommand().getPayload();
             boolean isArrived = payload.getX() == enemy.getX() && payload.getY() == enemy.getY();
             boolean isCantMove = isCanMove(enemy);
