@@ -11,20 +11,22 @@ import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.repository.cache.GameCache;
 import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static neverless.util.CoordinateUtils.calcNextStep;
+import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Service
 public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
-    @Autowired
-    private GameCache gameCache;
     @Autowired
     private LocalMapService localMapService;
     @Autowired
@@ -41,18 +43,17 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
 
         switch (player.getCommand().getCommandType()) {
             case PLAYER_MOVE:
-                newState = performCommandMapGo();
+                newState = performCommandMapGo(player);
                 break;
             case PLAYER_ATTACK:
-                newState = performCommandAttack();
+                newState = performCommandAttack(player);
                 break;
         }
-        finishCommand();
+        finishCommand(player);
         return newState;
     }
 
-    private BehaviorState performCommandMapGo() {
-        Player player = gameCache.getPlayer();
+    private BehaviorState performCommandMapGo(Player player) {
         Command command = player.getCommand();
         PlayerMapGoPayload payload = (PlayerMapGoPayload) command.getPayload();
 
@@ -67,15 +68,27 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         return BehaviorState.MOVE;
     }
 
-    private BehaviorState performCommandAttack() {
-        Player player = gameCache.getPlayer();
+    private BehaviorState performCommandAttack(Player player) {
         Command command = player.getCommand();
         PlayerAttackPayload payload = (PlayerAttackPayload) command.getPayload();
-
         AbstractEnemy enemy = payload.getEnemy();
-        if (calcToHit(enemy)) {
+
+        AbstractHandEquipment weapon = chooseBestWeapon(player, enemy);
+        if (weapon == null) {
+
+            Coordinate coordinate = calcNextStep(player.getX(), player.getY(), enemy.getX(), enemy.getY());
+            if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
+                player.setX(coordinate.getX());
+                player.setY(coordinate.getY());
+                eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY());
+            } else {
+                eventContext.addMapGoImpossibleEvent(player.getUniqueName());
+            }
+            return BehaviorState.MOVE;
+
+        } else if (calcToHit(enemy)) {
             // Player hits.
-            int damage = calcDamage(enemy);
+            int damage = calcDamage(player, enemy);
             enemy.decreaseHitPoints(damage);
             if (enemy.getHitPoints() <= 0) {
                 killEnemy(enemy);
@@ -91,8 +104,7 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         return BehaviorState.ATTACK;
     }
 
-    private BehaviorState performCommandPortalEnter() {
-        Player player = gameCache.getPlayer();
+    private BehaviorState performCommandPortalEnter(Player player) {
         Command command = player.getCommand();
         PlayerEnterPortalPayload payload = (PlayerEnterPortalPayload) command.getPayload();
         // todo: fix it.
@@ -109,8 +121,7 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         return BehaviorState.MOVE;
     }
 
-    private void finishCommand() {
-        Player player = gameCache.getPlayer();
+    private void finishCommand(Player player) {
         Command command = player.getCommand();
         switch (command.getCommandType()) {
             case PLAYER_MOVE:
@@ -142,10 +153,10 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
     /**
      * Calculates and returns damage, impacted by the player during attack to enemy.
      *
-     * @param enemy enemy attacked by the player.
+     * @param player    main player
+     * @param enemy     enemy attacked by the player.
      */
-    private int calcDamage(AbstractEnemy enemy) {
-        Player player = gameCache.getPlayer();
+    private int calcDamage(Player player, AbstractEnemy enemy) {
         AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
         AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
 
@@ -153,6 +164,28 @@ public class PlayerBehaviorService extends AbstractBehaviorService<Player> {
         int leftDamage = leftWeapon != null ? leftWeapon.getPower() : 0;
 
         return (rightDamage + leftDamage);
+    }
+
+    /**
+     * Returns best weapon for attack.
+     * Returns null if player hasn't weapon capable for attack.
+     *
+     * @param player    main player
+     * @param enemy     enemy attacked by the player.
+     */
+    private AbstractHandEquipment chooseBestWeapon(Player player, AbstractEnemy enemy) {
+        AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
+        AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
+
+        List<AbstractHandEquipment> weapons = new ArrayList<>();
+        weapons.add(rightWeapon);
+        weapons.add(leftWeapon);
+
+        return weapons.stream()
+                .filter(Objects::nonNull)
+                .filter(w -> isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), w.getRange()))
+                .max(Comparator.comparingInt(AbstractHandEquipment::getPower))
+                .orElse(null);
     }
 
     /**

@@ -1,0 +1,22 @@
+@startuml
+
+start
+
+:Choose weapon;
+
+if (Player attacking with same weapon?) then (yes)
+    if (Time to perform damage?) then (yes)
+       :calculate damage;
+       :provide damage;
+    endif
+
+else (no)
+    :Change weapon;
+    :Set time = 0;
+endif
+
+:increase time;
+
+end
+
+@enduml

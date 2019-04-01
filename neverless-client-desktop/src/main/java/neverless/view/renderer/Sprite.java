@@ -25,13 +25,13 @@ public class Sprite {
 
     private int x;
     private int y;
+    private int height;
+    private int width;
 
     private PlatformShape platformShape;
     private List<Coordinate> platformCoordinates = new ArrayList<>();
     private int platformShapeWidth;
     private int platformShapeHeight;
-    private int platformCenterX;
-    private int platformCenterY;
     private MapObjectMetaType metaType;
     private String id;
 
@@ -53,7 +53,7 @@ public class Sprite {
      */
     public void draw(GraphicsContext gc) {
         drawPlatform(gc);
-        gc.drawImage(image, x, y);
+        gc.drawImage(image, x - width / 2, y - height);
     }
 
     private void drawPlatform(GraphicsContext gc) {
@@ -62,11 +62,11 @@ public class Sprite {
 
         switch (platformShape) {
             case ELLIPSE: {
-                int dx = (int) (image.getWidth() - platformShapeWidth);
-                int centerX = x - (dx / 2);
+               //int dx = (int) (image.getWidth() - platformShapeWidth);
+                int centerX = x - (platformShapeWidth / 2);
 
-                int dy = (int) (image.getHeight() - platformShapeHeight / 2);
-                int centerY = y + dy;
+                //int dy = (int) (image.getHeight() - platformShapeHeight / 2);
+                int centerY = y - platformShapeHeight / 2;
                 gc.strokeArc(
                         centerX,
                         centerY,

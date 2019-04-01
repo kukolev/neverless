@@ -122,15 +122,17 @@ public class GameLoader {
         AbstractBuilding building = new LargeVillageHouse();
         building
                 .setX(1900)
-                .setY(1400)
+                .setY(1500)
+                .setWidth(162)
+                .setHeight(157)
                 .setLocation(location);
         location.getObjects().add(building);
         List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinate().setX(68).setY(156));
-        coordinates.add(new Coordinate().setX(92).setY(156));
-        coordinates.add(new Coordinate().setX(159).setY(118));
-        coordinates.add(new Coordinate().setX(92).setY(86));
-        coordinates.add(new Coordinate().setX(6).setY(116));
+        coordinates.add(new Coordinate().setX(-14).setY(0));
+        coordinates.add(new Coordinate().setX(11).setY(0));
+        coordinates.add(new Coordinate().setX(78).setY(-39));
+        coordinates.add(new Coordinate().setX(0).setY(-80));
+        coordinates.add(new Coordinate().setX(-75).setY(-39));
         building.setPlatformCoordinates(coordinates);
     }
 

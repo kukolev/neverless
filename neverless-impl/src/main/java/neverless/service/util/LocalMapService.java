@@ -39,8 +39,8 @@ public class LocalMapService {
                                     .setY(object.getY() + c.getY()))
                             .collect(Collectors.toList());
 
-                    int walkerCenterX = newX + walker.getPlatformCenterX();
-                    int walkerCenterY = newY + walker.getPlatformCenterY();
+                    int walkerCenterX = newX;
+                    int walkerCenterY = newY;
                     int walkerRadiusX = walker.getPlatformWidth() / 2;
                     int walkerRadiusY = walker.getPlatformHeight() / 2;
 
@@ -48,13 +48,13 @@ public class LocalMapService {
                 }
             } else if (object.getPlatformShape() == PlatformShape.ELLIPSE) {
                 if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {
-                    int walkerCenterX = newX + walker.getPlatformCenterX();
-                    int walkerCenterY = newY + walker.getPlatformCenterY();
+                    int walkerCenterX = newX;
+                    int walkerCenterY = newY;
                     int walkerRadiusX = walker.getPlatformWidth() / 2;
                     int walkerRadiusY = walker.getPlatformHeight() / 2;
 
-                    int objectCenterX = object.getX() + object.getPlatformCenterX();
-                    int objectCenterY = object.getY() + object.getPlatformCenterY();
+                    int objectCenterX = object.getX();
+                    int objectCenterY = object.getY();
                     int objectRadiusX = object.getPlatformWidth() / 2;
                     int objectRadiusY = object.getPlatformHeight() / 2;
 

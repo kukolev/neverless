@@ -130,7 +130,7 @@ public class DrawerUtils {
     private static List<Coordinate> calcAllPerimeterCoordinates(Sprite sprite) {
         switch (sprite.getPlatformShape()) {
             case ELLIPSE: {
-                return calcAllPerimeterCoordinatesEllipse(sprite.getPlatformShapeWidth(), sprite.getPlatformShapeHeight(), sprite.getX(), sprite.getY(), sprite.getPlatformCenterX(), sprite.getPlatformCenterY());
+                return calcAllPerimeterCoordinatesEllipse(sprite.getPlatformShapeWidth(), sprite.getPlatformShapeHeight(), sprite.getX(), sprite.getY());
             }
             case RECTANGLE: {
                 return calcAllPerimeterCoordinatesRectangle(sprite.getPlatformShapeWidth(), sprite.getPlatformShapeHeight());
@@ -142,7 +142,7 @@ public class DrawerUtils {
         return null;
     }
 
-    private static List<Coordinate> calcAllPerimeterCoordinatesEllipse(int width, int height, int objectX, int objectY, int platformCenterX, int platformCenterY) {
+    private static List<Coordinate> calcAllPerimeterCoordinatesEllipse(int width, int height, int objectX, int objectY) {
         List<Coordinate> coordinates = new ArrayList<>();
 
         double radX = (double) (width / 2);
@@ -150,8 +150,8 @@ public class DrawerUtils {
 
         for(int x = 0; x < radX; x++) {
             int y = (int) sqrt ((radY * radY * (1 - (x * x) / (radX * radX))));
-            coordinates.add(new Coordinate().setX(objectX + x + platformCenterX).setY(objectY + y + platformCenterY));
-            coordinates.add(new Coordinate().setX(objectX - x + platformCenterX).setY(objectY + y + platformCenterY));
+            coordinates.add(new Coordinate().setX(objectX + x).setY(objectY + y));
+            coordinates.add(new Coordinate().setX(objectX - x).setY(objectY + y));
         }
         return coordinates;
     }

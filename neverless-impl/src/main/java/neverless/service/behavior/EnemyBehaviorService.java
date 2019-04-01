@@ -344,12 +344,12 @@ public class EnemyBehaviorService extends AbstractBehaviorService<AbstractEnemy>
         // main idea - if two ellipses with radius + delta are intersected
         // then two ellipses are close enough for attack
         return isCurvesIntersected(
-                player.getX() + player.getPlatformCenterX(),
-                player.getY() + player.getPlatformCenterY(),
+                player.getX(),
+                player.getY(),
                 newPlayerRadiusX,
                 newPlayerRadiusY,
-                enemy.getX() + enemy.getPlatformCenterX(),
-                enemy.getY() + enemy.getPlatformCenterY(),
+                enemy.getX(),
+                enemy.getY(),
                 newEnemyRadiusX,
                 newEnemyRadiusY);
     }

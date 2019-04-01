@@ -20,6 +20,8 @@ public abstract class AbstractMapObject extends AbstractGameObject {
 
     private Integer x;
     private Integer y;
+    private Integer height = 32;
+    private Integer width = 32;
     private Location location;
     private Behavior behavior = new Behavior();
     private Command command;
@@ -31,15 +33,6 @@ public abstract class AbstractMapObject extends AbstractGameObject {
         return PlatformShape.ELLIPSE;
     }
     private List<Coordinate> platformCoordinates = new ArrayList<>();
-
-    public int getPlatformCenterX() {
-        return 16;
-    }
-
-    public int getPlatformCenterY() {
-        return 32;
-    }
-
 
     /**
      * Returns default value for object platformWidth.

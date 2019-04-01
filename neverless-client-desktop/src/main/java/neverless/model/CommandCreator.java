@@ -53,7 +53,8 @@ public class CommandCreator {
         Player player = frame.getGameState().getGame().getPlayer();
 
         switch (metaType) {
-            case TERRAIN: {
+            case TERRAIN:
+            case IMPASSIBLE_TERRAIN:    {
 
                 int dx = alignToGrid(screenX) - alignToGrid(CANVAS_CENTER_X);
                 int dy = alignToGrid(screenY) - alignToGrid(CANVAS_CENTER_Y);
@@ -108,10 +109,10 @@ public class CommandCreator {
 
     private Sprite getSpriteAtScreenCoordinates(Frame frame, int screenX, int screenY) {
         List<Sprite> sprites = frame.getSprites().stream()
-                .filter(s -> screenX >= s.getX() &&
-                        screenX <= s.getX() + s.getImage().getWidth() &&
-                        screenY >= s.getY() &&
-                        screenY <= s.getY() + s.getImage().getHeight())
+                .filter(s -> screenX >= s.getX() - s.getWidth() / 2 &&
+                        screenX <= s.getX() + s.getWidth() / 2 &&
+                        screenY >= s.getY() - s.getHeight() &&
+                        screenY <= s.getY())
                 .collect(Collectors.toList());
         if (sprites.size() > 0) {
             return sprites.get(sprites.size() - 1);

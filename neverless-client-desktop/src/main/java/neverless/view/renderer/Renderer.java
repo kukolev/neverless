@@ -110,8 +110,8 @@ public class Renderer {
                 .setPlatformShape(object.getPlatformShape())
                 .setPlatformShapeWidth(object.getPlatformWidth())
                 .setPlatformShapeHeight(object.getPlatformHeight())
-                .setPlatformCenterX(object.getPlatformCenterX())
-                .setPlatformCenterY(object.getPlatformCenterY())
+                .setHeight(object.getHeight())
+                .setWidth(object.getWidth())
                 .setMetaType(object.getMetaType())
                 .setId(object.getUniqueName());
     }
