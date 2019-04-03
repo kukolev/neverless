@@ -1,4 +1,4 @@
-package neverless.repository.cache;
+package neverless.context;
 
 import neverless.domain.entity.Game;
 import neverless.domain.entity.mapobject.Player;
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Stores game after first load
  */
 @Repository
-public class GameCache {
+public class GameContext {
 
     @Autowired
     private SessionUtil sessionUtil;

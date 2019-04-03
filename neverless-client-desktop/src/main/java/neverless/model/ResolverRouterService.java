@@ -1,8 +1,8 @@
 package neverless.model;
 
-import neverless.command.CommandType;
+import neverless.service.command.impl.GameStartNewGameCommand;
 import neverless.dto.GameStateDto;
-import neverless.command.Command;
+import neverless.service.command.AbstractCommand;
 import neverless.service.core.BackendService;
 import neverless.view.RootPane;
 import neverless.view.ViewState;
@@ -22,9 +22,9 @@ class ResolverRouterService {
      *
      * @param command   command that should be resolved.
      */
-    public GameStateDto resolve(Command command) {
+    public GameStateDto resolve(AbstractCommand command) {
         // Start New Game command
-        if (command.getCommandType() == CommandType.GAME_START_NEW_GAME) {
+        if (command instanceof GameStartNewGameCommand) {
             rootPane.setViewState(ViewState.LOCAL_MAP);
         }
         return backendService.resolveCommand(command);

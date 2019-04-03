@@ -7,7 +7,7 @@ import neverless.dto.quest.QuestInfoDto;
 import neverless.dto.quest.QuestScreenDataDto;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
-import neverless.repository.cache.GameCache;
+import neverless.context.GameContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class QuestService {
     @Autowired
     private EventContext eventContext;
     @Autowired
-    private GameCache gameCache;
+    private GameContext gameContext;
 
     public QuestScreenDataDto getScreenData() {
         QuestScreenDataDto screenDataDto = new QuestScreenDataDto();
@@ -33,7 +33,7 @@ public class QuestService {
     }
 
     public void generateQuestEvents() {
-        Player player = gameCache.getPlayer();
+        Player player = gameContext.getPlayer();
         requestContext.findUpdatedQuests()
                 .forEach(id -> {
                     AbstractQuest quest = repository.finaById(id);

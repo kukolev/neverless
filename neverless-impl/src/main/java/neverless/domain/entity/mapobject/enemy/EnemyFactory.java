@@ -1,6 +1,6 @@
 package neverless.domain.entity.mapobject.enemy;
 
-import neverless.command.EnemyCommandFactory;
+import neverless.service.command.factory.EnemyCommandFactory;
 import neverless.domain.entity.item.weapon.Sword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

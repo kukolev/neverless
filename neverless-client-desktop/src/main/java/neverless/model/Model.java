@@ -1,9 +1,9 @@
 package neverless.model;
 
 import javafx.concurrent.Task;
-import neverless.command.PlayerCommandFactory;
+import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.dto.GameStateDto;
-import neverless.command.Command;
+import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
@@ -28,14 +28,14 @@ public class Model extends Task {
     private PlayerCommandFactory playerCommandFactory;
 
     private volatile boolean isWorking = true;
-    private Queue<Command> queue = new ConcurrentLinkedQueue<>();
+    private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
 
     /**
      * Clears command queue and adds list of commands.
      *
      * @param commandList list of command added to queue.
      */
-    public void putCommandList(List<Command> commandList) {
+    public void putCommandList(List<AbstractCommand> commandList) {
         queue.clear();
         queue.addAll(commandList);
     }
@@ -45,7 +45,7 @@ public class Model extends Task {
      *
      * @param command command added to queue.
      */
-    public void putCommand(Command command) {
+    public void putCommand(AbstractCommand command) {
         queue.clear();
         queue.add(command);
     }
@@ -57,7 +57,7 @@ public class Model extends Task {
                 long t = System.nanoTime();
 
                 // 1. Get command from queue
-                Command command;
+                AbstractCommand command;
                 if (queue.size() != 0) {
                     command = queue.poll();
                 } else {
@@ -99,7 +99,7 @@ public class Model extends Task {
      *
      * @param command command that should be resolved.
      */
-    private void resolveCommand(Command command) {
+    private void resolveCommand(AbstractCommand command) {
             // send command to backend and get response
             GameStateDto gameState = resolver.resolve(command);
 

@@ -2,7 +2,7 @@ package neverless.domain.quest;
 
 import neverless.domain.entity.Game;
 import neverless.dto.quest.QuestState;
-import neverless.repository.cache.GameCache;
+import neverless.context.GameContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,7 +19,7 @@ public abstract class AbstractQuest {
     private static final String DEFAULT_INTEGER = "false";
 
     @Autowired
-    private GameCache gameCache;
+    private GameContext gameContext;
 
     public abstract String getTitle();
 
@@ -73,7 +73,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     protected final Boolean getParamBool(String paramName) {
-        Game game = gameCache.getGame();
+        Game game = gameContext.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_BOOL;
@@ -87,7 +87,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     public final Integer getParamInt(String paramName) {
-        Game game = gameCache.getGame();
+        Game game = gameContext.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_INTEGER;
@@ -101,7 +101,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     public final String getParamStr(String paramName) {
-        Game game = gameCache.getGame();
+        Game game = gameContext.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_STRING;
@@ -116,7 +116,7 @@ public abstract class AbstractQuest {
      * @param val           parameter value.
      */
     protected final void setParam(String paramName, Object val) {
-        Game game = gameCache.getGame();
+        Game game = gameContext.getGame();
         game.getParams().put(paramName, val.toString());
     }
 

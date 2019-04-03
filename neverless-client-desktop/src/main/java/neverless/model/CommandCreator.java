@@ -1,11 +1,11 @@
 package neverless.model;
 
-import neverless.command.GameCommandFactory;
-import neverless.command.PlayerCommandFactory;
+import neverless.service.command.factory.GameCommandFactory;
+import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.domain.entity.mapobject.Direction;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
-import neverless.command.Command;
+import neverless.service.command.AbstractCommand;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
@@ -99,7 +99,7 @@ public class CommandCreator {
         model.putCommandList(createMapGoCommands(RIGHT));
     }
 
-    private List<Command> createMapGoCommands(Direction direction) {
+    private List<AbstractCommand> createMapGoCommands(Direction direction) {
         return new ArrayList<>();
     }
 

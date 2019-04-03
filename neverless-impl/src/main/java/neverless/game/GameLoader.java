@@ -19,7 +19,7 @@ import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
-import neverless.repository.cache.GameCache;
+import neverless.context.GameContext;
 import neverless.util.SessionUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import static neverless.Resources.IMG_VILLAGE_BACKGROUND;
 public class GameLoader {
 
     @Autowired
-    private GameCache cache;
+    private GameContext cache;
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
