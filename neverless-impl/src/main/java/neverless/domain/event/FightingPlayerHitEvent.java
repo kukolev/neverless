@@ -17,4 +17,14 @@ public class FightingPlayerHitEvent extends AbstractEvent {
     public EventType getEventType() {
         return EventType.FIGHTING_PLAYER_HIT_EVENT;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Enemy %s hits: %s", enemyId, damage);
+    }
+
+    @Override
+    public boolean displayable() {
+        return true;
+    }
 }

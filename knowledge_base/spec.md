@@ -45,3 +45,9 @@ This paragraph includes main features descriptions. Every feature related to one
 
 #### Enemy respawn
 * Enemies respawn at respawn point position
+
+#### Event display
+* Events might be displayed in GUI
+* Displayable events:
+  * FightingPlayerHitEvent
+  * FightingEnemyKilledEvent

@@ -11,6 +11,7 @@ import neverless.view.renderer.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -64,9 +65,20 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayGameState(GameStateDto gameState) {
         if (gameState != null) {
-            Player player = gameState.getGame().getPlayer();
-            String health = "Health points: " + player.getHitPoints();
-            context.getInfoArea().setText(health);
+           // Player player = gameState.getGame().getPlayer();
+//            String health = "Health points: " + player.getHitPoints();
+//            context.getInfoArea().setText(health);
+
+            gameState
+                    .getEventsScreenDataDto()
+                    .getEvents()
+                    .values()
+                    .stream()
+                    .flatMap(Collection::stream)
+                    .forEach(e -> {
+                        if (e.displayable())
+                        context.getInfoArea().appendText("\n" + e.toString());
+                    });
         }
     }
 }

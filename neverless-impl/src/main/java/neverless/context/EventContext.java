@@ -5,7 +5,7 @@ import neverless.domain.event.AbstractEvent;
 import neverless.domain.event.DialogSelectPhraseEvent;
 import neverless.domain.event.DialogStartEvent;
 import neverless.domain.event.FightingEnemyHitEvent;
-import neverless.domain.event.FightingEnemyKillEvent;
+import neverless.domain.event.FightingEnemyKilledEvent;
 import neverless.domain.event.FightingEnemyMissEvent;
 import neverless.domain.event.FightingPlayerHitEvent;
 import neverless.domain.event.FightingPlayerMissEvent;
@@ -111,7 +111,7 @@ public class EventContext {
     }
 
     public void addFightingEnemyKillEvent(String playerId, String enemyId) {
-        addEvent(playerId, new FightingEnemyKillEvent()
+        addEvent(playerId, new FightingEnemyKilledEvent()
         .setEnemyId(enemyId));
     }
 }
