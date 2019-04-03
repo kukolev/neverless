@@ -12,6 +12,8 @@ public class Constants {
     public static final int ENEMY_DEFAULT_WALK_LENGTH = 100;
 
     public static final int WEAPON_DEFAULT_RANGE = 40;
+    public static final int WEAPON_DEFAULT_SPEED = 20;
+
 
     public static final String CURRENT_SESSION_ID = "TEMP_SESSION_ID";
 

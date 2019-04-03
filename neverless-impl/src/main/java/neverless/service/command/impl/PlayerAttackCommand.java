@@ -46,22 +46,28 @@ public class PlayerAttackCommand extends AbstractCommand {
             }
             return BehaviorState.MOVE;
 
-        } else if (calcToHit(enemy)) {
-            // Player hits.
-            int damage = calcDamage(player, enemy);
-            enemy.decreaseHitPoints(damage);
-            if (enemy.getHitPoints() <= 0) {
-                killEnemy(enemy);
-                eventContext.addFightingEnemyKillEvent(player.getUniqueName(), enemy.getUniqueName());
-            } else {
-                eventContext.addFightingPlayerHitEvent(player.getUniqueName(), enemy.getUniqueName(), damage);
+        } else {
+
+            if (player.getBehavior().checkTime(weapon.getSpeed())) {
+                player.getBehavior().replay();
+                if (calcToHit(enemy)) {
+
+                    // Player hits.
+                    int damage = calcDamage(player, enemy);
+                    enemy.decreaseHitPoints(damage);
+                    if (enemy.getHitPoints() <= 0) {
+                        killEnemy(enemy);
+                        eventContext.addFightingEnemyKillEvent(player.getUniqueName(), enemy.getUniqueName());
+                    } else {
+                        eventContext.addFightingPlayerHitEvent(player.getUniqueName(), enemy.getUniqueName(), damage);
+                    }
+                } else {
+                    // Player misses.
+                    eventContext.addFightingPlayerMissEvent(player.getUniqueName(), enemy.getUniqueName());
+                }
             }
-        } else
-        {
-            // Player misses.
-            eventContext.addFightingPlayerMissEvent(player.getUniqueName(), enemy.getUniqueName());
+            return BehaviorState.ATTACK;
         }
-        return BehaviorState.ATTACK;
     }
 
     @Override
@@ -74,12 +80,12 @@ public class PlayerAttackCommand extends AbstractCommand {
      * Returns best weapon for attack.
      * Returns null if player hasn't weapon capable for attack.
      *
-     * @param player    main player
-     * @param enemy     enemy attacked by the player.
+     * @param player main player
+     * @param enemy  enemy attacked by the player.
      */
     private AbstractHandEquipment chooseBestWeapon(Player player, AbstractEnemy enemy) {
-        AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
-        AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
+        AbstractHandEquipment rightWeapon = player.getInventory().getEquipment().getRightHand();
+        AbstractHandEquipment leftWeapon = player.getInventory().getEquipment().getLeftHand();
 
         List<AbstractHandEquipment> weapons = new ArrayList<>();
         weapons.add(rightWeapon);
@@ -106,12 +112,12 @@ public class PlayerAttackCommand extends AbstractCommand {
     /**
      * Calculates and returns damage, impacted by the player during attack to enemy.
      *
-     * @param player    main player
-     * @param enemy     enemy attacked by the player.
+     * @param player main player
+     * @param enemy  enemy attacked by the player.
      */
     private int calcDamage(Player player, AbstractEnemy enemy) {
-        AbstractHandEquipment rightWeapon =  player.getInventory().getEquipment().getRightHand();
-        AbstractHandEquipment leftWeapon =  player.getInventory().getEquipment().getLeftHand();
+        AbstractHandEquipment rightWeapon = player.getInventory().getEquipment().getRightHand();
+        AbstractHandEquipment leftWeapon = player.getInventory().getEquipment().getLeftHand();
 
         int rightDamage = rightWeapon != null ? rightWeapon.getPower() : 0;
         int leftDamage = leftWeapon != null ? leftWeapon.getPower() : 0;

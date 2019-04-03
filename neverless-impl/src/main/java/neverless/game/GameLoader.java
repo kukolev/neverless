@@ -98,7 +98,7 @@ public class GameLoader {
 
         Sword sword = new Sword();
         sword
-                .setPower(100)
+                .setPower(5)
                 .setTitle("Mega Sword of Ultra Power");
 
         Equipment equipment = new Equipment();

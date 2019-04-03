@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import neverless.domain.entity.item.AbstractItem;
 
 import static neverless.Constants.WEAPON_DEFAULT_RANGE;
+import static neverless.Constants.WEAPON_DEFAULT_SPEED;
 
 @Data
 @Accessors(chain = true)
@@ -13,4 +14,5 @@ import static neverless.Constants.WEAPON_DEFAULT_RANGE;
 public abstract class AbstractHandEquipment extends AbstractItem {
     private int power;
     private int range = WEAPON_DEFAULT_RANGE;
+    private int speed = WEAPON_DEFAULT_SPEED;
 }

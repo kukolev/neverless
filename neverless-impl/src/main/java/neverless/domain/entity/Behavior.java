@@ -21,6 +21,18 @@ public class Behavior {
         }
     }
 
+    public boolean checkTime(int speed) {
+        return ticks >= speed;
+    }
+
+    public void replay() {
+        ticks = 0;
+    }
+
+    public void tick() {
+        ticks++;
+    }
+
     public BehaviorState getState() {
         return state;
     }

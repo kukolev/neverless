@@ -30,6 +30,7 @@ public class PlayerCommander {
         if (curCommand != null) {
             BehaviorState state = curCommand.execute();
             player.getBehavior().changeState(state);
+            player.getBehavior().tick();
             if (curCommand.checkFinished()) {
                 player.setCommand(null);
                 player.getBehavior().changeState(BehaviorState.IDLE);

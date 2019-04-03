@@ -20,6 +20,7 @@
 * Enemy - special NPC hostile to the player
 * Respawn point - coordinates at location where enemy appears
 * Portal - place where player is able to move to other location
+* Event - event happened in game. Events might be displayed on GUI.
 
 ## Features
 
@@ -33,6 +34,10 @@ This paragraph includes main features descriptions. Every feature related to one
 
 #### Player attack
 * Player is able to attack enemy
+* Attack depends on next factors:
+  * Range between player and enemy
+  * Weapon speed
+  * Weapon power   
 
 #### Enemy movement
 * Enemies are able to move through the area of location
