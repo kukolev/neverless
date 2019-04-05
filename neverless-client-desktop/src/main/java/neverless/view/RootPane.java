@@ -71,34 +71,6 @@ public class RootPane extends Pane {
         canvas.setLayoutY(20);
         canvas.setOnMouseClicked(controller::onClick);
 
-        Button btnMoveDown = new Button();
-        btnMoveDown.setText("D");
-        btnMoveDown.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT);
-        btnMoveDown.setLayoutY(200 + MOVE_BTN_GABARIT);
-        btnMoveDown.setMaxWidth(MOVE_BTN_GABARIT);
-        btnMoveDown.setOnMouseClicked(controller::moveDownBtnClick);
-
-        Button btnMoveUp = new Button();
-        btnMoveUp.setText("U");
-        btnMoveUp.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT);
-        btnMoveUp.setLayoutY(200 - MOVE_BTN_GABARIT);
-        btnMoveUp.setMaxWidth(MOVE_BTN_GABARIT);
-        btnMoveUp.setOnMouseClicked(controller::moveUpBtnClick);
-
-        Button btnMoveLeft = new Button();
-        btnMoveLeft.setText("L");
-        btnMoveLeft.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20);
-        btnMoveLeft.setLayoutY(200);
-        btnMoveLeft.setMaxWidth(MOVE_BTN_GABARIT);
-        btnMoveLeft.setOnMouseClicked(controller::moveLeftBtnClick);
-
-        Button btnMoveRight = new Button();
-        btnMoveRight.setText("R");
-        btnMoveRight.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT * 2);
-        btnMoveRight.setLayoutY(200);
-        btnMoveRight.setMaxWidth(MOVE_BTN_GABARIT);
-        btnMoveRight.setOnMouseClicked(controller::moveRightBtnClick);
-
         TextArea infoArea = new TextArea();
         infoArea.setEditable(false);
         infoArea.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT * 2);
@@ -106,10 +78,6 @@ public class RootPane extends Pane {
         infoArea.setMaxWidth(150);
         infoArea.setMaxHeight(150);
 
-        localMapPane.getChildren().add(btnMoveDown);
-        localMapPane.getChildren().add(btnMoveUp);
-        localMapPane.getChildren().add(btnMoveLeft);
-        localMapPane.getChildren().add(btnMoveRight);
         localMapPane.getChildren().add(canvas);
         localMapPane.getChildren().add(infoArea);
 

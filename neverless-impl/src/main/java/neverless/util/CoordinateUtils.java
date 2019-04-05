@@ -1,29 +1,16 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.domain.entity.mapobject.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
-import static neverless.domain.entity.mapobject.Direction.DOWN;
-import static neverless.domain.entity.mapobject.Direction.DOWN_LEFT;
-import static neverless.domain.entity.mapobject.Direction.DOWN_RIGHT;
-import static neverless.domain.entity.mapobject.Direction.LEFT;
-import static neverless.domain.entity.mapobject.Direction.RIGHT;
-import static neverless.domain.entity.mapobject.Direction.UP;
-import static neverless.domain.entity.mapobject.Direction.UP_LEFT;
-import static neverless.domain.entity.mapobject.Direction.UP_RIGHT;
 
 public class CoordinateUtils {
-
-    private final static String LINE_UP = "+";
-    private final static String LINE_JUMP = "\\";
 
     /**
      * Calculates and returns coordinates in direction, defined by target coordinates.
@@ -68,138 +55,6 @@ public class CoordinateUtils {
     public static boolean isCoordinatesInRange(int x1, int y1, int x2, int y2, int range) {
         double realRange = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
         return realRange <= range;
-    }
-
-    /**
-     * Returns list direction steps for line between two points.
-     * It's a facade method, main calculations are placed below in methods "mapLineActionsList" and "commonLine".
-     *
-     * @param x1 horizontal start coordinate.
-     * @param y1 vertical start coordinate.
-     * @param x2 horizontal finish coordinate.
-     * @param y2 vertical finish coordinate.
-     */
-    public static List<Direction> line(int x1, int y1, int x2, int y2) {
-
-        List<String> actions;
-
-        int dx = x2 - x1;
-        int dy = y2 - y1;
-
-        if (x2 >= x1 && y2 >= y1) {
-            actions = commonLine(dx, dy);
-            if (abs(dx) > abs(dy)) {
-                return mapLineActionsList(actions, RIGHT, DOWN_RIGHT);
-            } else {
-                return mapLineActionsList(actions, DOWN, DOWN_RIGHT);
-            }
-        } else if (x2 < x1 && y2 >= y1) {
-            actions = commonLine(-dx, dy);
-            if (abs(dx) > abs(dy)) {
-                return mapLineActionsList(actions, LEFT, DOWN_LEFT);
-            } else {
-                return mapLineActionsList(actions, DOWN, DOWN_LEFT);
-            }
-        } else if (x2 >= x1) {
-            actions = commonLine(dx, -dy);
-
-            if (abs(dx) > abs(dy)) {
-                return mapLineActionsList(actions, RIGHT, UP_RIGHT);
-            } else {
-                return mapLineActionsList(actions, UP, UP_RIGHT);
-            }
-        } else {
-            actions = commonLine(-dx, -dy);
-            if (abs(dx) > abs(dy)) {
-                return mapLineActionsList(actions, LEFT, UP_LEFT);
-            } else {
-                return mapLineActionsList(actions, UP, UP_LEFT);
-            }
-        }
-    }
-
-    /**
-     * Converts list of two basic directions to list with result directions.
-     *
-     * @param actions list of basic directions.
-     * @param up      real direction which should replace LINE_UP
-     * @param jump    real direction which should replace LINE_JUMP
-     */
-    private static List<Direction> mapLineActionsList(List<String> actions, Direction up, Direction jump) {
-        return actions
-                .stream()
-                .map(a -> {
-                    switch (a) {
-                        case LINE_UP:
-                            return up;
-                        case LINE_JUMP:
-                            return jump;
-                    }
-                    return up;
-                })
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Returns list of basic directions.
-     * There are to basic directions: LINE_UP = "+", LINE_JUMP = "/".
-     * Example: dx = 5, dy = 10;
-     * Result: [+, /, +, /, +, /, +, /, +, /]
-     *
-     * @param dx abs of delta between x2 and x1
-     * @param dy abs of delta between y2 and y1
-     */
-    private static List<String> commonLine(int dx, int dy) {
-        List<String> result = new ArrayList<>();
-
-        int lenMinor;
-        int upRightCount;
-        int upCount;
-
-        if (abs(dy) > abs(dx)) {
-            lenMinor = abs(dx) + 1;
-            upRightCount = lenMinor - 1;
-            upCount = abs(dy - upRightCount);
-        } else {
-            lenMinor = abs(dy) + 1;
-            upRightCount = lenMinor - 1;
-            upCount = abs(dx - upRightCount);
-        }
-
-        if (upRightCount > 0) {
-            int[] packs = new int[upRightCount];
-            int packValue = upCount / upRightCount;
-            for (int i = 0; i < packs.length; i++) {
-                packs[i] = packValue;
-            }
-
-            int extraValue = upCount % upRightCount;
-            if (extraValue > 0) {
-                int extraStep = packs.length / extraValue;
-                for (int i = 0; i < packs.length / 2; i += extraStep) {
-                    if (extraValue > 0) {
-                        packs[packs.length - 1 - i]++;
-                        extraValue--;
-                    }
-                    if (extraValue > 0) {
-                        packs[i]++;
-                        extraValue--;
-                    }
-                }
-            }
-
-            for (int pack : packs) {
-                for (int j = 0; j < pack; j++) {
-                    result.add(LINE_UP);
-                }
-                result.add(LINE_JUMP);
-            }
-        } else {
-            for (int i = 0; i < upCount; i++) {
-                result.add(LINE_UP);
-            }
-        }
-        return result;
     }
 
     /**

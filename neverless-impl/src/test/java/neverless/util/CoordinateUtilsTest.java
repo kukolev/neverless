@@ -1,18 +1,14 @@
 package neverless.util;
 
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.domain.entity.mapobject.Direction;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.domain.entity.mapobject.Direction.DOWN;
-import static neverless.domain.entity.mapobject.Direction.DOWN_RIGHT;
 import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 import static neverless.util.CoordinateUtils.isSegmentAndCurveIntersected;
-import static neverless.util.CoordinateUtils.line;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -52,16 +48,6 @@ public class CoordinateUtilsTest {
         Coordinate coordinate = calcNextStep(10, 10, 10, 12);
         assertEquals(coordinate.getX(), 10);
         assertEquals(coordinate.getY(), 12);
-    }
-
-    @Test
-    public void testLine() {
-        List<Direction> directions = line(0, 0, 2, 5);
-        assertEquals(directions.get(0), DOWN);
-        assertEquals(directions.get(1), DOWN_RIGHT);
-        assertEquals(directions.get(2), DOWN);
-        assertEquals(directions.get(3), DOWN);
-        assertEquals(directions.get(4), DOWN_RIGHT);
     }
 
     @Test

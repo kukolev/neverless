@@ -2,7 +2,6 @@ package neverless.model;
 
 import neverless.service.command.factory.GameCommandFactory;
 import neverless.service.command.factory.PlayerCommandFactory;
-import neverless.domain.entity.mapobject.Direction;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
 import neverless.service.command.AbstractCommand;
@@ -18,10 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
-import static neverless.domain.entity.mapobject.Direction.DOWN;
-import static neverless.domain.entity.mapobject.Direction.LEFT;
-import static neverless.domain.entity.mapobject.Direction.RIGHT;
-import static neverless.domain.entity.mapobject.Direction.UP;
 import static neverless.MapObjectMetaType.TERRAIN;
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
@@ -81,26 +76,6 @@ public class CommandCreator {
     public void cmdStartNewGame() {
         model.putCommand(gameCommandFactory.createStartNewGameCommand());
         new Thread(model).start();
-    }
-
-    public void cmdMapGoDown() {
-        model.putCommandList(createMapGoCommands(DOWN));
-    }
-
-    public void cmdMapGoUp() {
-        model.putCommandList(createMapGoCommands(UP));
-    }
-
-    public void cmdMapGoLeft() {
-        model.putCommandList(createMapGoCommands(LEFT));
-    }
-
-    public void cmdMapGoRight() {
-        model.putCommandList(createMapGoCommands(RIGHT));
-    }
-
-    private List<AbstractCommand> createMapGoCommands(Direction direction) {
-        return new ArrayList<>();
     }
 
     private void cmdFightingAttack(AbstractEnemy enemy) {

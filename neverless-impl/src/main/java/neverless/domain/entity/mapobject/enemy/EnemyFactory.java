@@ -11,10 +11,12 @@ import static neverless.Resources.IMG_GOBLIN;
 @Component
 public class EnemyFactory {
 
-    private static final Integer GOBLIN_HP = 20;
-    private static final Integer GOBLIN_SPEED = 1;
+    private static final int GOBLIN_HP = 20;
+    private static final int GOBLIN_SPEED = 1;
     private static final String GOBLIN_RUST_SWORD_TITLE = "Rust sword";
-    private static final Integer GOBLIN_RUST_SWORD_POWER = 1;
+    private static final int GOBLIN_RUST_SWORD_POWER = 1;
+    private static final int GOBLIN_EXPERIENCE = 10;
+
 
     @Autowired
     private EnemyCommandFactory commandFactory;

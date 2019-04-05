@@ -18,20 +18,4 @@ public class Controller {
     public void startNewGameBtnClick(MouseEvent event) {
         commandCreator.cmdStartNewGame();
     }
-
-    public void moveDownBtnClick(MouseEvent event) {
-        commandCreator.cmdMapGoDown();
-    }
-
-    public void moveUpBtnClick(MouseEvent event) {
-        commandCreator.cmdMapGoUp();
-    }
-
-    public void moveLeftBtnClick(MouseEvent event) {
-        commandCreator.cmdMapGoLeft();
-    }
-
-    public void moveRightBtnClick(MouseEvent event) {
-        commandCreator.cmdMapGoRight();
-    }
 }

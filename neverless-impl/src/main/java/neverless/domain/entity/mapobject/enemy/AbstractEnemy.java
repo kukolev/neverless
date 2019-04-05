@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.BehaviorState;
-import neverless.domain.entity.mapobject.Direction;
 import neverless.PlatformShape;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
 import neverless.domain.entity.mapobject.AbstractMapObject;
@@ -28,7 +27,7 @@ public class AbstractEnemy extends AbstractMapObject {
     private Integer areaY;
     private String signature;
     private Integer agrRange = 50; // todo: should be in constants
-    private Direction walkDirection = Direction.NONE;
+    private int experience;
 
     /**
      * Count of turns while enemy walks in one direction (walkDirection field)
