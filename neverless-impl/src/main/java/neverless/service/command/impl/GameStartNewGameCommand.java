@@ -3,7 +3,7 @@ package neverless.service.command.impl;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.service.command.AbstractCommand;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 import neverless.game.GameLoader;
 
 @Data

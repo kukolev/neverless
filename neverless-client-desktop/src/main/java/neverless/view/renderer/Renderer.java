@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import lombok.Data;
 import neverless.PlatformShape;
 import neverless.context.EventContext;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.dto.event.EventsScreenDataDto;
 import neverless.dto.GameStateDto;

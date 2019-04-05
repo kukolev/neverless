@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
 import neverless.service.command.AbstractCommand;
-import neverless.domain.entity.Behavior;
+import neverless.domain.entity.behavior.Behavior;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.AbstractGameObject;
 import neverless.MapObjectMetaType;

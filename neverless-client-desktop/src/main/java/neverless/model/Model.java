@@ -69,7 +69,7 @@ public class Model extends Task {
                 }
 
                 long t2 = System.nanoTime();
-                long dt = 30 - ((t2 - t) / 1000_000);
+                long dt = 10 - ((t2 - t) / 1000_000);
 
                 if (dt > 1) {
                     try {

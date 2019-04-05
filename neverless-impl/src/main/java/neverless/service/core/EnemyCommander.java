@@ -6,7 +6,7 @@ import neverless.service.command.impl.EnemyMapGoCommand;
 import neverless.service.command.impl.EnemyWaitCommand;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;

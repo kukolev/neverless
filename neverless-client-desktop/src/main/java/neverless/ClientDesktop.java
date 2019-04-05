@@ -10,6 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import static neverless.util.Constants.WINDOW_HEIGHT;
+import static neverless.util.Constants.WINDOW_WIDTH;
+
 @SpringBootApplication
 @EnableCaching
 public class ClientDesktop extends Application {
@@ -26,8 +29,8 @@ public class ClientDesktop extends Application {
         stage.setScene(new Scene(rootPane));
         stage.setResizable(true);
         stage.centerOnScreen();
-        stage.setWidth(1000);
-        stage.setHeight(1000);
+        stage.setWidth(WINDOW_WIDTH);
+        stage.setHeight(WINDOW_HEIGHT);
 
         stage.show();
     }

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;

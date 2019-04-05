@@ -1,4 +1,4 @@
-package neverless.domain.entity;
+package neverless.domain.entity.behavior;
 
 public enum BehaviorState {
     IDLE,

@@ -1,7 +1,6 @@
 package neverless.view;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -21,7 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static neverless.util.Constants.CANVAS_HEIGHT;
+import static neverless.util.Constants.CANVAS_LEFT;
+import static neverless.util.Constants.CANVAS_TOP;
 import static neverless.util.Constants.CANVAS_WIDTH;
+import static neverless.util.Constants.LOG_HEIGHT;
+import static neverless.util.Constants.LOG_LEFT;
+import static neverless.util.Constants.LOG_TOP;
+import static neverless.util.Constants.LOG_WIDTH;
+import static neverless.util.Constants.STATS_HEIGHT;
+import static neverless.util.Constants.STATS_LEFT;
+import static neverless.util.Constants.STATS_TOP;
+import static neverless.util.Constants.STATS_WIDTH;
+import static neverless.util.Constants.WINDOW_HEIGHT;
+import static neverless.util.Constants.WINDOW_WIDTH;
 
 @Component
 public class RootPane extends Pane {
@@ -46,7 +57,6 @@ public class RootPane extends Pane {
         paneList.add(menuPane);
     }
 
-
     @PostConstruct
     public void init() {
         initInventory();
@@ -63,23 +73,31 @@ public class RootPane extends Pane {
     private void initLocalMap() {
         localMapPane.setLayoutX(0);
         localMapPane.setLayoutY(0);
-        localMapPane.setMaxWidth(1000);
-        localMapPane.setMaxHeight(1000);
+        localMapPane.setPrefWidth(WINDOW_WIDTH);
+        localMapPane.setPrefHeight(WINDOW_HEIGHT);
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        canvas.setLayoutX(20);
-        canvas.setLayoutY(20);
+        canvas.setLayoutX(CANVAS_LEFT);
+        canvas.setLayoutY(CANVAS_TOP);
         canvas.setOnMouseClicked(controller::onClick);
+
+        TextArea statsArea = new TextArea();
+        statsArea.setEditable(false);
+        statsArea.setLayoutX(STATS_LEFT);
+        statsArea.setLayoutY(STATS_TOP);
+        statsArea.setPrefWidth(STATS_WIDTH);
+        statsArea.setPrefHeight(STATS_HEIGHT);
 
         TextArea infoArea = new TextArea();
         infoArea.setEditable(false);
-        infoArea.setLayoutX(canvas.getLayoutX() + canvas.getWidth() + 20 + MOVE_BTN_GABARIT * 2);
-        infoArea.setLayoutY(300);
-        infoArea.setMaxWidth(150);
-        infoArea.setMaxHeight(150);
+        infoArea.setLayoutX(LOG_LEFT);
+        infoArea.setLayoutY(LOG_TOP);
+        infoArea.setPrefWidth(LOG_WIDTH);
+        infoArea.setPrefHeight(LOG_HEIGHT);
 
         localMapPane.getChildren().add(canvas);
         localMapPane.getChildren().add(infoArea);
+        localMapPane.getChildren().add(statsArea);
 
         DrawerContext drawerContext = new DrawerContext()
                 .setLocalMapCanvas(canvas)
@@ -92,8 +110,8 @@ public class RootPane extends Pane {
     private void initMainMenu() {
         menuPane.setLayoutX(0);
         menuPane.setLayoutY(0);
-        menuPane.setMaxWidth(1000);
-        menuPane.setMaxHeight(1000);
+        menuPane.setPrefWidth(WINDOW_WIDTH);
+        menuPane.setPrefHeight(WINDOW_HEIGHT);
 
         ImageButton imageButton = new ImageButton(menuPane,
                 new Image("buttons/btn_normal.png"),
@@ -107,8 +125,8 @@ public class RootPane extends Pane {
     private void initInventory() {
         inventoryPane.setLayoutX(0);
         inventoryPane.setLayoutY(0);
-        inventoryPane.setMaxWidth(1000);
-        inventoryPane.setMaxHeight(1000);
+        inventoryPane.setPrefWidth(WINDOW_WIDTH);
+        inventoryPane.setPrefHeight(WINDOW_HEIGHT);
     }
 
     public void setViewState(ViewState viewState) {

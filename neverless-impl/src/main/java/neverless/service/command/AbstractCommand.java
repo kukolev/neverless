@@ -2,7 +2,7 @@ package neverless.service.command;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 
 @Data
 @Accessors(chain = true)

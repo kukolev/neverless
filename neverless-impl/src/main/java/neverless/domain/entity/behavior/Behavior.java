@@ -1,4 +1,4 @@
-package neverless.domain.entity;
+package neverless.domain.entity.behavior;
 
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 

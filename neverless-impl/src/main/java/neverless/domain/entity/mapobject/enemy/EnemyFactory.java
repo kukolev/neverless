@@ -17,7 +17,6 @@ public class EnemyFactory {
     private static final int GOBLIN_RUST_SWORD_POWER = 1;
     private static final int GOBLIN_EXPERIENCE = 10;
 
-
     @Autowired
     private EnemyCommandFactory commandFactory;
 
@@ -32,6 +31,7 @@ public class EnemyFactory {
                 .setHitPoints(GOBLIN_HP)
                 .setSpeed(GOBLIN_SPEED)
                 .setSignature(IMG_GOBLIN)
+                .setExperience(GOBLIN_EXPERIENCE)
                 .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
         goblin
                 .getWeapons().add(sword);

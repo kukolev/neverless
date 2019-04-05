@@ -3,7 +3,7 @@ package neverless.service.core;
 import neverless.service.command.AbstractCommand;
 import neverless.service.command.impl.GameStartNewGameCommand;
 import neverless.service.command.impl.PlayerContinueCommand;
-import neverless.domain.entity.BehaviorState;
+import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.Player;
 import neverless.context.GameContext;
 import org.springframework.beans.factory.annotation.Autowired;
