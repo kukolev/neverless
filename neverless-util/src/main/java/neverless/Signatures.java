@@ -1,6 +1,6 @@
 package neverless;
 
-public class Resources {
+public class Signatures {
 
     public static final String IMG_WALL = "wall.png";
     public static final String IMG_HOUSE_LITTLE = "house_little.png";

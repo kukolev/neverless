@@ -47,13 +47,15 @@ public class Sprite {
     }
 
     /**
-     * Draws sprite on graphical context at x and y platformCoordinates.
+     * Draws sprite on graphical context.
      *
      * @param gc graphical context where we should draw the sprite.
      */
     public void draw(GraphicsContext gc) {
         drawPlatform(gc);
-        gc.drawImage(image, x - width / 2, y - height);
+        int dx = (int) (image.getWidth() / 2);
+        int dy = (height / 2) + (int) (image.getHeight() / 2);
+        gc.drawImage(image, x - dx, y - dy);
     }
 
     private void drawPlatform(GraphicsContext gc) {

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
-import neverless.Resources;
+import neverless.Signatures;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.MapObjectMetaType;
@@ -20,7 +20,7 @@ public class Player extends AbstractMapObject {
 
     @Override
     public String getSignature() {
-        return Resources.IMG_PLAYER;
+        return Signatures.IMG_PLAYER;
     }
 
     @Override

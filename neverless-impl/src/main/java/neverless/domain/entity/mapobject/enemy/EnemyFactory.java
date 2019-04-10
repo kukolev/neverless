@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static neverless.Constants.ENEMY_DEFAULT_WAIT_TIME;
-import static neverless.Resources.IMG_GOBLIN;
+import static neverless.Signatures.IMG_GOBLIN;
 
 @Component
 public class EnemyFactory {

@@ -1,5 +1,6 @@
 package neverless.util;
 
+import neverless.Direction;
 import neverless.domain.entity.mapobject.Coordinate;
 
 import java.util.ArrayList;
@@ -9,8 +10,24 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
+import static neverless.Direction.EAST;
+import static neverless.Direction.NORTH;
+import static neverless.Direction.NORTH_EAST;
+import static neverless.Direction.NORTH_WEST;
+import static neverless.Direction.SOUTH;
+import static neverless.Direction.SOUTH_EAST;
+import static neverless.Direction.SOUTH_WEST;
+import static neverless.Direction.WEST;
 
 public class CoordinateUtils {
+
+    private static final float SIN_000 = 0;
+    private static final float SIN_225 = 0.383f;
+    private static final float SIN_675 = 0.924f;
+    private static final float SIN_900 = 1;
+
+
+
 
     /**
      * Calculates and returns coordinates in direction, defined by target coordinates.
@@ -55,6 +72,45 @@ public class CoordinateUtils {
     public static boolean isCoordinatesInRange(int x1, int y1, int x2, int y2, int range) {
         double realRange = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
         return realRange <= range;
+    }
+
+    /**
+     * Calculates and returns direction relative to (x1,y1) point of view.
+     *
+     * @param x1        first horizontal coordinate.
+     * @param y1        first vertical coordinate.
+     * @param x2        second horizontal coordinate.
+     * @param y2        second vertical coordinate.
+     */
+    public static Direction calcDirection(int x1, int y1, int x2, int y2) {
+        double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        double sinus = (y2 - y1) / distance;
+
+        if (x2 > x1) {
+            if (sinus > -SIN_900 && sinus < -SIN_675) {
+                return NORTH;
+            } else if (sinus > -SIN_675 && sinus <= -SIN_225) {
+                return NORTH_EAST;
+            } else if (sinus > -SIN_225 && sinus <= SIN_225) {
+                return EAST;
+            } else if (sinus > SIN_225 && sinus <= SIN_675) {
+                return SOUTH_EAST;
+            } else {
+                return SOUTH;
+            }
+        } else {
+            if (sinus < -SIN_675) {
+                return NORTH;
+            } else if (sinus >= -SIN_675 && sinus < -SIN_225) {
+                return NORTH_WEST;
+            } else if (sinus >= -SIN_225 && sinus < SIN_225) {
+                return WEST;
+            } else if (sinus >= SIN_225 && sinus < SIN_675) {
+                return SOUTH_WEST;
+            } else {
+                return SOUTH;
+            }
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 package neverless.domain.entity.mapobject.building;
 
-import neverless.Resources;
+import neverless.Signatures;
 
 public final class LongVillageHouse extends AbstractBuilding {
 
@@ -16,6 +16,6 @@ public final class LongVillageHouse extends AbstractBuilding {
 
     @Override
     public String getSignature() {
-        return Resources.IMG_HOUSE_LONG;
+        return Signatures.IMG_HOUSE_LONG;
     }
 }

@@ -3,7 +3,7 @@ package neverless.game.npc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.Resources;
+import neverless.Signatures;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
 
 @Data
@@ -16,6 +16,6 @@ public final class OldMan extends AbstractNpc {
 
     @Override
     public String getSignature() {
-        return Resources.IMG_OLD_MAN;
+        return Signatures.IMG_OLD_MAN;
     }
 }

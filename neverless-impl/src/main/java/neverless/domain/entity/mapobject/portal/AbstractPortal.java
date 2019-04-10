@@ -3,7 +3,7 @@ package neverless.domain.entity.mapobject.portal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.Resources;
+import neverless.Signatures;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.MapObjectMetaType;
@@ -20,7 +20,7 @@ public class AbstractPortal extends AbstractMapObject {
 
     @Override
     public String getSignature() {
-        return Resources.IMG_PORTAL;
+        return Signatures.IMG_PORTAL;
     }
 
     @Override

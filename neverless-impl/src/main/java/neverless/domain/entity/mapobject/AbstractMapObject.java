@@ -3,6 +3,7 @@ package neverless.domain.entity.mapobject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import neverless.Direction;
 import neverless.PlatformShape;
 import neverless.service.command.AbstractCommand;
 import neverless.domain.entity.behavior.Behavior;
@@ -23,6 +24,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
     private Integer height = 32;
     private Integer width = 32;
     private Location location;
+    private Direction direction = Direction.NORTH;
     private Behavior behavior = new Behavior();
     private AbstractCommand command;
 
@@ -38,14 +40,15 @@ public abstract class AbstractMapObject extends AbstractGameObject {
      * Returns default value for object platformWidth.
      */
     public int getPlatformWidth() {
-        return 32;
+        return width;
     }
 
     /**
      * Returns default value for object platformHeight.
      */
     public int getPlatformHeight() {
-        return 16;
+        // div by 3 just for beauty
+        return getPlatformWidth() / 3;
     }
 
     /**

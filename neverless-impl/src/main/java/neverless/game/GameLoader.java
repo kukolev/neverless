@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.Resources.IMG_VILLAGE_BACKGROUND;
+import static neverless.Signatures.IMG_VILLAGE_BACKGROUND;
 
 @Component
 public class GameLoader {
@@ -113,6 +113,8 @@ public class GameLoader {
         Player player = new Player();
         player
                 .setInventory(inventory)
+                .setWidth(64)
+                .setHeight(96)
                 .setX(1600)
                 .setY(1600);
         return player;
@@ -121,7 +123,7 @@ public class GameLoader {
     private void createHouse(Location location) {
         AbstractBuilding building = new LargeVillageHouse();
         building
-                .setX(1900)
+                .setX(1800)
                 .setY(1500)
                 .setWidth(162)
                 .setHeight(157)

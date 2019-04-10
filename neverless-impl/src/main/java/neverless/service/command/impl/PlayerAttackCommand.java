@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import static neverless.util.CoordinateUtils.calcDirection;
 import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
@@ -40,6 +41,7 @@ public class PlayerAttackCommand extends AbstractCommand {
             if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
                 player.setX(coordinate.getX());
                 player.setY(coordinate.getY());
+                player.setDirection(calcDirection(player.getX(), player.getY(), enemy.getX(), enemy.getY()));
                 eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY());
             } else {
                 eventContext.addMapGoImpossibleEvent(player.getUniqueName());
