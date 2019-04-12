@@ -33,9 +33,13 @@ public class Sprite {
     private int platformShapeWidth;
     private int platformShapeHeight;
     private MapObjectMetaType metaType;
-    private String id;
 
-
+    /**
+     * Returns id of associated object.
+     */
+    public String getId() {
+        return mapObject.getUniqueName();
+    }
 
     /**
      * Constructor for Sprite.
@@ -56,6 +60,19 @@ public class Sprite {
         int dx = (int) (image.getWidth() / 2);
         int dy = (height / 2) + (int) (image.getHeight() / 2);
         gc.drawImage(image, x - dx, y - dy);
+    }
+
+    /**
+     * Draws high-light effect on sprite.
+     *
+     * @param gc graphical context where we should draw the sprite.
+     */
+    public void drawHighLight(GraphicsContext gc) {
+        int dx = (int) (image.getWidth() / 2);
+        int dy = (height / 2) + (int) (image.getHeight() / 2);
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(1);
+        gc.strokeRect(x - dx, y - dy, image.getWidth(), image.getWidth());
     }
 
     private void drawPlatform(GraphicsContext gc) {

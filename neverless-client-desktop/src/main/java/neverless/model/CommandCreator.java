@@ -4,22 +4,19 @@ import neverless.service.command.factory.GameCommandFactory;
 import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
-import neverless.service.command.AbstractCommand;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
+import neverless.view.drawer.ViewContext;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 import static neverless.MapObjectMetaType.TERRAIN;
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
+import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
 
 @Component
 public class CommandCreator {
@@ -32,6 +29,8 @@ public class CommandCreator {
     private PlayerCommandFactory commandFactory;
     @Autowired
     private GameCommandFactory gameCommandFactory;
+    @Autowired
+    private ViewContext viewContext;
 
     /**
      * Evaluates a command that should be performed by clicking in some coordinates.
@@ -43,7 +42,7 @@ public class CommandCreator {
     public void click(int screenX, int screenY) {
         Frame frame = frameExchanger.getFrame();
 
-        Sprite sprite = getSpriteAtScreenCoordinates(frame, screenX, screenY);
+        Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
         MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
         Player player = frame.getGameState().getGame().getPlayer();
 
@@ -70,6 +69,10 @@ public class CommandCreator {
         }
     }
 
+    public void mouseMove(int screenX, int screenY) {
+        viewContext.setScreenPoint(screenX, screenY);
+    }
+
     /**
      * Creates command for new game start.
      */
@@ -82,20 +85,6 @@ public class CommandCreator {
         model.putCommand(commandFactory.createPlayerAttackCommand(enemy));
     }
 
-    private Sprite getSpriteAtScreenCoordinates(Frame frame, int screenX, int screenY) {
-        List<Sprite> sprites = frame.getSprites().stream()
-                .filter(s -> screenX >= s.getX() - s.getWidth() / 2 &&
-                        screenX <= s.getX() + s.getWidth() / 2 &&
-                        screenY >= s.getY() - s.getHeight() &&
-                        screenY <= s.getY())
-                .collect(Collectors.toList());
-        if (sprites.size() > 0) {
-            return sprites.get(sprites.size() - 1);
-        } else {
-            return null;
-        }
-    }
-
     /**
      * Converts and returns coordinate, aligned to coordinates grid, defined via LOCAL_MAP_STEP_LENGTH.
      *
@@ -104,5 +93,4 @@ public class CommandCreator {
     private int alignToGrid(int coordinate) {
         return LOCAL_MAP_STEP_LENGTH * (coordinate / LOCAL_MAP_STEP_LENGTH);
     }
-
 }

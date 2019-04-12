@@ -37,8 +37,6 @@ import static neverless.util.Constants.WINDOW_WIDTH;
 @Component
 public class RootPane extends Pane {
 
-    private static final int MOVE_BTN_GABARIT = 40;
-
     @Autowired
     private Controller controller;
     @Autowired
@@ -80,6 +78,7 @@ public class RootPane extends Pane {
         canvas.setLayoutX(CANVAS_LEFT);
         canvas.setLayoutY(CANVAS_TOP);
         canvas.setOnMouseClicked(controller::onClick);
+        canvas.setOnMouseMoved(controller::onMouseMoved);
 
         TextArea statsArea = new TextArea();
         statsArea.setEditable(false);

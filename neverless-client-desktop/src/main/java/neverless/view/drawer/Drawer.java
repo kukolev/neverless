@@ -42,6 +42,7 @@ public class Drawer implements ChangeListener<String> {
         Frame frame = frameExchanger.getFrame();
         displayGameState(frame.getGameState());
         displayLocalMap(frame.getBackground(), frame.getSprites());
+        displayHighLights(frame.getSprites(), frame.getHighLighted());
     }
 
     /**
@@ -56,6 +57,20 @@ public class Drawer implements ChangeListener<String> {
             background.draw(gc);
             sprites.forEach(s -> s.draw(gc));
         }
+    }
+
+    /**
+     * Draws high-light effects for all sprites.
+     *
+     * @param sprites   list of all sprites.
+     * @param ids       list of sprites ids.
+     */
+    private void displayHighLights(List<Sprite> sprites, List<String> ids) {
+        GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+        sprites.stream()
+                .filter(s -> ids.contains(s.getId()))
+                .forEach(s -> s.drawHighLight(gc));
+        ids.forEach(System.out::println);
     }
 
     /**

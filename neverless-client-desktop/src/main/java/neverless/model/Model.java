@@ -5,6 +5,8 @@ import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.dto.GameStateDto;
 import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
+import neverless.view.drawer.DrawerContext;
+import neverless.view.drawer.ViewContext;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class Model extends Task {
     private FrameExchanger frameExchanger;
     @Autowired
     private PlayerCommandFactory playerCommandFactory;
+    @Autowired
+    private ViewContext viewContext;
 
     private volatile boolean isWorking = true;
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
@@ -104,7 +108,8 @@ public class Model extends Task {
             GameStateDto gameState = resolver.resolve(command);
 
             // render frame for response
-            Frame frame = renderer.calcFrame(gameState);
+            viewContext.setGameStateDto(gameState);
+            Frame frame = renderer.calcFrame();
 
             // store frame and send acknowledge to Drawer
             frameExchanger.setFrame(frame);

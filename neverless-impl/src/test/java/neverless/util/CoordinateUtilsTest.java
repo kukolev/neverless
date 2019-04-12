@@ -18,28 +18,28 @@ public class CoordinateUtilsTest {
     @Test
     public void testPlayer1010Enemy2020() {
         Coordinate coordinate = calcNextStep(10, 10, 20, 20);
-        assertEquals(coordinate.getX(), 13);
-        assertEquals(coordinate.getY(), 13);
+        assertEquals(coordinate.getX(), 12);
+        assertEquals(coordinate.getY(), 12);
     }
 
     @Test
     public void testPlayer2020Enemy1010() {
         Coordinate coordinate = calcNextStep(20, 20, 10, 10);
-        assertEquals(coordinate.getX(), 17);
-        assertEquals(coordinate.getY(), 17);
+        assertEquals(coordinate.getX(), 18);
+        assertEquals(coordinate.getY(), 18);
     }
 
     @Test
     public void testPlayer1010Enemy1020() {
         Coordinate coordinate = calcNextStep(10, 10, 10, 20);
         assertEquals(coordinate.getX(), 10);
-        assertEquals(coordinate.getY(), 15);
+        assertEquals(coordinate.getY(), 13);
     }
 
     @Test
     public void testPlayer1010Enemy2010() {
         Coordinate coordinate = calcNextStep(10, 10, 20, 10);
-        assertEquals(coordinate.getX(), 15);
+        assertEquals(coordinate.getX(), 13);
         assertEquals(coordinate.getY(), 10);
     }
 

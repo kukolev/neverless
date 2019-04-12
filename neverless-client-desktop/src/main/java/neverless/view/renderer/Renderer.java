@@ -9,6 +9,7 @@ import neverless.dto.event.EventsScreenDataDto;
 import neverless.dto.GameStateDto;
 import neverless.resource.Resource;
 import neverless.resource.ResourceKeeper;
+import neverless.view.drawer.ViewContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 import static neverless.Constants.ANIMATION_SLOW_FACTOR;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
+import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
 import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
 
 @Component
@@ -29,6 +31,8 @@ public class Renderer {
     private SpriteRepository spriteRepository;
     @Autowired
     private ResourceKeeper resourceKeeper;
+    @Autowired
+    private ViewContext viewContext;
 
     private Map<String, Phase> cache = new HashMap<>();
 
@@ -49,10 +53,9 @@ public class Renderer {
 
     /**
      * Calculates and returns frames should be painted on game screen.
-     *
-     * @param gameStateDto response from backend that include game state in concrete time.
      */
-    public Frame calcFrame(GameStateDto gameStateDto) {
+    public Frame calcFrame() {
+        GameStateDto gameStateDto = viewContext.getGameStateDto();
         double playerX = gameStateDto.getGame().getPlayer().getX();
         double playerY = gameStateDto.getGame().getPlayer().getY();
 
@@ -70,7 +73,28 @@ public class Renderer {
         }
         frame.setSprites(calcRenderOrder(sprites));
         frame.setGameState(gameStateDto);
+
+        calcEffects(frame);
+
         return frame;
+    }
+
+    /**
+     * Calculates and puts visual effects to frame.
+     *
+     * @param frame     frame that contains all rendered information for drawing.
+     */
+    private void calcEffects(Frame frame) {
+        // todo: check for possible race condition!
+        int screenX = viewContext.getScreenX();
+        int screenY = viewContext.getScreenY();
+
+        if (frame != null) {
+            Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
+            if (sprite != null) {
+                frame.addHighLighted(sprite.getId(), true);
+            }
+        }
     }
 
     private Sprite calcBackground(String signature, double playerX, double playerY) {
@@ -112,8 +136,7 @@ public class Renderer {
                 .setPlatformShapeHeight(object.getPlatformHeight())
                 .setHeight(object.getHeight())
                 .setWidth(object.getWidth())
-                .setMetaType(object.getMetaType())
-                .setId(object.getUniqueName());
+                .setMetaType(object.getMetaType());
     }
 
     private Resource calcResource(AbstractMapObject object) {

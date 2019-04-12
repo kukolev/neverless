@@ -15,6 +15,10 @@ public class Controller {
         commandCreator.click((int) event.getX(), (int) event.getY());
     }
 
+    public void onMouseMoved(MouseEvent event) {
+        commandCreator.mouseMove((int) event.getX(), (int) event.getY());
+    }
+
     public void startNewGameBtnClick(MouseEvent event) {
         commandCreator.cmdStartNewGame();
     }

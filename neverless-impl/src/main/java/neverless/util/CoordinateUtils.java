@@ -21,13 +21,9 @@ import static neverless.Direction.WEST;
 
 public class CoordinateUtils {
 
-    private static final float SIN_000 = 0;
     private static final float SIN_225 = 0.383f;
     private static final float SIN_675 = 0.924f;
     private static final float SIN_900 = 1;
-
-
-
 
     /**
      * Calculates and returns coordinates in direction, defined by target coordinates.
@@ -114,7 +110,7 @@ public class CoordinateUtils {
     }
 
     /**
-     * Returns true if two ellipses have one or common points.
+     * Returns true if two ellipses have one or more common points.
      *
      * @param x1 horizontal coordinate of first ellipse center.
      * @param y1 vertical coordinate of first ellipse center.

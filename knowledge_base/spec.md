@@ -28,6 +28,9 @@ This paragraph includes main features descriptions. Every feature related to one
 
 ### Location game screen
 
+#### Objects high-light
+* All game objects high-lighted on mouse over.
+
 #### Player movement
 * Player is able to move through the area of location
 * Player can't move through impossible terrain
