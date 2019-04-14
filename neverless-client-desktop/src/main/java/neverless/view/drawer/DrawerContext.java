@@ -14,5 +14,6 @@ import org.springframework.stereotype.Component;
 public class DrawerContext {
 
     private Canvas localMapCanvas;
-    private TextArea infoArea;
+    private TextArea statesArea;
+    private TextArea logArea;
 }

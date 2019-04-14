@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import neverless.util.FrameExchanger;
 import neverless.view.domain.Frame;
 import neverless.view.domain.DestinationMarkerEffect;
+import neverless.view.domain.ProfileWidget;
 import neverless.view.domain.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,11 +22,11 @@ public class Drawer implements ChangeListener<String> {
     private DrawerContext context;
 
     /**
-     * Sets graphic context.
+     * Sets drawer context.
      *
-     * @param context context.
+     * @param context Context that contains drawing containers and tools.
      */
-    public void setGraphicsContext(DrawerContext context) {
+    public void setDrawerContext(DrawerContext context) {
         this.context = context;
     }
 
@@ -38,12 +39,11 @@ public class Drawer implements ChangeListener<String> {
      */
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         Frame frame = frameExchanger.getFrame();
-        //displayGameState(frame.getGameState());
+        displayGameState(frame.getProfileWidget());
         displayLog(frame.getLog());
         displayLocalMap(frame.getBackground(), frame.getSprites());
         displayHighLights(frame.getSprites(), frame.getHighLighted());
         displayMarker(frame.getMarker());
-
     }
 
     /**
@@ -77,8 +77,8 @@ public class Drawer implements ChangeListener<String> {
     /**
      * Displays details from game state on panes.
      */
-    private void displayGameState() {
-        // todo: implement it!
+    private void displayGameState(ProfileWidget profileWidget) {
+        profileWidget.draw(context);
     }
 
     /**
@@ -99,7 +99,7 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayLog(List<String> log) {
         log.forEach(s -> {
-            context.getInfoArea().appendText("\n" + s);
+            context.getLogArea().appendText("\n" + s);
         });
     }
 }

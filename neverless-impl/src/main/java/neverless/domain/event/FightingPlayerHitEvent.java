@@ -14,7 +14,7 @@ public class FightingPlayerHitEvent extends AbstractEvent {
 
     @Override
     public String toString() {
-        return String.format("Enemy %s hits: %s", enemyId, damage);
+        return String.format("Enemy %s gains damage: %s", enemyId, damage);
     }
 
     @Override

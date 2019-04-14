@@ -13,7 +13,7 @@ public class FightingEnemyKilledEvent extends AbstractEvent {
 
     @Override
     public String toString() {
-        return String.format("Enemy %s killed", enemyId);
+        return String.format("Enemy %s is dead", enemyId);
     }
 
     @Override

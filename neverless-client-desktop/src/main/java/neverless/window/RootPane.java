@@ -100,9 +100,10 @@ public class RootPane extends Pane {
 
         DrawerContext drawerContext = new DrawerContext()
                 .setLocalMapCanvas(canvas)
-                .setInfoArea(infoArea);
+                .setStatesArea(statsArea)
+                .setLogArea(infoArea);
 
-        drawer.setGraphicsContext(drawerContext);
+        drawer.setDrawerContext(drawerContext);
         model.messageProperty().addListener(drawer);
     }
 

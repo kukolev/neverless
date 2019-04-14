@@ -16,6 +16,7 @@ public class Frame {
     private List<Sprite> sprites = new ArrayList<>();
     private List<String> log = new ArrayList<>();
     private DestinationMarkerEffect marker;
+    private ProfileWidget profileWidget = new ProfileWidget();
 
     /**
      * Container for object ids that should be high-lighted

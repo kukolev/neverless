@@ -27,6 +27,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
     private Direction direction = Direction.NORTH;
     private Behavior behavior = new Behavior();
     private AbstractCommand command;
+    private Profile profile = new Profile();
 
     /**
      * Returns default value for

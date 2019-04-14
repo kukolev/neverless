@@ -8,6 +8,8 @@ import neverless.context.GameContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.Profile;
 import neverless.model.domain.DestinationMarkerData;
 import neverless.view.domain.DestinationMarkerEffect;
 import neverless.view.domain.Frame;
@@ -83,8 +85,20 @@ public class Renderer {
         calcEffects(frame, viewContext);
         calcLogs(frame);
         calcMarker(frame, viewContext, playerX, playerY);
+        calcProfile(frame);
 
         return frame;
+    }
+
+    /**
+     * Fills profile widget in frame.
+     *
+     * @param frame     frame that contains all rendered information for drawing.
+     */
+    private void calcProfile(Frame frame) {
+        Player player = gameContext.getPlayer();
+        Profile profile = player.getProfile();
+        frame.getProfileWidget().mapFromProfile(profile);
     }
 
     /**

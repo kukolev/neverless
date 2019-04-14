@@ -57,3 +57,6 @@ This paragraph includes main features descriptions. Every feature related to one
 * Displayable events:
   * FightingPlayerHitEvent
   * FightingEnemyKilledEvent
+  
+#### Profile display
+* Player profile displayed on GUI
