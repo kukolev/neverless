@@ -27,7 +27,7 @@ public class EnemyMapGoCommand extends AbstractCommand {
         if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
             enemy.setX(coordinate.getX());
             enemy.setY(coordinate.getY());
-            eventContext.addMapGoEvent(enemy.getUniqueName(), enemy.getX(), enemy.getY());
+            eventContext.addMapGoEvent(enemy.getUniqueName(), enemy.getX(), enemy.getY(), x, y);
         } else {
             eventContext.addMapGoImpossibleEvent(enemy.getUniqueName());
         }

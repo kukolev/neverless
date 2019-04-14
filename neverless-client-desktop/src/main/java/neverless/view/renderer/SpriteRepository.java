@@ -5,7 +5,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import neverless.resource.Resource;
+import neverless.view.resource.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

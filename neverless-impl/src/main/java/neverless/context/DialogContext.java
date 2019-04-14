@@ -2,29 +2,21 @@ package neverless.context;
 
 import neverless.domain.dialog.Dialog;
 import neverless.domain.dialog.NpcPhrase;
-import neverless.util.SessionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
- *  Context of current dialog.
- *  Stores dialog state for game session.
+ * Context of current dialog.
+ * Stores dialog state for game session.
  */
 @Component
 public class DialogContext {
 
-    @Autowired
-    private SessionUtil sessionUtil;
-
-    private Map<String, DialogPack> packs = new ConcurrentHashMap<>();
+    private DialogPack pack;
 
     /**
      * Adds dialog to context.
      *
-     * @param dialog    dialog.
+     * @param dialog dialog.
      */
     public void add(Dialog dialog) {
         DialogPack pack = getOrCreatePack();
@@ -44,8 +36,8 @@ public class DialogContext {
     /**
      * Adds couple of dialog and npc phrase to context.
      *
-     * @param dialog        dialog.
-     * @param npcPhrase     npc phrase.
+     * @param dialog    dialog.
+     * @param npcPhrase npc phrase.
      */
     public void add(Dialog dialog, NpcPhrase npcPhrase) {
         DialogPack pack = getOrCreatePack();
@@ -54,37 +46,44 @@ public class DialogContext {
                 .setNpcPhrase(npcPhrase);
     }
 
-    /** Returns dialog from context */
+    /**
+     * Returns dialog from context
+     */
     public Dialog getDialog() {
         DialogPack pack = getOrCreatePack();
         return pack.getDialog();
     }
 
-    /** Returns npc phrase from context */
+    /**
+     * Returns npc phrase from context
+     */
     public NpcPhrase getNpcPhrase() {
         DialogPack pack = getOrCreatePack();
         return pack.getNpcPhrase();
     }
 
-    /** Clears dialog */
+    /**
+     * Clears dialog
+     */
     public void clearDialog() {
         DialogPack pack = getOrCreatePack();
         pack.setDialog(null);
     }
 
-    /** Clears npc phrase */
+    /**
+     * Clears npc phrase
+     */
     public void clearNpcPhrase() {
         DialogPack pack = getOrCreatePack();
         pack.setNpcPhrase(null);
     }
 
-    /** Returns dialog pack from cache. Creates the pack if absent. */
+    /**
+     * Returns dialog pack from cache. Creates the pack if absent.
+     */
     private DialogPack getOrCreatePack() {
-        String key = sessionUtil.getGameId();
-        DialogPack pack = packs.get(key);
         if (pack == null) {
             pack = new DialogPack();
-            packs.put(key, pack);
         }
         return pack;
     }

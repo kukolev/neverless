@@ -1,16 +1,15 @@
 package neverless.model;
 
 import neverless.service.command.impl.GameStartNewGameCommand;
-import neverless.dto.GameStateDto;
 import neverless.service.command.AbstractCommand;
 import neverless.service.core.BackendService;
-import neverless.view.RootPane;
-import neverless.view.ViewState;
+import neverless.window.RootPane;
+import neverless.window.ViewState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-class ResolverRouterService {
+class CommandResolver {
 
     @Autowired
     private BackendService backendService;
@@ -18,15 +17,15 @@ class ResolverRouterService {
     private RootPane rootPane;
 
     /**
-     * Resolves command via mapped resolver. Returns GameStateDto.
+     * Resolves command via mapped resolver.
      *
      * @param command   command that should be resolved.
      */
-    public GameStateDto resolve(AbstractCommand command) {
+    public void resolve(AbstractCommand command) {
         // Start New Game command
         if (command instanceof GameStartNewGameCommand) {
             rootPane.setViewState(ViewState.LOCAL_MAP);
         }
-        return backendService.resolveCommand(command);
+        backendService.resolveCommand(command);
     }
 }

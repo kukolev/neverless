@@ -42,7 +42,7 @@ public class PlayerAttackCommand extends AbstractCommand {
                 player.setX(coordinate.getX());
                 player.setY(coordinate.getY());
                 player.setDirection(calcDirection(player.getX(), player.getY(), enemy.getX(), enemy.getY()));
-                eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY());
+                eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), enemy.getX(), enemy.getY());
             } else {
                 eventContext.addMapGoImpossibleEvent(player.getUniqueName());
             }
@@ -59,13 +59,13 @@ public class PlayerAttackCommand extends AbstractCommand {
                     enemy.decreaseHitPoints(damage);
                     if (enemy.getHitPoints() <= 0) {
                         killEnemy(enemy);
-                        eventContext.addFightingEnemyKillEvent(player.getUniqueName(), enemy.getUniqueName());
+                        eventContext.addFightingEnemyKillEvent(enemy.getUniqueName());
                     } else {
-                        eventContext.addFightingPlayerHitEvent(player.getUniqueName(), enemy.getUniqueName(), damage);
+                        eventContext.addFightingPlayerHitEvent(enemy.getUniqueName(), damage);
                     }
                 } else {
                     // Player misses.
-                    eventContext.addFightingPlayerMissEvent(player.getUniqueName(), enemy.getUniqueName());
+                    eventContext.addFightingPlayerMissEvent(enemy.getUniqueName());
                 }
             }
             return BehaviorState.ATTACK;

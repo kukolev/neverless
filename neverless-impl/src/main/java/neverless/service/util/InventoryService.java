@@ -30,7 +30,7 @@ public class InventoryService {
         inventory.getEquipment().setRightHand(newWeapon);
         inventory.getBag().remove(newWeapon);
         Player player = gameContext.getPlayer();
-        eventContext.addInventoryRightHandEquipEvent(player.getUniqueName());
+        eventContext.addInventoryRightHandEquipEvent();
     }
 
     /**
@@ -46,7 +46,7 @@ public class InventoryService {
         inventory.getEquipment().setLeftHand(newWeapon);
         inventory.getBag().remove(newWeapon);
         Player player = gameContext.getPlayer();
-        eventContext.addInventoryLeftHandEquipEvent(player.getUniqueName());
+        eventContext.addInventoryLeftHandEquipEvent();
     }
 
     /**

@@ -29,7 +29,7 @@ public class PlayerMapGoCommand extends AbstractCommand {
             player.setDirection(calcDirection(player.getX(), player.getY(), x, y));
             player.setX(coordinate.getX());
             player.setY(coordinate.getY());
-            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY());
+            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), x, y);
         } else {
             eventContext.addMapGoImpossibleEvent(player.getUniqueName());
         }

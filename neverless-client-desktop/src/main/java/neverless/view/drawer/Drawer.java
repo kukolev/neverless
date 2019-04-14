@@ -3,15 +3,13 @@ package neverless.view.drawer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
-import neverless.domain.entity.mapobject.Player;
-import neverless.dto.GameStateDto;
 import neverless.util.FrameExchanger;
 import neverless.view.renderer.Frame;
+import neverless.view.renderer.DestinationMarkerEffect;
 import neverless.view.renderer.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -40,9 +38,12 @@ public class Drawer implements ChangeListener<String> {
      */
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         Frame frame = frameExchanger.getFrame();
-        displayGameState(frame.getGameState());
+        //displayGameState(frame.getGameState());
+        displayLog(frame.getLog());
         displayLocalMap(frame.getBackground(), frame.getSprites());
         displayHighLights(frame.getSprites(), frame.getHighLighted());
+        displayMarker(frame.getMarker());
+
     }
 
     /**
@@ -62,8 +63,8 @@ public class Drawer implements ChangeListener<String> {
     /**
      * Draws high-light effects for all sprites.
      *
-     * @param sprites   list of all sprites.
-     * @param ids       list of sprites ids.
+     * @param sprites list of all sprites.
+     * @param ids     list of sprites ids.
      */
     private void displayHighLights(List<Sprite> sprites, List<String> ids) {
         GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
@@ -75,25 +76,30 @@ public class Drawer implements ChangeListener<String> {
 
     /**
      * Displays details from game state on panes.
-     *
-     * @param gameState game state for displaying.
      */
-    private void displayGameState(GameStateDto gameState) {
-        if (gameState != null) {
-           // Player player = gameState.getGame().getPlayer();
-//            String health = "Health points: " + player.getHitPoints();
-//            context.getInfoArea().setText(health);
+    private void displayGameState() {
+        // todo: implement it!
+    }
 
-            gameState
-                    .getEventsScreenDataDto()
-                    .getEvents()
-                    .values()
-                    .stream()
-                    .flatMap(Collection::stream)
-                    .forEach(e -> {
-                        if (e.displayable())
-                        context.getInfoArea().appendText("\n" + e.toString());
-                    });
+    /**
+     * Draws destination marker.
+     *
+     * @param markerEffect  destination marker effect.
+     */
+    private void displayMarker(DestinationMarkerEffect markerEffect) {
+        if (markerEffect != null) {
+            markerEffect.draw(context.getLocalMapCanvas().getGraphicsContext2D());
         }
+    }
+
+    /**
+     * Displays log in specified log area.
+     *
+     * @param log   list of log items.
+     */
+    private void displayLog(List<String> log) {
+        log.forEach(s -> {
+            context.getInfoArea().appendText("\n" + s);
+        });
     }
 }

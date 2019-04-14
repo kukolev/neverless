@@ -2,12 +2,7 @@ package neverless.context;
 
 import neverless.domain.entity.Game;
 import neverless.domain.entity.mapobject.Player;
-import neverless.util.SessionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Cache for game object.
@@ -16,18 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 public class GameContext {
 
-    @Autowired
-    private SessionUtil sessionUtil;
-
-    private Map<String, Game> cache = new ConcurrentHashMap<>();
+    private Game game;
 
     /**
      * Returns game object from cache.
      * Loads game object from persistence layer if the object canProcessObject absent in cache.
      */
     public Game getGame() {
-        String id = sessionUtil.getGameId();
-        return cache.get(id);
+       return game;
     }
 
     public Player getPlayer() {
@@ -35,6 +26,6 @@ public class GameContext {
     }
 
     public void save(Game game) {
-        cache.put(sessionUtil.getGameId(), game);
+       this.game = game;
     }
 }

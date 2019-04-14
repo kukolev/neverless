@@ -31,6 +31,9 @@ This paragraph includes main features descriptions. Every feature related to one
 #### Objects high-light
 * All game objects high-lighted on mouse over.
 
+#### Destination marker
+* A special marker visualizes the point to which the player goes.
+
 #### Player movement
 * Player is able to move through the area of location
 * Player can't move through impossible terrain

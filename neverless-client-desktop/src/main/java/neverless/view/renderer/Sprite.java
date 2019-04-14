@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(exclude = "mapObject")
-public class Sprite {
+public class Sprite extends AbstractViewObject {
 
     private AbstractMapObject mapObject;
     private Image image;
@@ -55,6 +55,7 @@ public class Sprite {
      *
      * @param gc graphical context where we should draw the sprite.
      */
+    @Override
     public void draw(GraphicsContext gc) {
         drawPlatform(gc);
         int dx = (int) (image.getWidth() / 2);

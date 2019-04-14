@@ -1,12 +1,13 @@
-package neverless.model;
+package neverless.controller;
 
+import neverless.context.GameContext;
+import neverless.model.Model;
 import neverless.service.command.factory.GameCommandFactory;
 import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
-import neverless.view.drawer.ViewContext;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static neverless.util.Constants.CANVAS_CENTER_Y;
 import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
 
 @Component
-public class CommandCreator {
+public class ControlHandler {
 
     @Autowired
     private FrameExchanger frameExchanger;
@@ -30,7 +31,7 @@ public class CommandCreator {
     @Autowired
     private GameCommandFactory gameCommandFactory;
     @Autowired
-    private ViewContext viewContext;
+    private GameContext gameContext;
 
     /**
      * Evaluates a command that should be performed by clicking in some coordinates.
@@ -44,7 +45,7 @@ public class CommandCreator {
 
         Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
         MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
-        Player player = frame.getGameState().getGame().getPlayer();
+        Player player = gameContext.getPlayer();
 
         switch (metaType) {
             case TERRAIN:
@@ -70,7 +71,7 @@ public class CommandCreator {
     }
 
     public void mouseMove(int screenX, int screenY) {
-        viewContext.setScreenPoint(screenX, screenY);
+        model.setScreenPoint(screenX, screenY);
     }
 
     /**

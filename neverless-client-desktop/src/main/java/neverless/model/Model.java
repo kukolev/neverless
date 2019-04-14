@@ -1,18 +1,15 @@
 package neverless.model;
 
 import javafx.concurrent.Task;
+import neverless.model.domain.ViewContext;
 import neverless.service.command.factory.PlayerCommandFactory;
-import neverless.dto.GameStateDto;
 import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
-import neverless.view.drawer.DrawerContext;
-import neverless.view.drawer.ViewContext;
 import neverless.view.renderer.Frame;
 import neverless.view.renderer.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -21,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Model extends Task {
 
     @Autowired
-    private ResolverRouterService resolver;
+    private CommandResolver resolver;
     @Autowired
     private Renderer renderer;
     @Autowired
@@ -29,20 +26,11 @@ public class Model extends Task {
     @Autowired
     private PlayerCommandFactory playerCommandFactory;
     @Autowired
-    private ViewContext viewContext;
+    private EventHandler eventHandler;
 
     private volatile boolean isWorking = true;
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
-
-    /**
-     * Clears command queue and adds list of commands.
-     *
-     * @param commandList list of command added to queue.
-     */
-    public void putCommandList(List<AbstractCommand> commandList) {
-        queue.clear();
-        queue.addAll(commandList);
-    }
+    private ViewContext viewContext = new ViewContext();
 
     /**
      * Clears command queue and adds one command.
@@ -52,6 +40,16 @@ public class Model extends Task {
     public void putCommand(AbstractCommand command) {
         queue.clear();
         queue.add(command);
+    }
+
+    /**
+     * Sets information of mouse pointer coordinates.
+     *
+     * @param screenX   horizontal coordinate.
+     * @param screenY   vertical coordinate.
+     */
+    public void setScreenPoint(int screenX, int screenY) {
+        viewContext.setScreenPoint(screenX, screenY);
     }
 
     @Override
@@ -105,11 +103,13 @@ public class Model extends Task {
      */
     private void resolveCommand(AbstractCommand command) {
             // send command to backend and get response
-            GameStateDto gameState = resolver.resolve(command);
+            resolver.resolve(command);
+
+            // handle events
+            eventHandler.handleEvents(viewContext);
 
             // render frame for response
-            viewContext.setGameStateDto(gameState);
-            Frame frame = renderer.calcFrame();
+            Frame frame = renderer.calcFrame(viewContext);
 
             // store frame and send acknowledge to Drawer
             frameExchanger.setFrame(frame);

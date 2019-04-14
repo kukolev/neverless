@@ -3,13 +3,15 @@ package neverless.view.renderer;
 import javafx.scene.image.Image;
 import lombok.Data;
 import neverless.PlatformShape;
+import neverless.context.EventContext;
+import neverless.context.GameContext;
+import neverless.domain.entity.Game;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.dto.event.EventsScreenDataDto;
-import neverless.dto.GameStateDto;
-import neverless.resource.Resource;
-import neverless.resource.ResourceKeeper;
-import neverless.view.drawer.ViewContext;
+import neverless.model.domain.DestinationMarkerData;
+import neverless.view.resource.Resource;
+import neverless.view.resource.ResourceKeeper;
+import neverless.model.domain.ViewContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +34,9 @@ public class Renderer {
     @Autowired
     private ResourceKeeper resourceKeeper;
     @Autowired
-    private ViewContext viewContext;
+    private GameContext gameContext;
+    @Autowired
+    private EventContext eventContext;
 
     private Map<String, Phase> cache = new HashMap<>();
 
@@ -54,37 +58,78 @@ public class Renderer {
     /**
      * Calculates and returns frames should be painted on game screen.
      */
-    public Frame calcFrame() {
-        GameStateDto gameStateDto = viewContext.getGameStateDto();
-        double playerX = gameStateDto.getGame().getPlayer().getX();
-        double playerY = gameStateDto.getGame().getPlayer().getY();
+    public Frame calcFrame(ViewContext viewContext) {
+        Game game = gameContext.getGame();
+        double playerX = game.getPlayer().getX();
+        double playerY = game.getPlayer().getY();
 
         Frame frame = new Frame();
 
-        String backSignature = gameStateDto.getGame().getPlayer().getLocation().getSignature();
+        String backSignature = game.getPlayer().getLocation().getSignature();
         Sprite background = calcBackground(backSignature, playerX, playerY);
         frame.setBackground(background);
 
-        List<AbstractMapObject> objects = gameStateDto.getGame().getPlayer().getLocation().getObjects();
+        List<AbstractMapObject> objects = game.getPlayer().getLocation().getObjects();
         List<Sprite> sprites = new ArrayList<>();
         for (AbstractMapObject o : objects) {
-            Sprite sprite = calcSprite(o, gameStateDto.getEventsScreenDataDto(), playerX, playerY);
+            Sprite sprite = calcSprite(o, playerX, playerY);
             sprites.add(sprite);
         }
         frame.setSprites(calcRenderOrder(sprites));
-        frame.setGameState(gameStateDto);
 
-        calcEffects(frame);
+        calcEffects(frame, viewContext);
+        calcLogs(frame);
+        calcMarker(frame, viewContext, playerX, playerY);
 
         return frame;
     }
 
     /**
-     * Calculates and puts visual effects to frame.
+     * Fills logs in frame.
      *
      * @param frame     frame that contains all rendered information for drawing.
      */
-    private void calcEffects(Frame frame) {
+    private void calcLogs(Frame frame) {
+        eventContext.getEvents()
+                .stream()
+                .forEach(e -> {
+                    if (e.displayable())
+                        frame.addLog(e.toString());
+                });
+    }
+
+    /**
+     * Renders destination marker
+     *
+     * @param frame         frame that contains all rendered information for drawing.
+     * @param viewContext   view context that contains states of visual objects on game screen.
+     * @param playerX       horizontal coordinate of the player.
+     * @param playerY       vertical coordinate of the player.
+     */
+    private void calcMarker(Frame frame, ViewContext viewContext, double playerX, double playerY) {
+        DestinationMarkerData marker = viewContext.getMarker();
+        if (marker != null) {
+
+            int centerX = CANVAS_WIDTH / 2;
+            int centerY = CANVAS_HEIGHT / 2;
+
+            int imgX = (int) (centerX - (playerX - marker.getX()));
+            int imgY = (int) (centerY - (playerY - marker.getY()));
+
+            DestinationMarkerEffect markerEffect = new DestinationMarkerEffect();
+            markerEffect
+                    .setX(imgX)
+                    .setY(imgY);
+            frame.setMarker(markerEffect);
+        }
+    }
+
+    /**
+     * Calculates and puts visual effects to frame.
+     *
+     * @param frame frame that contains all rendered information for drawing.
+     */
+    private void calcEffects(Frame frame, ViewContext viewContext) {
         // todo: check for possible race condition!
         int screenX = viewContext.getScreenX();
         int screenY = viewContext.getScreenY();
@@ -116,7 +161,7 @@ public class Renderer {
                 .setPlatformShape(PlatformShape.CUSTOM);
     }
 
-    private Sprite calcSprite(AbstractMapObject object, EventsScreenDataDto events, double playerX, double playerY) {
+    private Sprite calcSprite(AbstractMapObject object, double playerX, double playerY) {
         int centerX = CANVAS_WIDTH / 2;
         int centerY = CANVAS_HEIGHT / 2;
 

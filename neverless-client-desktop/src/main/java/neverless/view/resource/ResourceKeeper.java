@@ -1,4 +1,4 @@
-package neverless.resource;
+package neverless.view.resource;
 
 import neverless.Direction;
 import org.springframework.stereotype.Component;

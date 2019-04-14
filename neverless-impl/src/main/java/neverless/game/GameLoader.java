@@ -20,7 +20,6 @@ import neverless.game.npc.OldMan;
 import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 import neverless.context.GameContext;
-import neverless.util.SessionUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,8 +36,6 @@ public class GameLoader {
     @Autowired
     private GameContext cache;
     @Autowired
-    private SessionUtil sessionUtil;
-    @Autowired
     private QuestContainer questContainer;
     @Autowired
     private ApplicationContext context;
@@ -50,8 +47,7 @@ public class GameLoader {
     }
 
     private void createGame() {
-        Game game = new Game()
-                .setId(sessionUtil.getGameId());
+        Game game = new Game();
         cache.save(game);
 
         Location village = createLocationVillage();

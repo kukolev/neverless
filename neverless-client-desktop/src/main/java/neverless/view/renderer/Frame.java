@@ -2,17 +2,20 @@ package neverless.view.renderer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.dto.GameStateDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Frame object contains all information for local map rendering.
+ */
 @Data
 @Accessors(chain = true)
 public class Frame {
-    private GameStateDto gameState;
     private Sprite background;
     private List<Sprite> sprites = new ArrayList<>();
+    private List<String> log = new ArrayList<>();
+    private DestinationMarkerEffect marker;
 
     /**
      * Container for object ids that should be high-lighted
@@ -43,5 +46,14 @@ public class Frame {
             highLighted.clear();
         }
         highLighted.add(id);
+    }
+
+    /**
+     * Adds log item to list of log items.
+     *
+     * @param logItem   log item.
+     */
+    public void addLog(String logItem) {
+        log.add(logItem);
     }
 }

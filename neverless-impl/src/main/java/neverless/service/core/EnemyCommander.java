@@ -166,7 +166,7 @@ public class EnemyCommander {
 
 
     private boolean isCanMove(AbstractEnemy enemy) {
-        List<AbstractEvent> events = eventContext.getEvents(enemy.getUniqueName());
+        List<AbstractEvent> events = eventContext.getEvents();
         return !events.stream()
                 .anyMatch(e -> e instanceof MapGoImpossibleEvent);
     }

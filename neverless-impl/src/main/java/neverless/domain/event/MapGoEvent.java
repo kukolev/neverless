@@ -13,6 +13,8 @@ public class MapGoEvent extends AbstractEvent{
     private String id;
     private int x;
     private int y;
+    private int targetX;
+    private int targetY;
 
     @Override
     public EventType getEventType() {

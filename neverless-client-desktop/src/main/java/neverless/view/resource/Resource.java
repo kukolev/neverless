@@ -1,4 +1,4 @@
-package neverless.resource;
+package neverless.view.resource;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
