@@ -6,7 +6,7 @@ import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
 import neverless.domain.quest.AbstractQuest;
 import neverless.domain.quest.QuestReward;
 import neverless.domain.quest.QuestStep;
-import neverless.dto.quest.QuestState;
+import neverless.domain.quest.QuestState;
 import neverless.util.DialogBuilder;
 import org.springframework.stereotype.Service;
 

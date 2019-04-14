@@ -60,7 +60,7 @@ public class EnemyService {
     }
 
     /**
-     * Returns true if enemy position canProcessObject close to player.
+     * Returns true if enemy position is close to player.
      *
      * @param enemy checked enemy.
      */

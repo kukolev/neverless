@@ -3,7 +3,7 @@ package neverless.view.drawer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.mapobject.Coordinate;
-import neverless.view.renderer.Sprite;
+import neverless.view.domain.Sprite;
 
 import java.util.ArrayList;
 import java.util.HashMap;

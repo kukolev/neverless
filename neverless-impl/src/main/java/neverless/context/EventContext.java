@@ -15,7 +15,7 @@ import neverless.domain.event.JournalUpdateEvent;
 import neverless.domain.event.MapGoEvent;
 import neverless.domain.event.MapGoImpossibleEvent;
 import neverless.domain.event.PortalEnterEvent;
-import neverless.dto.quest.QuestState;
+import neverless.domain.quest.QuestState;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

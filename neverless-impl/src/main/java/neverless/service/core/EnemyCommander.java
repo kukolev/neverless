@@ -65,7 +65,7 @@ public class EnemyCommander {
 
     /**
      * Creates enemies, related to respawn points.
-     * Respawn point canProcessObject able to recreate an enemy if there no live enemy in the respawn point.
+     * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
      */
     public void respawn() {
         Player player = gameContext.getPlayer();
@@ -74,7 +74,7 @@ public class EnemyCommander {
         points.forEach(p -> {
 
             // Guarantee that new enemy would not be created
-            // until current canProcessObject alive
+            // until current is alive
             if (p.getEnemy() != null) {
                 p.setLastTurnInLife(requestContext.getTurnNumber());
             }

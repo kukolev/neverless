@@ -2,6 +2,7 @@ package neverless.view.renderer;
 
 import neverless.domain.entity.mapobject.Coordinate;
 import neverless.PlatformShape;
+import neverless.view.domain.Sprite;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class RendererUtilsTest {
 
 
     /**
-     * Checks that list returned by DrawerUtils::calcRenderOrder canProcessObject sorted properly.
+     * Checks that list returned by DrawerUtils::calcRenderOrder is sorted properly.
      * Geometry interpretation of the scene:
      *
      *      8

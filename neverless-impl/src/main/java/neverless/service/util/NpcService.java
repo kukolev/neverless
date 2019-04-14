@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class NpcService {
 
     public AbstractNpc getNpcAtPosition(int npcX, int npcY, Location location) {
-        // todo: throw exception when nothing canProcessObject found
+        // todo: throw exception when nothing is found
         AbstractMapObject object = location.getObjects()
                 .stream()
                 .filter(o -> o.getX() == npcX && o.getY() == npcY)

@@ -1,6 +1,6 @@
 package neverless.util;
 
-import neverless.view.renderer.Sprite;
+import neverless.view.domain.Sprite;
 import java.util.List;
 
 public class SpriteUtils {

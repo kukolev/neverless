@@ -5,14 +5,11 @@ import neverless.domain.dialog.NpcPhrase;
 import neverless.domain.dialog.PlayerPhrase;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
-import neverless.dto.DialogScreenDataDto;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
 import neverless.context.GameContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @Service
 public class DialogService {
@@ -52,19 +49,6 @@ public class DialogService {
                 .filter(phrase -> phrase.getActivator().isCurrent())
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-    }
-
-    public DialogScreenDataDto getScreenData() {
-        NpcPhrase npcPhrase = dialogContext.getNpcPhrase();
-        if (npcPhrase == null) {
-            return new DialogScreenDataDto();
-        }
-        return new DialogScreenDataDto()
-                .setNpcPhrase(npcPhrase.getPhraseText())
-                .setAnswers(npcPhrase.getAnswers()
-                .stream()
-                .map(PlayerPhrase::getPhraseText)
-                .collect(Collectors.toList()));
     }
 
     public void selectPhrase(int phraseNumber) {

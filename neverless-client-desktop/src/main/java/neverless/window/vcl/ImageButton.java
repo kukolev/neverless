@@ -1,4 +1,4 @@
-package neverless.controller.vcl;
+package neverless.window.vcl;
 
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;

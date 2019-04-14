@@ -15,7 +15,7 @@ public class GameContext {
 
     /**
      * Returns game object from cache.
-     * Loads game object from persistence layer if the object canProcessObject absent in cache.
+     * Loads game object from persistence layer if the object is absent in cache.
      */
     public Game getGame() {
        return game;

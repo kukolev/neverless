@@ -4,9 +4,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
 import neverless.util.FrameExchanger;
-import neverless.view.renderer.Frame;
-import neverless.view.renderer.DestinationMarkerEffect;
-import neverless.view.renderer.Sprite;
+import neverless.view.domain.Frame;
+import neverless.view.domain.DestinationMarkerEffect;
+import neverless.view.domain.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +32,9 @@ public class Drawer implements ChangeListener<String> {
     /**
      * Receives message from renderer and invokes other methods for displaying information.
      *
-     * @param observable observable (canProcessObject not used).
-     * @param oldValue   old value of message (canProcessObject not used).
-     * @param newValue   new value (canProcessObject not used).
+     * @param observable observable (is not used).
+     * @param oldValue   old value of message (is not used).
+     * @param newValue   new value (is not used).
      */
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         Frame frame = frameExchanger.getFrame();

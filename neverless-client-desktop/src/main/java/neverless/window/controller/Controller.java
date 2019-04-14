@@ -1,4 +1,4 @@
-package neverless.controller;
+package neverless.window.controller;
 
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -62,7 +62,7 @@ public abstract class AbstractMapObject extends AbstractGameObject {
     public abstract MapObjectMetaType getMetaType();
 
     /**
-     * Returns true if terrain canProcessObject passable.
+     * Returns true if terrain is passable.
      *
      * @return true/false.
      */

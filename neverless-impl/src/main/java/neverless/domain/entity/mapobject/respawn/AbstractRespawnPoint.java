@@ -17,7 +17,7 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
     private Integer areaX = 100;
     private Integer areaY = 100;
 
-    /** Turn number when the enemy canProcessObject alive */
+    /** Turn number when the enemy is alive */
     private Integer lastTurnInLife = 0;
 
     /** Period, after that enemy should be respawned (turns) */

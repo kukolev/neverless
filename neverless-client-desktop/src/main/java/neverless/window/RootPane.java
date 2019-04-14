@@ -5,8 +5,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-import neverless.controller.Controller;
-import neverless.controller.vcl.ImageButton;
+import neverless.window.controller.Controller;
+import neverless.window.vcl.ImageButton;
 import neverless.model.Model;
 
 import neverless.view.drawer.Drawer;

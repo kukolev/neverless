@@ -1,4 +1,4 @@
-package neverless.view.renderer;
+package neverless.view.domain;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

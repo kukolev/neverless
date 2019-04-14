@@ -1,4 +1,4 @@
-package neverless.controller;
+package neverless.window.controller;
 
 import neverless.context.GameContext;
 import neverless.model.Model;
@@ -8,8 +8,8 @@ import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
-import neverless.view.renderer.Frame;
-import neverless.view.renderer.Sprite;
+import neverless.view.domain.Frame;
+import neverless.view.domain.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

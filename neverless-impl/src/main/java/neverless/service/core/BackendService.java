@@ -3,7 +3,6 @@ package neverless.service.core;
 import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.context.RequestContext;
-import neverless.service.util.EventService;
 import neverless.service.util.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,6 @@ public class BackendService {
 
     @Autowired
     private QuestService questService;
-    @Autowired
-    private EventService eventService;
     @Autowired
     private RequestContext requestContext;
     @Autowired

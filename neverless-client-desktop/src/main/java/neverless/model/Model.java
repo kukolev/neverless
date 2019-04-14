@@ -5,7 +5,7 @@ import neverless.model.domain.ViewContext;
 import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
-import neverless.view.renderer.Frame;
+import neverless.view.domain.Frame;
 import neverless.view.renderer.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
