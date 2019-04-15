@@ -15,6 +15,7 @@ import static neverless.Direction.SOUTH_EAST;
 import static neverless.Direction.SOUTH_WEST;
 import static neverless.Direction.WEST;
 import static neverless.Signatures.IMG_PLAYER;
+import static neverless.Signatures.IMG_TAVERN_SMALL;
 
 @Component
 public class ResourceKeeper {
@@ -94,6 +95,8 @@ public class ResourceKeeper {
         map.put(IMG_PLAYER + "_" + NORTH + "_06", new Resource("player_walking.png", 640, 384, 128, 128));
         map.put(IMG_PLAYER + "_" + NORTH + "_07", new Resource("player_walking.png", 768, 384, 128, 128));
         map.put(IMG_PLAYER + "_" + NORTH + "_08", new Resource("player_walking.png", 896, 384, 128, 128));
+
+        map.put(IMG_TAVERN_SMALL + "_" + NORTH + "_01", new Resource("tavern_1.png", 0, 0, 500, 813));
     }
 
     /**

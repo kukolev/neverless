@@ -6,18 +6,13 @@ import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
-import neverless.domain.entity.mapobject.building.AbstractBuilding;
+import neverless.domain.entity.mapobject.building.TavernSmall;
 import neverless.domain.entity.mapobject.portal.AbstractPortal;
 import neverless.domain.entity.mapobject.portal.LocationsPortal;
 import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
-import neverless.domain.entity.mapobject.wall.AbstractWall;
-import neverless.domain.entity.mapobject.wall.StoneWall;
 import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
-import neverless.domain.entity.mapobject.building.LargeVillageHouse;
 import neverless.game.npc.OldManQuestKillGoblins;
 import neverless.context.GameContext;
 
@@ -25,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static neverless.Signatures.IMG_DUNGEON_BACKGROUND;
 import static neverless.Signatures.IMG_VILLAGE_BACKGROUND;
 
 @Component
@@ -73,7 +66,7 @@ public class GameLoader {
 
         createNpc(village);
         createRespawnPoints(village);
-        createHouse(village);
+        createTavern(village);
 
         return village;
     }
@@ -81,9 +74,7 @@ public class GameLoader {
     private Location createLocationDungeon() {
         Location dungeon = new Location()
                 .setTitle("Dungeon")
-                .setSignature(IMG_VILLAGE_BACKGROUND);
-
-        dungeon.getObjects().addAll(createDungeonObjects());
+                .setSignature(IMG_DUNGEON_BACKGROUND);
 
         return dungeon;
     }
@@ -111,51 +102,16 @@ public class GameLoader {
                 .setInventory(inventory)
                 .setWidth(64)
                 .setHeight(96)
-                .setX(1600)
-                .setY(1600);
+                .setX(200)
+                .setY(1200);
         return player;
     }
 
-    private void createHouse(Location location) {
-        AbstractBuilding building = new LargeVillageHouse();
-        building
-                .setX(1800)
-                .setY(1500)
-                .setWidth(162)
-                .setHeight(157)
-                .setLocation(location);
-        location.getObjects().add(building);
-        List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinate().setX(-14).setY(0));
-        coordinates.add(new Coordinate().setX(11).setY(0));
-        coordinates.add(new Coordinate().setX(78).setY(-39));
-        coordinates.add(new Coordinate().setX(0).setY(-80));
-        coordinates.add(new Coordinate().setX(-75).setY(-39));
-        building.setPlatformCoordinates(coordinates);
-    }
-
-    private List<AbstractWall> drawStoneWallVertical(int x, int y1, int y2) {
-        List<AbstractWall> walls = new ArrayList<>();
-        for (int j = y1; j <= y2; j+=32 ) {
-            walls.add(createStoneWall(x, j));
-        }
-        return walls;
-    }
-
-    private List<AbstractWall> drawStoneWallHorizontal(int y, int x1, int x2) {
-        List<AbstractWall> walls = new ArrayList<>();
-        for (int i = x1; i <= x2; i += 32 ) {
-            walls.add(createStoneWall(i, y));
-        }
-        return walls;
-    }
-
-    private AbstractWall createStoneWall(int x, int y) {
-        StoneWall wall = new StoneWall();
-        wall
-                .setX(x)
-                .setY(y);
-        return wall;
+    private void createTavern(Location location) {
+        TavernSmall tavern = new TavernSmall();
+        tavern.setX(330);
+        tavern.setY(1100);
+        location.getObjects().add(tavern);
     }
 
     private void createNpc(Location location) {
@@ -186,18 +142,6 @@ public class GameLoader {
                 .setX(32)
                 .setY(160);
         return portal;
-    }
-
-    private List<AbstractMapObject> createDungeonObjects() {
-        List<AbstractMapObject> walls = new ArrayList<>();
-        walls.addAll(drawStoneWallHorizontal(32, 32, 320));
-        walls.addAll(drawStoneWallHorizontal(320,  32, 320));
-
-        walls.addAll(drawStoneWallVertical(32, 64, 128));
-        walls.addAll(drawStoneWallVertical(32, 192, 288));
-
-        walls.addAll(drawStoneWallVertical(320, 64, 288));
-        return walls;
     }
 
     private void createRespawnPoints(Location location) {

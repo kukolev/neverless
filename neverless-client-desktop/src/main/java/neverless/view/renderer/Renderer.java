@@ -164,7 +164,7 @@ public class Renderer {
         int centerY = CANVAS_HEIGHT / 2;
 
         // todo: fix this hardcode!
-        Resource resource = new Resource("village.jpg", 0, 0, 2560, 1728);
+        Resource resource = new Resource(signature, 0, 0, 2200, 1600);
         Image image = spriteRepository.getImage(resource);
 
         int imgX = (int) ((centerX - (playerX)) + image.getWidth() / 2);

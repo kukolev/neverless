@@ -60,3 +60,7 @@ This paragraph includes main features descriptions. Every feature related to one
   
 #### Profile display
 * Player profile displayed on GUI
+
+#### Test Location
+* Plain map with grass, road and cliffs.
+* One building - something like tavern
