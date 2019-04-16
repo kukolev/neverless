@@ -51,8 +51,8 @@ public class ControlHandler {
             case TERRAIN:
             case IMPASSIBLE_TERRAIN:    {
 
-                int dx = alignToGrid(screenX) - alignToGrid(CANVAS_CENTER_X);
-                int dy = alignToGrid(screenY) - alignToGrid(CANVAS_CENTER_Y);
+                int dx = screenX - CANVAS_CENTER_X;
+                int dy = screenY - CANVAS_CENTER_Y;
 
                 int newGameX = player.getX() + dx;
                 int newGameY = player.getY() + dy;
@@ -84,14 +84,5 @@ public class ControlHandler {
 
     private void cmdFightingAttack(AbstractEnemy enemy) {
         model.putCommand(commandFactory.createPlayerAttackCommand(enemy));
-    }
-
-    /**
-     * Converts and returns coordinate, aligned to coordinates grid, defined via LOCAL_MAP_STEP_LENGTH.
-     *
-     * @param coordinate aligned coordinate.
-     */
-    private int alignToGrid(int coordinate) {
-        return LOCAL_MAP_STEP_LENGTH * (coordinate / LOCAL_MAP_STEP_LENGTH);
     }
 }

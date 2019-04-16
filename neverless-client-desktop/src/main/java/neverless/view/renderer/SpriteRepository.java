@@ -48,10 +48,17 @@ public class SpriteRepository {
      * @param image     given image.
      * @param left      left margin of result image.
      * @param top       top margin of result image.
-     * @param width     width of result image.
-     * @param height    height of result image.
+     * @param width     width of result image. if width == 0 then image would be copied up to right border.
+     * @param height    height of result image. if height == 0 then image would be copied up to bottom border.
      */
     private static WritableImage copyImage(Image image, int left, int top, int width, int height) {
+        if (width == 0) {
+            width = (int) image.getWidth() - left;
+        }
+        if (height == 0) {
+            height = (int) image.getHeight() - height;
+        }
+
         PixelReader pixelReader=image.getPixelReader();
         WritableImage writableImage = new WritableImage(width, height);
         PixelWriter pixelWriter = writableImage.getPixelWriter();

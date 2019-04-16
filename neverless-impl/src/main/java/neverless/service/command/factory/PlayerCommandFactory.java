@@ -7,7 +7,7 @@ import neverless.service.command.impl.PlayerPortalEnterCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
-import neverless.domain.entity.mapobject.portal.AbstractPortal;
+import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.context.GameContext;
 import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class PlayerCommandFactory {
         return new PlayerContinueCommand();
     }
 
-    public PlayerPortalEnterCommand createPlayerPortalEnterCommand(AbstractPortal portal) {
+    public PlayerPortalEnterCommand createPlayerPortalEnterCommand(LocationPortal portal) {
         Player player = gameContext.getPlayer();
         return new PlayerPortalEnterCommand()
                 .setPlayer(player)

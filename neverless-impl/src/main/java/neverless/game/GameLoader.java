@@ -6,10 +6,10 @@ import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.TavernSmall;
-import neverless.domain.entity.mapobject.portal.AbstractPortal;
-import neverless.domain.entity.mapobject.portal.LocationsPortal;
+import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
 import neverless.domain.quest.QuestContainer;
 import neverless.game.npc.OldMan;
@@ -46,8 +46,8 @@ public class GameLoader {
         Location village = createLocationVillage();
         Location dungeon = createLocationDungeon();
 
-        village.getObjects().add(createPortalVillage2Dungeon(dungeon));
-        dungeon.getObjects().add(createPortalDungeon2Village(village));
+        village.getAreas().add(createPortalVillage2Dungeon(dungeon));
+        dungeon.getAreas().add(createPortalDungeon2Village(village));
 
         Player player = createPlayer();
         player.setLocation(village);
@@ -122,25 +122,27 @@ public class GameLoader {
             .setLocation(location);
     }
 
-    private AbstractPortal createPortalVillage2Dungeon(Location destination) {
-        LocationsPortal portal = new LocationsPortal();
+    private LocationPortal createPortalVillage2Dungeon(Location destination) {
+        LocationPortal portal = new LocationPortal();
         portal
                 .setDestination(destination)
                 .setDestX(64)
-                .setDestY(160)
-                .setX(1632)
-                .setY(1696);
+                .setDestY(160);
+        portal.getCoordinates().add(new Coordinate().setX(1530).setY(380));
+        portal.getCoordinates().add(new Coordinate().setX(1546).setY(296));
+        portal.getCoordinates().add(new Coordinate().setX(1600).setY(266));
+        portal.getCoordinates().add(new Coordinate().setX(1632).setY(318));
+        portal.getCoordinates().add(new Coordinate().setX(1633).setY(380));
+
         return portal;
     }
 
-    private AbstractPortal createPortalDungeon2Village(Location destination) {
-        LocationsPortal portal = new LocationsPortal();
+    private LocationPortal createPortalDungeon2Village(Location destination) {
+        LocationPortal portal = new LocationPortal();
         portal
                 .setDestination(destination)
                 .setDestX(1632)
-                .setDestY(1664)
-                .setX(32)
-                .setY(160);
+                .setDestY(1664);
         return portal;
     }
 

@@ -61,6 +61,11 @@ This paragraph includes main features descriptions. Every feature related to one
 #### Profile display
 * Player profile displayed on GUI
 
+#### Portal display
+* Portal is displaying on GUI as green polygon
+* Portal is displaying only if mouse over it
+
 #### Test Location
 * Plain map with grass, road and cliffs.
 * One building - something like tavern
+* One portal at north-east of location

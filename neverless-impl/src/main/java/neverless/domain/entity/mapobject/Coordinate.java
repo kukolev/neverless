@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Coordinate {
 
-    private String id;
     private int x;
     private int y;
 }

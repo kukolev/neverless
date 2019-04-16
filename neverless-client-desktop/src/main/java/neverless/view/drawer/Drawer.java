@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
 import neverless.util.FrameExchanger;
+import neverless.view.domain.AreaHighlighted;
 import neverless.view.domain.Frame;
 import neverless.view.domain.DestinationMarkerEffect;
 import neverless.view.domain.ProfileWidget;
@@ -44,6 +45,7 @@ public class Drawer implements ChangeListener<String> {
         displayLocalMap(frame.getBackground(), frame.getSprites());
         displayHighLights(frame.getSprites(), frame.getHighLighted());
         displayMarker(frame.getMarker());
+        displayHighLighedArea(frame.getAreaHighlighted());
     }
 
     /**
@@ -89,6 +91,17 @@ public class Drawer implements ChangeListener<String> {
     private void displayMarker(DestinationMarkerEffect markerEffect) {
         if (markerEffect != null) {
             markerEffect.draw(context.getLocalMapCanvas().getGraphicsContext2D());
+        }
+    }
+
+    /**
+     * Draws high-lighted area.
+     *
+     * @param areaHighlighted   area that should be drawn.
+     */
+    private void displayHighLighedArea(AreaHighlighted areaHighlighted) {
+        if (areaHighlighted != null) {
+            areaHighlighted.draw(context.getLocalMapCanvas().getGraphicsContext2D());
         }
     }
 

@@ -8,9 +8,12 @@ import neverless.context.GameContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.Profile;
 import neverless.model.domain.DestinationMarkerData;
+import neverless.util.CoordinateUtils;
+import neverless.view.domain.AreaHighlighted;
 import neverless.view.domain.DestinationMarkerEffect;
 import neverless.view.domain.Frame;
 import neverless.view.domain.Sprite;
@@ -24,8 +27,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static neverless.Constants.ANIMATION_SLOW_FACTOR;
+import static neverless.util.Constants.CANVAS_CENTER_X;
+import static neverless.util.Constants.CANVAS_CENTER_Y;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
 import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
@@ -86,6 +92,7 @@ public class Renderer {
         calcLogs(frame);
         calcMarker(frame, viewContext, playerX, playerY);
         calcProfile(frame);
+        calcArea(frame, viewContext);
 
         return frame;
     }
@@ -93,7 +100,7 @@ public class Renderer {
     /**
      * Fills profile widget in frame.
      *
-     * @param frame     frame that contains all rendered information for drawing.
+     * @param frame frame that contains all rendered information for drawing.
      */
     private void calcProfile(Frame frame) {
         Player player = gameContext.getPlayer();
@@ -104,7 +111,7 @@ public class Renderer {
     /**
      * Fills logs in frame.
      *
-     * @param frame     frame that contains all rendered information for drawing.
+     * @param frame frame that contains all rendered information for drawing.
      */
     private void calcLogs(Frame frame) {
         eventContext.getEvents()
@@ -118,20 +125,17 @@ public class Renderer {
     /**
      * Renders destination marker
      *
-     * @param frame         frame that contains all rendered information for drawing.
-     * @param viewContext   view context that contains states of visual objects on game screen.
-     * @param playerX       horizontal coordinate of the player.
-     * @param playerY       vertical coordinate of the player.
+     * @param frame       frame that contains all rendered information for drawing.
+     * @param viewContext view context that contains states of visual objects on game screen.
+     * @param playerX     horizontal coordinate of the player.
+     * @param playerY     vertical coordinate of the player.
      */
     private void calcMarker(Frame frame, ViewContext viewContext, double playerX, double playerY) {
         DestinationMarkerData marker = viewContext.getMarker();
         if (marker != null) {
 
-            int centerX = CANVAS_WIDTH / 2;
-            int centerY = CANVAS_HEIGHT / 2;
-
-            int imgX = (int) (centerX - (playerX - marker.getX()));
-            int imgY = (int) (centerY - (playerY - marker.getY()));
+            int imgX = (int) (CANVAS_CENTER_X - (playerX - marker.getX()));
+            int imgY = (int) (CANVAS_CENTER_Y - (playerY - marker.getY()));
 
             DestinationMarkerEffect markerEffect = new DestinationMarkerEffect();
             markerEffect
@@ -144,7 +148,8 @@ public class Renderer {
     /**
      * Calculates and puts visual effects to frame.
      *
-     * @param frame frame that contains all rendered information for drawing.
+     * @param frame       frame that contains all rendered information for drawing.
+     * @param viewContext view context that contains states of visual objects on game screen.
      */
     private void calcEffects(Frame frame, ViewContext viewContext) {
         // todo: check for possible race condition!
@@ -159,16 +164,48 @@ public class Renderer {
         }
     }
 
-    private Sprite calcBackground(String signature, double playerX, double playerY) {
-        int centerX = CANVAS_WIDTH / 2;
-        int centerY = CANVAS_HEIGHT / 2;
+    /**
+     * Renders area under mouse cursor if any.
+     *
+     * @param frame       frame that contains all rendered information for drawing.
+     * @param viewContext view context that contains states of visual objects on game screen.
+     */
+    public void calcArea(Frame frame, ViewContext viewContext) {
+        Game game = gameContext.getGame();
+        int screenX = viewContext.getScreenX();
+        int screenY = viewContext.getScreenY();
+        int playerX = game.getPlayer().getX();
+        int playerY = game.getPlayer().getY();
+        int gameX = playerX + screenX - CANVAS_CENTER_X;
+        int gameY = playerY + screenY - CANVAS_CENTER_Y;
 
+        game.getPlayer().getLocation().getAreas().stream()
+                .filter(a -> CoordinateUtils.isPointInner(gameX, gameY, a.getCoordinates()))
+                .findFirst()
+                .map(a -> {
+                    AreaHighlighted areaHighlighted = new AreaHighlighted();
+
+                    // map coordinates from game to screen.
+                    List<Coordinate> gameCoordinates = a.getCoordinates()
+                            .stream()
+                            .map(c -> new Coordinate()
+                                    .setX(c.getX() + CANVAS_CENTER_X - playerX)
+                                    .setY(c.getY() + CANVAS_CENTER_Y - playerY))
+                            .collect(Collectors.toList());
+
+                    areaHighlighted.getCoordinates().addAll(gameCoordinates);
+                    frame.setAreaHighlighted(areaHighlighted);
+                    return null;
+                });
+    }
+
+    private Sprite calcBackground(String signature, double playerX, double playerY) {
         // todo: fix this hardcode!
-        Resource resource = new Resource(signature, 0, 0, 2200, 1600);
+        Resource resource = new Resource(signature, 0, 0, 0, 0);
         Image image = spriteRepository.getImage(resource);
 
-        int imgX = (int) ((centerX - (playerX)) + image.getWidth() / 2);
-        int imgY = (int) ((centerY - (playerY)) + image.getHeight());
+        int imgX = (int) ((CANVAS_CENTER_X - (playerX)) + image.getWidth() / 2);
+        int imgY = (int) ((CANVAS_CENTER_Y - (playerY)) + image.getHeight());
 
         return new Sprite(image)
                 .setX(imgX)

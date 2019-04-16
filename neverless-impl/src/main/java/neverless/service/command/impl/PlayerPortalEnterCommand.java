@@ -6,7 +6,7 @@ import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.Player;
-import neverless.domain.entity.mapobject.portal.AbstractPortal;
+import neverless.domain.entity.mapobject.portal.LocationPortal;
 
 @Data
 @Accessors(chain = true)
@@ -14,7 +14,7 @@ public class PlayerPortalEnterCommand extends AbstractCommand {
 
     private Player player;
     private EventContext eventContext;
-    private AbstractPortal portal;
+    private LocationPortal portal;
 
     @Override
     public BehaviorState execute() {

@@ -251,4 +251,18 @@ public class CoordinateUtils {
 
         return (v1 * v2 < 0) && (v3 * v4 < 0);
     }
+
+    /**
+     * Returns true if point is inner for some area.
+     *
+     * @param x1            horizontal coordinate of the point.
+     * @param y1            vertical coordinate of the point.
+     * @param coordinates   list of coordinates for approximate the area curve.
+     */
+    public static boolean isPointInner(int x1, int y1, List<Coordinate> coordinates) {
+        // todo: is might be optimized
+        boolean vert = isSegmentAndCurveIntersected(x1, Integer.MIN_VALUE, x1, Integer.MAX_VALUE, coordinates);
+        boolean horz = isSegmentAndCurveIntersected(Integer.MIN_VALUE, y1, Integer.MAX_VALUE, y1, coordinates);
+        return vert && horz;
+    }
 }
