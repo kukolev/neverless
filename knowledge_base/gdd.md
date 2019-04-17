@@ -2,7 +2,7 @@
 
 1. [Overview](#overview)
    1. [Entities](#entities)
-2. [Features](#features)
+2. [Gameplay](#gameplay)
    1. [Location game screen](#location-game-screen)
    2. [Main menu game screen](#main-menu-game-screen)
    3. [Inventory game screen](#inventory-game-screen)
@@ -10,8 +10,13 @@
    5. [Dialog game screen](#market-game-screen)
    6. [Reading game screen](#market-game-screen)
    7. [Global map game screen](#global-map-game-screen)
+3. [Interface](#interface)
+   1. [Location game screen UI](#location-game-screen-ui)
+4. [Test Game](#test-game)   
    
 ## Overview
+
+Neverless is a offline RPG with 2D isometric graphics.
 
 ## Entities
 * Player - main hero of the game. Player is controlled by human who is playing the game
@@ -22,17 +27,11 @@
 * Portal - place where player is able to move to other location
 * Event - event happened in game. Events might be displayed on GUI.
 
-## Features
+## Gameplay
 
 This paragraph includes main features descriptions. Every feature related to one of game screens.
 
 ### Location game screen
-
-#### Objects high-light
-* All game objects high-lighted on mouse over.
-
-#### Destination marker
-* A special marker visualizes the point to which the player goes.
 
 #### Player movement
 * Player is able to move through the area of location
@@ -52,6 +51,17 @@ This paragraph includes main features descriptions. Every feature related to one
 #### Enemy respawn
 * Enemies respawn at respawn point position
 
+
+## Interface
+
+### Location game screen UI
+
+#### Objects high-light
+* All game objects high-lighted on mouse over.
+
+#### Destination marker
+* A special marker visualizes the point to which the player goes.
+
 #### Event display
 * Events might be displayed in GUI
 * Displayable events:
@@ -66,11 +76,11 @@ This paragraph includes main features descriptions. Every feature related to one
 * Portal is displaying only if mouse over it
 * Click on portal generates a command to player to move to portal
 
-#### Test Location
+#### Test Game
 * Location "Village"
   * Plain map with grass, road and cliffs.
   * One building - something like tavern
   * One portal to "Dungeon" at north-east
 * Location "Dungeon"
   * Simple dungeon with two branches
-  * Dungeon contains two respawn points  
+  * Dungeon contains two respawn points
