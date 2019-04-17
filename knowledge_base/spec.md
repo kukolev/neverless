@@ -67,6 +67,10 @@ This paragraph includes main features descriptions. Every feature related to one
 * Click on portal generates a command to player to move to portal
 
 #### Test Location
-* Plain map with grass, road and cliffs.
-* One building - something like tavern
-* One portal at north-east of location
+* Location "Village"
+  * Plain map with grass, road and cliffs.
+  * One building - something like tavern
+  * One portal to "Dungeon" at north-east
+* Location "Dungeon"
+  * Simple dungeon with two branches
+  * Dungeon contains two respawn points  

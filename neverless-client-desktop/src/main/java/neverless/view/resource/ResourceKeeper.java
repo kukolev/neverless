@@ -14,6 +14,7 @@ import static neverless.Direction.SOUTH;
 import static neverless.Direction.SOUTH_EAST;
 import static neverless.Direction.SOUTH_WEST;
 import static neverless.Direction.WEST;
+import static neverless.Signatures.IMG_GOBLIN;
 import static neverless.Signatures.IMG_PLAYER;
 import static neverless.Signatures.IMG_TAVERN_SMALL;
 
@@ -97,6 +98,78 @@ public class ResourceKeeper {
         map.put(IMG_PLAYER + "_" + NORTH + "_08", new Resource("player_walking.png", 896, 384, 128, 128));
 
         map.put(IMG_TAVERN_SMALL + "_" + NORTH + "_01", new Resource("tavern_1.png", 0, 0, 500, 813));
+
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_01", new Resource("wolf_walking_diag.png", 0, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_02", new Resource("wolf_walking_diag.png", 96, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_03", new Resource("wolf_walking_diag.png", 192, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_04", new Resource("wolf_walking_diag.png", 288, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_05", new Resource("wolf_walking_diag.png", 384, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_06", new Resource("wolf_walking_diag.png", 480, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_07", new Resource("wolf_walking_diag.png", 576, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_WEST + "_08", new Resource("wolf_walking_diag.png", 672, 0, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_01", new Resource("wolf_walking_diag.png", 0, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_02", new Resource("wolf_walking_diag.png", 96, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_03", new Resource("wolf_walking_diag.png", 192, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_04", new Resource("wolf_walking_diag.png", 288, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_05", new Resource("wolf_walking_diag.png", 384, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_06", new Resource("wolf_walking_diag.png", 480, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_07", new Resource("wolf_walking_diag.png", 576, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_WEST + "_08", new Resource("wolf_walking_diag.png", 672, 96, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_01", new Resource("wolf_walking_diag.png", 0, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_02", new Resource("wolf_walking_diag.png", 96, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_03", new Resource("wolf_walking_diag.png", 192, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_04", new Resource("wolf_walking_diag.png", 288, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_05", new Resource("wolf_walking_diag.png", 384, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_06", new Resource("wolf_walking_diag.png", 480, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_07", new Resource("wolf_walking_diag.png", 576, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH_EAST + "_08", new Resource("wolf_walking_diag.png", 672, 192, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_01", new Resource("wolf_walking_diag.png", 0, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_02", new Resource("wolf_walking_diag.png", 96, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_03", new Resource("wolf_walking_diag.png", 192, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_04", new Resource("wolf_walking_diag.png", 288, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_05", new Resource("wolf_walking_diag.png", 384, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_06", new Resource("wolf_walking_diag.png", 480, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_07", new Resource("wolf_walking_diag.png", 576, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH_EAST + "_08", new Resource("wolf_walking_diag.png", 672, 288, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_01", new Resource("wolf_walking.png", 0, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_02", new Resource("wolf_walking.png", 96, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_03", new Resource("wolf_walking.png", 192, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_04", new Resource("wolf_walking.png", 288, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_05", new Resource("wolf_walking.png", 384, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_06", new Resource("wolf_walking.png", 480, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_07", new Resource("wolf_walking.png", 576, 0, 96, 96));
+        map.put(IMG_GOBLIN + "_" + SOUTH + "_08", new Resource("wolf_walking.png", 672, 0, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + WEST + "_01", new Resource("wolf_walking.png", 0, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_02", new Resource("wolf_walking.png", 96, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_03", new Resource("wolf_walking.png", 192, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_04", new Resource("wolf_walking.png", 288, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_05", new Resource("wolf_walking.png", 384, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_06", new Resource("wolf_walking.png", 480, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_07", new Resource("wolf_walking.png", 576, 96, 96, 96));
+        map.put(IMG_GOBLIN + "_" + WEST + "_08", new Resource("wolf_walking.png", 672, 96, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + EAST + "_01", new Resource("wolf_walking.png", 0, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_02", new Resource("wolf_walking.png", 96, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_03", new Resource("wolf_walking.png", 192, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_04", new Resource("wolf_walking.png", 288, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_05", new Resource("wolf_walking.png", 384, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_06", new Resource("wolf_walking.png", 480, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_07", new Resource("wolf_walking.png", 576, 192, 96, 96));
+        map.put(IMG_GOBLIN + "_" + EAST + "_08", new Resource("wolf_walking.png", 672, 192, 96, 96));
+
+        map.put(IMG_GOBLIN + "_" + NORTH + "_01", new Resource("wolf_walking.png", 0, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_02", new Resource("wolf_walking.png", 96, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_03", new Resource("wolf_walking.png", 192, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_04", new Resource("wolf_walking.png", 288, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_05", new Resource("wolf_walking.png", 384, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_06", new Resource("wolf_walking.png", 480, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_07", new Resource("wolf_walking.png", 576, 288, 96, 96));
+        map.put(IMG_GOBLIN + "_" + NORTH + "_08", new Resource("wolf_walking.png", 672, 288, 96, 96));
     }
 
     /**
