@@ -1,18 +1,26 @@
 package neverless.service.util;
 
 import neverless.PlatformShape;
+import neverless.context.EventContext;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.mapobject.AbstractMapObject;
 import neverless.domain.entity.mapobject.Coordinate;
+import neverless.domain.entity.mapobject.Player;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static neverless.util.CoordinateUtils.calcDirection;
+import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service
 public class LocalMapService {
+
+    @Autowired
+    private EventContext eventContext;
 
     /**
      * Returns true if walker can go to new coordinates.
@@ -69,8 +77,15 @@ public class LocalMapService {
         return !intersection;
     }
 
-    public boolean isPortal(int x, int y, Location location) {
-        // todo: fix it.
-       return false;
+    public void makeStep(Player player, int destX, int destY) {
+        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), destX, destY);
+        if (isPassable(player, coordinate.getX(), coordinate.getY())) {
+            player.setX(coordinate.getX());
+            player.setY(coordinate.getY());
+            player.setDirection(calcDirection(player.getX(), player.getY(), destX, destY));
+            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), destX, destY);
+        } else {
+            eventContext.addMapGoImpossibleEvent(player.getUniqueName());
+        }
     }
 }

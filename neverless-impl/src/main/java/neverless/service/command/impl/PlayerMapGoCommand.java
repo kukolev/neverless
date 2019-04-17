@@ -5,12 +5,8 @@ import lombok.experimental.Accessors;
 import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.behavior.BehaviorState;
-import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.service.util.LocalMapService;
-
-import static neverless.util.CoordinateUtils.calcDirection;
-import static neverless.util.CoordinateUtils.calcNextStep;
 
 @Data
 @Accessors(chain = true)
@@ -24,16 +20,7 @@ public class PlayerMapGoCommand extends AbstractCommand {
 
     @Override
     public BehaviorState execute() {
-        // todo: DRY!
-        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), x, y);
-        if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
-            player.setDirection(calcDirection(player.getX(), player.getY(), x, y));
-            player.setX(coordinate.getX());
-            player.setY(coordinate.getY());
-            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), x, y);
-        } else {
-            eventContext.addMapGoImpossibleEvent(player.getUniqueName());
-        }
+        localMapService.makeStep(player, x, y);
         return BehaviorState.MOVE;
     }
 

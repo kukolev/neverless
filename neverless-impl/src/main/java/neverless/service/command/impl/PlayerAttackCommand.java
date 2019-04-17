@@ -6,7 +6,6 @@ import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.item.weapon.AbstractHandEquipment;
-import neverless.domain.entity.mapobject.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static neverless.util.CoordinateUtils.calcDirection;
-import static neverless.util.CoordinateUtils.calcNextStep;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 
 @Data
@@ -37,17 +34,8 @@ public class PlayerAttackCommand extends AbstractCommand {
         AbstractHandEquipment weapon = chooseBestWeapon(player, enemy);
         if (weapon == null) {
             // todo: DRY!
-            Coordinate coordinate = calcNextStep(player.getX(), player.getY(), enemy.getX(), enemy.getY());
-            if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
-                player.setX(coordinate.getX());
-                player.setY(coordinate.getY());
-                player.setDirection(calcDirection(player.getX(), player.getY(), enemy.getX(), enemy.getY()));
-                eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), enemy.getX(), enemy.getY());
-            } else {
-                eventContext.addMapGoImpossibleEvent(player.getUniqueName());
-            }
+            localMapService.makeStep(player, enemy.getX(), enemy.getY());
             return BehaviorState.MOVE;
-
         } else {
 
             if (player.getBehavior().checkTime(weapon.getSpeed())) {
