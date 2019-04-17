@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
+import static java.lang.Math.signum;
 import static java.lang.Math.sqrt;
 import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
 import static neverless.Direction.EAST;
@@ -234,22 +235,24 @@ public class CoordinateUtils {
      * @param secondPoint2 finish coordinates of first second segment.
      */
     public static boolean isSegmentsIntersected(Coordinate firstPoint1, Coordinate firstPoint2, Coordinate secondPoint1, Coordinate secondPoint2) {
-        int ax1 = firstPoint1.getX();
-        int ax2 = firstPoint2.getX();
-        int ay1 = firstPoint1.getY();
-        int ay2 = firstPoint2.getY();
+        long ax1 = firstPoint1.getX();
+        long ax2 = firstPoint2.getX();
+        long ay1 = firstPoint1.getY();
+        long ay2 = firstPoint2.getY();
 
-        int bx1 = secondPoint1.getX();
-        int bx2 = secondPoint2.getX();
-        int by1 = secondPoint1.getY();
-        int by2 = secondPoint2.getY();
+        long bx1 = secondPoint1.getX();
+        long bx2 = secondPoint2.getX();
+        long by1 = secondPoint1.getY();
+        long by2 = secondPoint2.getY();
 
-        int v1 = (bx2 - bx1) * (ay1 - by1) - (by2 - by1) * (ax1 - bx1);
-        int v2 = (bx2 - bx1) * (ay2 - by1) - (by2 - by1) * (ax2 - bx1);
-        int v3 = (ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1);
-        int v4 = (ax2 - ax1) * (by2 - ay1) - (ay2 - ay1) * (bx2 - ax1);
+        long v1 = (bx2 - bx1) * (ay1 - by1) - (by2 - by1) * (ax1 - bx1);
+        long v2 = (bx2 - bx1) * (ay2 - by1) - (by2 - by1) * (ax2 - bx1);
+        long v3 = (ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1);
+        long v4 = (ax2 - ax1) * (by2 - ay1) - (ay2 - ay1) * (bx2 - ax1);
 
-        return (v1 * v2 < 0) && (v3 * v4 < 0);
+        // Here we are using signum instead "(v1 * v2 < 0) && (v3 * v4 < 0)"
+        // to avoid long overflow effect that could happen if coordinates == Integer.MAX_VALUE.
+        return (signum(v1) != signum(v2) && signum(v3) != signum(v4));
     }
 
     /**
@@ -260,9 +263,12 @@ public class CoordinateUtils {
      * @param coordinates   list of coordinates for approximate the area curve.
      */
     public static boolean isPointInner(int x1, int y1, List<Coordinate> coordinates) {
-        // todo: is might be optimized
-        boolean vert = isSegmentAndCurveIntersected(x1, Integer.MIN_VALUE, x1, Integer.MAX_VALUE, coordinates);
-        boolean horz = isSegmentAndCurveIntersected(Integer.MIN_VALUE, y1, Integer.MAX_VALUE, y1, coordinates);
-        return vert && horz;
+        int maxV = Integer.MAX_VALUE;
+        boolean vert1 = isSegmentAndCurveIntersected(x1, y1, x1, y1 - maxV, coordinates);
+        boolean vert2 = isSegmentAndCurveIntersected(x1, y1, x1, y1 + maxV, coordinates);
+        boolean horz1 = isSegmentAndCurveIntersected( x1, y1, x1 - maxV, y1, coordinates);
+        boolean horz2 = isSegmentAndCurveIntersected( x1, y1, x1 + maxV, y1, coordinates);
+
+        return vert1 && vert2 && horz1 && horz2;
     }
 }

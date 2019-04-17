@@ -64,6 +64,7 @@ This paragraph includes main features descriptions. Every feature related to one
 #### Portal display
 * Portal is displaying on GUI as green polygon
 * Portal is displaying only if mouse over it
+* Click on portal generates a command to player to move to portal
 
 #### Test Location
 * Plain map with grass, road and cliffs.

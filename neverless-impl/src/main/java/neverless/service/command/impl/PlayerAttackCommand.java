@@ -36,7 +36,7 @@ public class PlayerAttackCommand extends AbstractCommand {
 
         AbstractHandEquipment weapon = chooseBestWeapon(player, enemy);
         if (weapon == null) {
-
+            // todo: DRY!
             Coordinate coordinate = calcNextStep(player.getX(), player.getY(), enemy.getX(), enemy.getY());
             if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
                 player.setX(coordinate.getX());

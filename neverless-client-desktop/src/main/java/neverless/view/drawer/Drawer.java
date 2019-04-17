@@ -73,7 +73,6 @@ public class Drawer implements ChangeListener<String> {
         sprites.stream()
                 .filter(s -> ids.contains(s.getId()))
                 .forEach(s -> s.drawHighLight(gc));
-        ids.forEach(System.out::println);
     }
 
     /**

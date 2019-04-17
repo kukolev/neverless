@@ -24,6 +24,7 @@ public class PlayerMapGoCommand extends AbstractCommand {
 
     @Override
     public BehaviorState execute() {
+        // todo: DRY!
         Coordinate coordinate = calcNextStep(player.getX(), player.getY(), x, y);
         if (localMapService.isPassable(player, coordinate.getX(), coordinate.getY())) {
             player.setDirection(calcDirection(player.getX(), player.getY(), x, y));

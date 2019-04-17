@@ -34,7 +34,7 @@ import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
-import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
+import static neverless.util.FrameUtils.getSpriteAtScreenCoordinates;
 import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
 
 @Component
@@ -153,8 +153,9 @@ public class Renderer {
      */
     private void calcEffects(Frame frame, ViewContext viewContext) {
         // todo: check for possible race condition!
-        int screenX = viewContext.getScreenX();
-        int screenY = viewContext.getScreenY();
+        Coordinate mousePoint = viewContext.getScreenPoint();
+        int screenX = mousePoint.getX();
+        int screenY = mousePoint.getY();
 
         if (frame != null) {
             Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
@@ -172,8 +173,9 @@ public class Renderer {
      */
     public void calcArea(Frame frame, ViewContext viewContext) {
         Game game = gameContext.getGame();
-        int screenX = viewContext.getScreenX();
-        int screenY = viewContext.getScreenY();
+        Coordinate mousePoint = viewContext.getScreenPoint();
+        int screenX = mousePoint.getX();
+        int screenY = mousePoint.getY();
         int playerX = game.getPlayer().getX();
         int playerY = game.getPlayer().getY();
         int gameX = playerX + screenX - CANVAS_CENTER_X;
@@ -194,6 +196,7 @@ public class Renderer {
                             .collect(Collectors.toList());
 
                     areaHighlighted.getCoordinates().addAll(gameCoordinates);
+                    areaHighlighted.setAbstractArea(a);
                     frame.setAreaHighlighted(areaHighlighted);
                     return null;
                 });

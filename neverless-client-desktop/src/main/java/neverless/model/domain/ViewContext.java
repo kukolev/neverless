@@ -1,13 +1,14 @@
 package neverless.model.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import neverless.domain.entity.mapobject.Coordinate;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Container for all objects needed for display on screen.
  */
-@Data
 public class ViewContext {
     /** Screen horizontal coordinate */
     private int screenX;
@@ -15,6 +16,8 @@ public class ViewContext {
     /** Screen vertical coordinate */
     private int screenY;
 
+    @Getter
+    @Setter
     private DestinationMarkerData marker;
 
     private ReentrantLock lock = new ReentrantLock();
@@ -30,6 +33,18 @@ public class ViewContext {
         try {
             this.screenX = screenX;
             this.screenY = screenY;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public Coordinate getScreenPoint() {
+        lock.lock();
+        try {
+            Coordinate result = new Coordinate()
+                    .setX(screenX)
+                    .setY(screenY);
+            return result;
         } finally {
             lock.unlock();
         }

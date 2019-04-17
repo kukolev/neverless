@@ -133,6 +133,7 @@ public class GameLoader {
         portal.getCoordinates().add(new Coordinate().setX(1600).setY(266));
         portal.getCoordinates().add(new Coordinate().setX(1632).setY(318));
         portal.getCoordinates().add(new Coordinate().setX(1633).setY(380));
+        portal.setEnterPoint(new Coordinate().setX(1580).setY(380));
 
         return portal;
     }

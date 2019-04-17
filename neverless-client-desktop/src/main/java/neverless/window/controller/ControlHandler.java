@@ -1,6 +1,7 @@
 package neverless.window.controller;
 
 import neverless.context.GameContext;
+import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.model.Model;
 import neverless.service.command.factory.GameCommandFactory;
 import neverless.service.command.factory.PlayerCommandFactory;
@@ -8,16 +9,15 @@ import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
+import neverless.util.FrameUtils;
 import neverless.view.domain.Frame;
 import neverless.view.domain.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static neverless.Constants.LOCAL_MAP_STEP_LENGTH;
-import static neverless.MapObjectMetaType.TERRAIN;
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
-import static neverless.util.SpriteUtils.getSpriteAtScreenCoordinates;
+import static neverless.util.FrameUtils.getSpriteAtScreenCoordinates;
 
 @Component
 public class ControlHandler {
@@ -41,32 +41,38 @@ public class ControlHandler {
      * @param screenY vertical cell index
      */
     public void click(int screenX, int screenY) {
+        model.setScreenPoint(screenX, screenY);
         Frame frame = frameExchanger.getFrame();
 
         Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
-        MapObjectMetaType metaType = sprite != null ? sprite.getMetaType() : TERRAIN;
         Player player = gameContext.getPlayer();
+        if (sprite != null) {
+            // Click on sprite
+            MapObjectMetaType metaType = sprite.getMetaType();
 
-        switch (metaType) {
-            case TERRAIN:
-            case IMPASSIBLE_TERRAIN:    {
-
-                int dx = screenX - CANVAS_CENTER_X;
-                int dy = screenY - CANVAS_CENTER_Y;
-
-                int newGameX = player.getX() + dx;
-                int newGameY = player.getY() + dy;
-
-                model.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
-            }
-            break;
-
-            case ENEMY: {
-                if (sprite.getMapObject() instanceof AbstractEnemy) {
-                    cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
+            switch (metaType) {
+                case ENEMY: {
+                    if (sprite.getMapObject() instanceof AbstractEnemy) {
+                        cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
+                    }
                 }
+                break;
             }
-            break;
+        } else if (FrameUtils.isAreaAtScreenCoordinates(frame.getAreaHighlighted(), screenX, screenY)) {
+            // Click on area
+            if (frame.getAreaHighlighted().getAbstractArea() instanceof LocationPortal) {
+                LocationPortal portal = (LocationPortal) frame.getAreaHighlighted().getAbstractArea();
+                model.putCommand(commandFactory.createPlayerPortalEnterCommand(portal));
+            }
+        } else {
+            // Click on background
+            int dx = screenX - CANVAS_CENTER_X;
+            int dy = screenY - CANVAS_CENTER_Y;
+
+            int newGameX = player.getX() + dx;
+            int newGameY = player.getY() + dy;
+
+            model.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
         }
     }
 
