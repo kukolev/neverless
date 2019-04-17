@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.behavior.BehaviorState;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.service.util.LocalMapService;
 

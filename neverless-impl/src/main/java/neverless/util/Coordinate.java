@@ -1,4 +1,4 @@
-package neverless.domain.entity.mapobject;
+package neverless.util;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

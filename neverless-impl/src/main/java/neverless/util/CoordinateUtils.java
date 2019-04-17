@@ -1,7 +1,6 @@
 package neverless.util;
 
 import neverless.Direction;
-import neverless.domain.entity.mapobject.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

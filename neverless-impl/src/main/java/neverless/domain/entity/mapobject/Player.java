@@ -7,12 +7,11 @@ import neverless.PlatformShape;
 import neverless.Signatures;
 import neverless.domain.entity.Location;
 import neverless.domain.entity.inventory.Inventory;
-import neverless.MapObjectMetaType;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Player extends AbstractMapObject {
+public class Player extends AbstractPhysicalObject {
 
     private Integer hitPoints = 100;
     private Inventory inventory;
@@ -30,10 +29,5 @@ public class Player extends AbstractMapObject {
 
     public void decreaseHitPoints(int damage) {
         hitPoints -= damage;
-    }
-
-    @Override
-    public MapObjectMetaType getMetaType() {
-        return MapObjectMetaType.PLAYER;
     }
 }

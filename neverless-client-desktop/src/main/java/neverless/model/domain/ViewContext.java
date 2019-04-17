@@ -2,7 +2,7 @@ package neverless.model.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 
 import java.util.concurrent.locks.ReentrantLock;
 

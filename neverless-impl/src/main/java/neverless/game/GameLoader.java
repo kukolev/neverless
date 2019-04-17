@@ -6,7 +6,7 @@ import neverless.domain.entity.inventory.Bag;
 import neverless.domain.entity.inventory.Equipment;
 import neverless.domain.entity.inventory.Inventory;
 import neverless.domain.entity.item.weapon.Sword;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.building.TavernSmall;
 import neverless.domain.entity.mapobject.portal.LocationPortal;
@@ -127,7 +127,7 @@ public class GameLoader {
         portal
                 .setDestination(destination)
                 .setDestX(64)
-                .setDestY(160);
+                .setDestY(500);
         portal.getCoordinates().add(new Coordinate().setX(1530).setY(380));
         portal.getCoordinates().add(new Coordinate().setX(1546).setY(296));
         portal.getCoordinates().add(new Coordinate().setX(1600).setY(266));
@@ -142,8 +142,14 @@ public class GameLoader {
         LocationPortal portal = new LocationPortal();
         portal
                 .setDestination(destination)
-                .setDestX(1632)
-                .setDestY(1664);
+                .setDestX(1600)
+                .setDestY(400);
+        portal.getCoordinates().add(new Coordinate().setX(0).setY(400));
+        portal.getCoordinates().add(new Coordinate().setX(50).setY(400));
+        portal.getCoordinates().add(new Coordinate().setX(50).setY(600));
+        portal.getCoordinates().add(new Coordinate().setX(0).setY(600));
+        portal.setEnterPoint(new Coordinate().setX(50).setY(500));
+
         return portal;
     }
 

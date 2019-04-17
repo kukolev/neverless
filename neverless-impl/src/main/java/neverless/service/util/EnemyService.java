@@ -1,6 +1,6 @@
 package neverless.service.util;
 
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;

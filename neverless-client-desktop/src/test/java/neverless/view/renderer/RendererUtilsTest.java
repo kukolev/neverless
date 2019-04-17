@@ -1,6 +1,6 @@
 package neverless.view.renderer;
 
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 import neverless.PlatformShape;
 import neverless.view.domain.Sprite;
 import org.testng.annotations.Test;

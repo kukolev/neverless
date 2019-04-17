@@ -1,13 +1,8 @@
 package neverless.domain.entity.mapobject.tree;
 
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.MapObjectMetaType;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 
 
-public abstract class AbstractTree extends AbstractMapObject {
+public abstract class AbstractTree extends AbstractPhysicalObject {
 
-    @Override
-    public MapObjectMetaType getMetaType() {
-        return MapObjectMetaType.IMPASSIBLE_TERRAIN;
-    }
 }

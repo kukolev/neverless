@@ -9,7 +9,7 @@ import neverless.context.RequestContext;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.Location;
-import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.enemy.EnemyFactory;
@@ -150,8 +150,8 @@ public class EnemyCommander {
     }
 
     private boolean isCanGoNewPosition(AbstractEnemy enemy, int newX, int newY) {
-        List<AbstractMapObject> objects = enemy.getLocation().getObjects();
-        for(AbstractMapObject object: objects) {
+        List<AbstractPhysicalObject> objects = enemy.getLocation().getObjects();
+        for(AbstractPhysicalObject object: objects) {
             if (isSegmentAndCurveIntersected(enemy.getX(), enemy.getY(), newX, newY, object.getPlatformCoordinates())) {
                 return false;
             }

@@ -2,7 +2,7 @@ package neverless.domain.entity.mapobject.building;
 
 import neverless.Direction;
 import neverless.Signatures;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

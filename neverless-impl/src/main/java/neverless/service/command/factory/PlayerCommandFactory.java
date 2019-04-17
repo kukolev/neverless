@@ -48,10 +48,6 @@ public class PlayerCommandFactory {
 
     public PlayerPortalEnterCommand createPlayerPortalEnterCommand(LocationPortal portal) {
         Player player = gameContext.getPlayer();
-        return new PlayerPortalEnterCommand()
-                .setPlayer(player)
-                .setPortal(portal)
-                .setLocalMapService(localMapService)
-                .setEventContext(eventContext);
+        return new PlayerPortalEnterCommand(player, eventContext, portal, localMapService);
     }
 }

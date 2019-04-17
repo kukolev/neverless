@@ -3,8 +3,8 @@ package neverless.domain.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.domain.entity.mapobject.AbstractArea;
-import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.AbstractMapArea;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.entity.mapobject.npc.AbstractNpc;
 import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
@@ -20,8 +20,8 @@ public class Location extends AbstractGameObject{
 
     private String title;
     private String signature;
-    private List<AbstractMapObject> objects = new CopyOnWriteArrayList<>();
-    private List<AbstractArea> areas = new CopyOnWriteArrayList<>();
+    private List<AbstractPhysicalObject> objects = new CopyOnWriteArrayList<>();
+    private List<AbstractMapArea> areas = new CopyOnWriteArrayList<>();
 
     public List<AbstractRespawnPoint> getRespawnPoints() {
         return objects.stream()

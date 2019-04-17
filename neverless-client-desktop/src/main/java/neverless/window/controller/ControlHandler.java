@@ -5,7 +5,6 @@ import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.model.Model;
 import neverless.service.command.factory.GameCommandFactory;
 import neverless.service.command.factory.PlayerCommandFactory;
-import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.util.FrameExchanger;
@@ -43,25 +42,18 @@ public class ControlHandler {
     public void click(int screenX, int screenY) {
         model.setScreenPoint(screenX, screenY);
         Frame frame = frameExchanger.getFrame();
-
         Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
         Player player = gameContext.getPlayer();
+
         if (sprite != null) {
             // Click on sprite
-            MapObjectMetaType metaType = sprite.getMetaType();
-
-            switch (metaType) {
-                case ENEMY: {
-                    if (sprite.getMapObject() instanceof AbstractEnemy) {
-                        cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
-                    }
-                }
-                break;
+            if (sprite.getMapObject() instanceof AbstractEnemy) {
+                cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
             }
         } else if (FrameUtils.isAreaAtScreenCoordinates(frame.getAreaHighlighted(), screenX, screenY)) {
             // Click on area
-            if (frame.getAreaHighlighted().getAbstractArea() instanceof LocationPortal) {
-                LocationPortal portal = (LocationPortal) frame.getAreaHighlighted().getAbstractArea();
+            if (frame.getAreaHighlighted().getMapArea() instanceof LocationPortal) {
+                LocationPortal portal = (LocationPortal) frame.getAreaHighlighted().getMapArea();
                 model.putCommand(commandFactory.createPlayerPortalEnterCommand(portal));
             }
         } else {

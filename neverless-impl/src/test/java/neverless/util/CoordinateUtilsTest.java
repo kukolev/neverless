@@ -1,6 +1,5 @@
 package neverless.util;
 
-import neverless.domain.entity.mapobject.Coordinate;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;

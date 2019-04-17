@@ -7,8 +7,8 @@ import neverless.context.EventContext;
 import neverless.context.GameContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.behavior.BehaviorState;
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
+import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.Profile;
 import neverless.model.domain.DestinationMarkerData;
@@ -80,9 +80,9 @@ public class Renderer {
         Sprite background = calcBackground(backSignature, playerX, playerY);
         frame.setBackground(background);
 
-        List<AbstractMapObject> objects = game.getPlayer().getLocation().getObjects();
+        List<AbstractPhysicalObject> objects = game.getPlayer().getLocation().getObjects();
         List<Sprite> sprites = new ArrayList<>();
-        for (AbstractMapObject o : objects) {
+        for (AbstractPhysicalObject o : objects) {
             Sprite sprite = calcSprite(o, playerX, playerY);
             sprites.add(sprite);
         }
@@ -196,7 +196,7 @@ public class Renderer {
                             .collect(Collectors.toList());
 
                     areaHighlighted.getCoordinates().addAll(gameCoordinates);
-                    areaHighlighted.setAbstractArea(a);
+                    areaHighlighted.setMapArea(a);
                     frame.setAreaHighlighted(areaHighlighted);
                     return null;
                 });
@@ -218,7 +218,7 @@ public class Renderer {
                 .setPlatformShape(PlatformShape.CUSTOM);
     }
 
-    private Sprite calcSprite(AbstractMapObject object, double playerX, double playerY) {
+    private Sprite calcSprite(AbstractPhysicalObject object, double playerX, double playerY) {
         int centerX = CANVAS_WIDTH / 2;
         int centerY = CANVAS_HEIGHT / 2;
 
@@ -237,11 +237,10 @@ public class Renderer {
                 .setPlatformShapeWidth(object.getPlatformWidth())
                 .setPlatformShapeHeight(object.getPlatformHeight())
                 .setHeight(object.getHeight())
-                .setWidth(object.getWidth())
-                .setMetaType(object.getMetaType());
+                .setWidth(object.getWidth());
     }
 
-    private Resource calcResource(AbstractMapObject object) {
+    private Resource calcResource(AbstractPhysicalObject object) {
         Phase phase = cache.get(object.getUniqueName());
         if (phase == null) {
             phase = new Phase();

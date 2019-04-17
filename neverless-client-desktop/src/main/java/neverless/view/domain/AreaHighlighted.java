@@ -4,8 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.entity.mapobject.AbstractArea;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.domain.entity.mapobject.AbstractMapArea;
+import neverless.util.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class AreaHighlighted extends AbstractViewObject {
 
-    private AbstractArea abstractArea;
+    private AbstractMapArea mapArea;
     private List<Coordinate> coordinates = new ArrayList<>();
 
     /**

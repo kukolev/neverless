@@ -3,6 +3,7 @@ package neverless.view.drawer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import neverless.util.FrameExchanger;
 import neverless.view.domain.AreaHighlighted;
 import neverless.view.domain.Frame;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static neverless.util.Constants.CANVAS_HEIGHT;
+import static neverless.util.Constants.CANVAS_WIDTH;
 
 @Component
 public class Drawer implements ChangeListener<String> {
@@ -42,22 +46,33 @@ public class Drawer implements ChangeListener<String> {
         Frame frame = frameExchanger.getFrame();
         displayGameState(frame.getProfileWidget());
         displayLog(frame.getLog());
-        displayLocalMap(frame.getBackground(), frame.getSprites());
+        displayBackground(frame.getBackground());
+        displayLocalMap(frame.getSprites());
         displayHighLights(frame.getSprites(), frame.getHighLighted());
         displayMarker(frame.getMarker());
         displayHighLighedArea(frame.getAreaHighlighted());
     }
 
     /**
-     * Draws graphic scene on game screen in local map pane.
+     * Draws background of the game scene.
      *
      * @param background special sprite for background.
+     */
+    private void displayBackground(Sprite background) {
+        GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        background.draw(gc);
+    }
+
+    /**
+     * Draws graphic scene on game screen in local map pane.
+     *
      * @param sprites    list of sprites for drawing.
      */
-    private void displayLocalMap(Sprite background, List<Sprite> sprites) {
+    private void displayLocalMap(List<Sprite> sprites) {
         if (sprites.size() > 0) {
             GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
-            background.draw(gc);
             sprites.forEach(s -> s.draw(gc));
         }
     }

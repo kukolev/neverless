@@ -7,9 +7,8 @@ import javafx.scene.shape.ArcType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.MapObjectMetaType;
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
+import neverless.util.Coordinate;
 import neverless.PlatformShape;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(exclude = "mapObject")
 public class Sprite extends AbstractViewObject {
 
-    private AbstractMapObject mapObject;
+    private AbstractPhysicalObject mapObject;
     private Image image;
 
     private int x;
@@ -32,7 +31,6 @@ public class Sprite extends AbstractViewObject {
     private List<Coordinate> platformCoordinates = new ArrayList<>();
     private int platformShapeWidth;
     private int platformShapeHeight;
-    private MapObjectMetaType metaType;
 
     /**
      * Returns id of associated object.

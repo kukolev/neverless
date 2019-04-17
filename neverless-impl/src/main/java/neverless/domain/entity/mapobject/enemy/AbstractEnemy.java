@@ -6,9 +6,8 @@ import lombok.experimental.Accessors;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.PlatformShape;
 import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
-import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
-import neverless.MapObjectMetaType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbstractEnemy extends AbstractMapObject {
+public class AbstractEnemy extends AbstractPhysicalObject {
 
     private Integer hitPoints;
     private AbstractRespawnPoint respawnPoint;
@@ -48,11 +47,6 @@ public class AbstractEnemy extends AbstractMapObject {
         } else {
             hitPoints = 0;
         }
-    }
-
-    @Override
-    public MapObjectMetaType getMetaType() {
-        return MapObjectMetaType.ENEMY;
     }
 
     @Override

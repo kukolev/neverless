@@ -4,18 +4,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.dialog.Dialog;
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.MapObjectMetaType;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-public abstract class AbstractNpc extends AbstractMapObject {
+public abstract class AbstractNpc extends AbstractPhysicalObject {
 
     private Dialog dialog = new Dialog();
-
-    @Override
-    public MapObjectMetaType getMetaType() {
-        return MapObjectMetaType.NPC;
-    }
 }

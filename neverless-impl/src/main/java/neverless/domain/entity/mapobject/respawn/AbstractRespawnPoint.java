@@ -4,15 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.PlatformShape;
-import neverless.domain.entity.mapobject.AbstractMapObject;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
-import neverless.MapObjectMetaType;
 import neverless.domain.entity.mapobject.enemy.EnemyFactory;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractRespawnPoint extends AbstractMapObject {
+public abstract class AbstractRespawnPoint extends AbstractPhysicalObject {
 
     private Integer areaX = 100;
     private Integer areaY = 100;
@@ -28,12 +27,6 @@ public abstract class AbstractRespawnPoint extends AbstractMapObject {
 
     /** Returns a factory which able to create enemies for this point. */
     public abstract Class<? extends EnemyFactory> getEnemyFactory();
-
-    /** {@inheritDoc} */
-    @Override
-    public MapObjectMetaType getMetaType() {
-        return MapObjectMetaType.TERRAIN;
-    }
 
     public PlatformShape getPlatformShape() {
         return PlatformShape.CUSTOM;

@@ -2,10 +2,11 @@ package neverless.service.util;
 
 import neverless.PlatformShape;
 import neverless.context.EventContext;
-import neverless.domain.entity.Location;
-import neverless.domain.entity.mapobject.AbstractMapObject;
-import neverless.domain.entity.mapobject.Coordinate;
+import neverless.context.GameContext;
+import neverless.domain.entity.mapobject.AbstractPhysicalObject;
+import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.Player;
+import neverless.domain.entity.mapobject.portal.LocationPortal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class LocalMapService {
 
     @Autowired
     private EventContext eventContext;
+    @Autowired
+    private GameContext gameContext;
 
     /**
      * Returns true if walker can go to new coordinates.
@@ -29,10 +32,10 @@ public class LocalMapService {
      * @param newX      new horizontal coordinate where walker wants to go to
      * @param newY      new vertical coordinate where walker wants to go to
      */
-    public boolean isPassable(AbstractMapObject walker, int newX, int newY) {
+    public boolean isPassable(AbstractPhysicalObject walker, int newX, int newY) {
         boolean intersection = false;
 
-        for (AbstractMapObject object: walker.getLocation().getObjects()) {
+        for (AbstractPhysicalObject object: walker.getLocation().getObjects()) {
             if (walker.equals(object)) {
                 continue;
             }
@@ -47,27 +50,21 @@ public class LocalMapService {
                                     .setY(object.getY() + c.getY()))
                             .collect(Collectors.toList());
 
-                    int walkerCenterX = newX;
-                    int walkerCenterY = newY;
                     int walkerRadiusX = walker.getPlatformWidth() / 2;
                     int walkerRadiusY = walker.getPlatformHeight() / 2;
 
-                    intersection = isCurvesIntersected(walkerCenterX, walkerCenterY, walkerRadiusX, walkerRadiusY, realCoordinates);
+                    intersection = isCurvesIntersected(newX, newY, walkerRadiusX, walkerRadiusY, realCoordinates);
                 }
             } else if (object.getPlatformShape() == PlatformShape.ELLIPSE) {
                 if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {
-                    int walkerCenterX = newX;
-                    int walkerCenterY = newY;
+
                     int walkerRadiusX = walker.getPlatformWidth() / 2;
                     int walkerRadiusY = walker.getPlatformHeight() / 2;
-
-                    int objectCenterX = object.getX();
-                    int objectCenterY = object.getY();
                     int objectRadiusX = object.getPlatformWidth() / 2;
                     int objectRadiusY = object.getPlatformHeight() / 2;
 
-                    intersection = isCurvesIntersected(walkerCenterX, walkerCenterY, walkerRadiusX, walkerRadiusY,
-                            objectCenterX, objectCenterY, objectRadiusX, objectRadiusY);
+                    intersection = isCurvesIntersected(newX, newY, walkerRadiusX, walkerRadiusY,
+                            object.getX(), object.getY(), objectRadiusX, objectRadiusY);
                 }
             }
             if (intersection) {
@@ -87,5 +84,13 @@ public class LocalMapService {
         } else {
             eventContext.addMapGoImpossibleEvent(player.getUniqueName());
         }
+    }
+
+    public void enterPortal(Player player, LocationPortal portal) {
+        player.getLocation().getObjects().remove(player);
+        portal.getDestination().getObjects().add(player);
+        player.setLocation(portal.getDestination());
+        player.setX(portal.getDestX());
+        player.setY(portal.getDestY());
     }
 }
