@@ -1,4 +1,4 @@
-package neverless.service.core;
+package neverless.service.core.ai;
 
 import neverless.service.command.AbstractCommand;
 import neverless.service.command.factory.EnemyCommandFactory;
@@ -17,6 +17,7 @@ import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.domain.event.AbstractEvent;
 import neverless.domain.event.MapGoImpossibleEvent;
 import neverless.context.GameContext;
+import neverless.service.util.EnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -44,10 +45,59 @@ public class EnemyCommander {
     private ApplicationContext applicationContext;
     @Autowired
     private EnemyCommandFactory commandFactory;
+    @Autowired
+    private EnemyService enemyService;
 
 
     public void processEnemies() {
         respawn();
+        orderNewCommand();
+        performCommands();
+    }
+
+    /**
+     * Creates enemies, related to respawn points.
+     * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
+     */
+    public void respawn() {
+        Game game = gameContext.getGame();
+        game.getLocations()
+                .forEach(l -> {
+                    List<AbstractRespawnPoint> points = l.getRespawnPoints();
+                    points.forEach(p -> {
+
+                        // Guarantee that new enemy would not be created
+                        // until current is alive
+                        if (p.getEnemy() != null) {
+                            p.setLastTurnInLife(requestContext.getTurnNumber());
+                        }
+                        int delta = requestContext.getTurnNumber() - p.getLastTurnInLife();
+
+                        // Calculates if new enemy should be respawn
+                        if (delta > p.getRespawnPeriod()) {
+                            if (p.getEnemy() == null) {
+                                AbstractEnemy enemy = respawn(p, p.getLocation());
+                                p.setEnemy(enemy);
+                                p.setLastTurnInLife(requestContext.getTurnNumber());
+                            }
+                        }
+                    });
+                });
+    }
+
+    /**
+     * Decides if should be new command for all enemies in location.
+     */
+    public void orderNewCommand() {
+        Player player = gameContext.getPlayer();
+        player.getLocation().getRespawnPoints()
+                .forEach(rp -> {
+                    AbstractEnemy enemy = rp.getEnemy();
+                    calcNewCommand(enemy);
+                });
+    }
+
+    private void performCommands() {
         Game game = gameContext.getGame();
         game.getLocations().forEach(location ->
                 location.getRespawnPoints().forEach(rp -> {
@@ -57,38 +107,15 @@ public class EnemyCommander {
                         if (command != null) {
                             BehaviorState state = command.execute();
                             enemy.getBehavior().changeState(state);
+                            enemy.getBehavior().tick();
+                            if (command.checkFinished()) {
+                                enemy.setCommand(null);
+                                enemy.getBehavior().changeState(BehaviorState.IDLE);
+                            }
                         }
-                        calcNewCommand(enemy);
+                        //calcNewCommand(enemy);
                     }
                 }));
-    }
-
-    /**
-     * Creates enemies, related to respawn points.
-     * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
-     */
-    public void respawn() {
-        Player player = gameContext.getPlayer();
-
-        List<AbstractRespawnPoint> points = player.getLocation().getRespawnPoints();
-        points.forEach(p -> {
-
-            // Guarantee that new enemy would not be created
-            // until current is alive
-            if (p.getEnemy() != null) {
-                p.setLastTurnInLife(requestContext.getTurnNumber());
-            }
-            int delta = requestContext.getTurnNumber() - p.getLastTurnInLife();
-
-            // Calculates if new enemy should be respawn
-            if (delta > p.getRespawnPeriod()) {
-                if (p.getEnemy() == null) {
-                    AbstractEnemy enemy = respawn(p, p.getLocation());
-                    p.setEnemy(enemy);
-                    p.setLastTurnInLife(requestContext.getTurnNumber());
-                }
-            }
-        });
     }
 
     /**
@@ -97,13 +124,13 @@ public class EnemyCommander {
      * @param enemy enemy whose command should be calculated
      */
     private void calcNewCommand(AbstractEnemy enemy) {
-        boolean isNeedToAttack = false; // todo: check range and if already attacking
+        boolean isNeedToAttack = isAggressiveRange(enemy);
         boolean isWaitingEnough = isWaitingEnough(enemy);
         boolean isEndOfMove = isEndOfMove(enemy);
 
         AbstractCommand command = enemy.getCommand();
         if (isNeedToAttack) {
-            command = commandFactory.createEnemyAttackCommand();
+            command = commandFactory.createEnemyAttackCommand(enemy);
         } else if (isWaitingEnough) {
             Random random = new Random(System.currentTimeMillis());
 
@@ -128,7 +155,9 @@ public class EnemyCommander {
         } else if (isEndOfMove) {
             command = commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME);
         }
-        enemy.setCommand(command);
+//        if (command != null && !command.equals(enemy.getCommand())) {
+            enemy.setCommand(command);
+//        }
     }
 
     private boolean isWaitingEnough(AbstractEnemy enemy) {
@@ -151,7 +180,7 @@ public class EnemyCommander {
 
     private boolean isCanGoNewPosition(AbstractEnemy enemy, int newX, int newY) {
         List<AbstractPhysicalObject> objects = enemy.getLocation().getObjects();
-        for(AbstractPhysicalObject object: objects) {
+        for (AbstractPhysicalObject object : objects) {
             if (isSegmentAndCurveIntersected(enemy.getX(), enemy.getY(), newX, newY, object.getPlatformCoordinates())) {
                 return false;
             }

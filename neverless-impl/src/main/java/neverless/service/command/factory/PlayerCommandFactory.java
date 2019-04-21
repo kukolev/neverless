@@ -9,6 +9,7 @@ import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.entity.mapobject.portal.LocationPortal;
 import neverless.context.GameContext;
+import neverless.service.util.CombatService;
 import neverless.service.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,14 +23,12 @@ public class PlayerCommandFactory {
     private LocalMapService localMapService;
     @Autowired
     private GameContext gameContext;
+    @Autowired
+    private CombatService combatService;
 
     public PlayerAttackCommand createPlayerAttackCommand(AbstractEnemy enemy) {
         Player player = gameContext.getPlayer();
-        return new PlayerAttackCommand()
-                .setEnemy(enemy)
-                .setEventContext(eventContext)
-                .setLocalMapService(localMapService)
-                .setPlayer(player);
+        return new PlayerAttackCommand(enemy, player, localMapService, eventContext, combatService);
     }
 
     public PlayerMapGoCommand createPlayerMapGoCommand(int x, int y) {

@@ -3,6 +3,7 @@ package neverless.service.util;
 import neverless.PlatformShape;
 import neverless.context.EventContext;
 import neverless.context.GameContext;
+import neverless.domain.entity.mapobject.AbstractLiveObject;
 import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.Player;
@@ -74,7 +75,7 @@ public class LocalMapService {
         return !intersection;
     }
 
-    public void makeStep(Player player, int destX, int destY) {
+    public void makeStep(AbstractLiveObject player, int destX, int destY) {
         Coordinate coordinate = calcNextStep(player.getX(), player.getY(), destX, destY);
         if (isPassable(player, coordinate.getX(), coordinate.getY())) {
             player.setX(coordinate.getX());

@@ -27,26 +27,10 @@ public class InventoryService {
         clearRightHand();
         Inventory inventory = loadInventory();
         AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
-        inventory.getEquipment().setRightHand(newWeapon);
+        inventory.getEquipment().setWeapon(newWeapon);
         inventory.getBag().remove(newWeapon);
         Player player = gameContext.getPlayer();
         eventContext.addInventoryRightHandEquipEvent();
-    }
-
-    /**
-     * Equips weapon in left hand.
-     * Item added to left hand. Current weapon in left hand goes to bag.
-     *
-     * @param itemNo order number of item in Bag.
-     */
-    public void equipLeftHand(Integer itemNo) {
-        clearLeftHand();
-        Inventory inventory = loadInventory();
-        AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
-        inventory.getEquipment().setLeftHand(newWeapon);
-        inventory.getBag().remove(newWeapon);
-        Player player = gameContext.getPlayer();
-        eventContext.addInventoryLeftHandEquipEvent();
     }
 
     /**
@@ -54,23 +38,11 @@ public class InventoryService {
      */
     public void clearRightHand() {
         Inventory inventory = loadInventory();
-        AbstractHandEquipment curWeapon = inventory.getEquipment().getRightHand();
+        AbstractHandEquipment curWeapon = inventory.getEquipment().getWeapon();
         if (curWeapon != null) {
             inventory.getBag().addLast(curWeapon);
         }
-        inventory.getEquipment().setRightHand(null);
-    }
-
-    /**
-     * Clears left hand. Current weapon in left hand goes to bag.
-     */
-    public void clearLeftHand() {
-        Inventory inventory = loadInventory();
-        AbstractHandEquipment curWeapon = inventory.getEquipment().getLeftHand();
-        if (curWeapon != null) {
-            inventory.getBag().addLast(curWeapon);
-        }
-        inventory.getEquipment().setLeftHand(null);
+        inventory.getEquipment().setWeapon(null);
     }
 
     /**

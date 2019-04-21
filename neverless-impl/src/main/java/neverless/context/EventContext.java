@@ -4,11 +4,9 @@ import lombok.Getter;
 import neverless.domain.event.AbstractEvent;
 import neverless.domain.event.DialogSelectPhraseEvent;
 import neverless.domain.event.DialogStartEvent;
-import neverless.domain.event.FightingEnemyHitEvent;
-import neverless.domain.event.FightingEnemyKilledEvent;
-import neverless.domain.event.FightingEnemyMissEvent;
-import neverless.domain.event.FightingPlayerHitEvent;
-import neverless.domain.event.FightingPlayerMissEvent;
+import neverless.domain.event.CombatKillEvent;
+import neverless.domain.event.CombatHitEvent;
+import neverless.domain.event.CombatMissEvent;
 import neverless.domain.event.InventoryLeftHandEquipEvent;
 import neverless.domain.event.InventoryRightHandEquipEvent;
 import neverless.domain.event.JournalUpdateEvent;
@@ -53,7 +51,7 @@ public class EventContext {
                 .setPhraseNumber(phraseNumber));
     }
 
-    public void addDialogStartEvent(String objectId, String npcName, Integer npcX, Integer npcY) {
+    public void addDialogStartEvent(String objectId, String npcName) {
         addEvent(new DialogStartEvent()
                 .setNpcName(npcName));
     }
@@ -76,30 +74,19 @@ public class EventContext {
         addEvent(new PortalEnterEvent());
     }
 
-    public void addFightingEnemyHitEvent(String enemyId, Integer damage) {
-        addEvent(new FightingEnemyHitEvent()
-                .setEnemyId(enemyId)
+    public void addCombatHitEvent(String defender, Integer damage) {
+        addEvent(new CombatHitEvent()
+                .setDefenderId(defender)
                 .setDamage(damage));
     }
 
-    public void addFightingEnemyMissEvent(String enemyId) {
-        addEvent(new FightingEnemyMissEvent()
-                .setEnemyId(enemyId));
+    public void addCombatMissEvent(String defender) {
+        addEvent(new CombatMissEvent()
+                .setDefenderId(defender));
     }
 
-    public void addFightingPlayerHitEvent(String enemyId, Integer damage) {
-        addEvent(new FightingPlayerHitEvent()
-                .setEnemyId(enemyId)
-                .setDamage(damage));
-    }
-
-    public void addFightingPlayerMissEvent(String enemyId) {
-        addEvent(new FightingPlayerMissEvent()
-                .setEnemyId(enemyId));
-    }
-
-    public void addFightingEnemyKillEvent(String enemyId) {
-        addEvent(new FightingEnemyKilledEvent()
-        .setEnemyId(enemyId));
+    public void addCombatKillEvent(String defender) {
+        addEvent(new CombatKillEvent()
+        .setDefenderId(defender));
     }
 }

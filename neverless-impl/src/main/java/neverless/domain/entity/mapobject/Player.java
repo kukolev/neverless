@@ -11,11 +11,7 @@ import neverless.domain.entity.inventory.Inventory;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Player extends AbstractPhysicalObject {
-
-    private Integer hitPoints = 100;
-    private Inventory inventory;
-    private Location location;
+public class Player extends AbstractLiveObject {
 
     @Override
     public String getSignature() {
@@ -27,7 +23,4 @@ public class Player extends AbstractPhysicalObject {
         return PlatformShape.ELLIPSE;
     }
 
-    public void decreaseHitPoints(int damage) {
-        hitPoints -= damage;
-    }
 }

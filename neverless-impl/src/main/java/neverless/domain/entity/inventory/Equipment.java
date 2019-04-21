@@ -8,6 +8,5 @@ import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 @Accessors(chain = true)
 public class Equipment {
     private String id;
-    private AbstractHandEquipment rightHand;
-    private AbstractHandEquipment leftHand;
+    private AbstractHandEquipment weapon;
 }

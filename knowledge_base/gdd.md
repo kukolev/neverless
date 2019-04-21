@@ -48,6 +48,14 @@ This paragraph includes main features descriptions. Every feature related to one
 * Enemies are able to move through the area of location
 * Enemies move randomly
 
+#### Enemy attack
+* Enemies are able to attack the player
+* Enemy attack player when last one is in enemy's aggressive range
+* Attack depends on next factors:
+  * Range between player and enemy
+  * Weapon speed
+  * Weapon power   
+
 #### Enemy respawn
 * Enemies respawn at respawn point position
 

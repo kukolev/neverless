@@ -28,13 +28,15 @@ public class EnemyFactory {
 
         AbstractEnemy goblin = new AbstractEnemy();
         goblin
-                .setHitPoints(GOBLIN_HP)
-                .setSpeed(GOBLIN_SPEED)
-                .setSignature(IMG_GOBLIN)
                 .setExperience(GOBLIN_EXPERIENCE)
+                .setSignature(IMG_GOBLIN)
+                .setSpeed(GOBLIN_SPEED)
+                .setHitPoints(GOBLIN_HP)
                 .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
         goblin
-                .getWeapons().add(sword);
+                .getInventory()
+                .getEquipment()
+                .setWeapon(sword);
         return goblin;
     }
 

@@ -7,13 +7,14 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class FightingEnemyKilledEvent extends AbstractEvent {
+public class CombatHitEvent extends AbstractEvent {
 
-    private String enemyId;
+    private String defenderId;
+    private Integer damage;
 
     @Override
     public String toString() {
-        return String.format("Enemy %s is dead", enemyId);
+        return String.format("%s gains damage: %s", defenderId, damage);
     }
 
     @Override

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class FightingPlayerMissEvent extends AbstractEvent {
+public class CombatMissEvent extends AbstractEvent {
 
-    private String enemyId;
+    private String defenderId;
 }

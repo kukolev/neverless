@@ -5,49 +5,30 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.PlatformShape;
-import neverless.domain.entity.item.weapon.AbstractMeleeWeapon;
-import neverless.domain.entity.mapobject.AbstractPhysicalObject;
+import neverless.domain.entity.mapobject.AbstractLiveObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 
-import java.util.ArrayList;
-import java.util.List;
+import static neverless.Constants.ENEMY_DEFAULT_AGGRESSIVE_RANGE;
 
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbstractEnemy extends AbstractPhysicalObject {
+public class AbstractEnemy extends AbstractLiveObject {
 
-    private Integer hitPoints;
     private AbstractRespawnPoint respawnPoint;
-    private List<AbstractMeleeWeapon> weapons = new ArrayList<>();
     private Integer bornX;
     private Integer bornY;
     private Integer areaX;
     private Integer areaY;
     private String signature;
-    private Integer agrRange = 50; // todo: should be in constants
+    private Integer agrRange = ENEMY_DEFAULT_AGGRESSIVE_RANGE;
     private int experience;
 
     /**
      * Count of turns while enemy walks in one direction (walkDirection field)
      */
-    private Integer walkTime = 0;
     private BehaviorState behaviorState;
     private Integer speed;
-
-    /**
-     * Decreases amount of hit points.
-     * Hit points could not be less than zero.
-     *
-     * @param damage    impacted damage.
-     */
-    public void decreaseHitPoints(int damage) {
-        if (hitPoints > damage) {
-            hitPoints -= damage;
-        } else {
-            hitPoints = 0;
-        }
-    }
 
     @Override
     public PlatformShape getPlatformShape() {

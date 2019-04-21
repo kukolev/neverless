@@ -23,11 +23,8 @@ public class DialogService {
     @Autowired
     private DialogContext dialogContext;
 
-    public void dialogStart(int npcX, int npcY) {
+    public void dialogStart(AbstractNpc npc) {
         Player player = gameContext.getPlayer();
-
-        // find NPC
-        AbstractNpc npc = npcService.getNpcAtPosition(npcX, npcY, player.getLocation());
 
         // simpleGet NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -39,7 +36,7 @@ public class DialogService {
         dialogContext.add(dialog);
         dialogContext.add(npcPhrase);
 
-        eventContext.addDialogStartEvent(player.getUniqueName(), npc.getUniqueName(), npcX, npcY);
+        eventContext.addDialogStartEvent(player.getUniqueName(), npc.getUniqueName());
     }
 
     private NpcPhrase getStartPhrase(Dialog dialog) {

@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Inventory {
 
-    private String id;
-    private Bag bag;
+    private Bag bag = new Bag();
     private Equipment equipment = new Equipment();
 }

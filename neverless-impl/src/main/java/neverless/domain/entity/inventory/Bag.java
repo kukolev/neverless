@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class Bag {
 
-    private String id;
     private List<AbstractItem> items = new ArrayList<>();
 
     public void addLast(AbstractItem item) {

@@ -130,7 +130,7 @@ public class GameLoader {
         sword.setTitle("Mega Sword of Ultra Power");
 
         Equipment equipment = new Equipment();
-        equipment.setRightHand(sword);
+        equipment.setWeapon(sword);
 
         Inventory inventory = new Inventory();
         inventory.setBag(bag);
@@ -138,6 +138,7 @@ public class GameLoader {
 
         Player player = new Player();
         player.setInventory(inventory);
+        player.setHitPoints(1000);
         player.setWidth(64);
         player.setHeight(96);
         player.setX(200);

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static neverless.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
@@ -64,7 +63,7 @@ public class EnemyService {
      *
      * @param enemy checked enemy.
      */
-    private boolean isPlayerNear(AbstractEnemy enemy) {
+    public boolean isPlayerNear(AbstractEnemy enemy) {
         Player player = gameContext.getPlayer();
 
         // calculate radiuses for player and enemy ellipses
@@ -112,9 +111,9 @@ public class EnemyService {
             int damage = calcDamage(enemy);
             Player player = gameContext.getPlayer();
             player.decreaseHitPoints(damage);
-            eventContext.addFightingEnemyHitEvent(enemy.getUniqueName(), damage);
+            eventContext.addCombatHitEvent(enemy.getUniqueName(), damage);
         } else {
-            eventContext.addFightingEnemyMissEvent(enemy.getUniqueName());
+            eventContext.addCombatMissEvent(enemy.getUniqueName());
         }
     }
 
@@ -134,9 +133,9 @@ public class EnemyService {
      * @param enemy enemy that attacks.
      */
     private int calcDamage(AbstractEnemy enemy) {
-        AtomicInteger damage = new AtomicInteger();
-        enemy.getWeapons()
-                .forEach(w -> damage.addAndGet(w.getPower()));
-        return damage.get();
+        return enemy.getInventory()
+                .getEquipment()
+                .getWeapon()
+                .getPower();
     }
 }
