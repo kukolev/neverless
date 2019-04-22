@@ -13,7 +13,7 @@ public class GameStartNewGameCommand extends AbstractCommand {
     private GameLoader loader;
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
         loader.createNewGame();
         return BehaviorState.IDLE;
     }

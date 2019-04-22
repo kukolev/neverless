@@ -19,7 +19,7 @@ public class PlayerMapGoCommand extends AbstractCommand {
     private EventContext eventContext;
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
         localMapService.makeStep(player, x, y);
         return BehaviorState.MOVE;
     }

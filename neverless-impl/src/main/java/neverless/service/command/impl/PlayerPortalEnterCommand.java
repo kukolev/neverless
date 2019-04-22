@@ -26,7 +26,7 @@ public class PlayerPortalEnterCommand extends AbstractCommand {
     }
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
         Coordinate enterPoint = portal.getEnterPoint();
         localMapService.makeStep(player, enterPoint.getX(), enterPoint.getY());
         if (CoordinateUtils.isCoordinatesInRange(player.getX(), player.getY(), enterPoint.getX(), enterPoint.getY(), 100)) {

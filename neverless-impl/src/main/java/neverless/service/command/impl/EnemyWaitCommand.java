@@ -12,7 +12,7 @@ public class EnemyWaitCommand extends AbstractCommand {
     private int waitTime;
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
         waitTime--;
         return BehaviorState.IDLE;
     }

@@ -93,7 +93,9 @@ public class EnemyCommander {
         player.getLocation().getRespawnPoints()
                 .forEach(rp -> {
                     AbstractEnemy enemy = rp.getEnemy();
-                    calcNewCommand(enemy);
+                    if (rp.getEnemy() != null) {
+                        calcNewCommand(enemy);
+                    }
                 });
     }
 
@@ -105,12 +107,9 @@ public class EnemyCommander {
                     if (enemy != null) {
                         AbstractCommand command = enemy.getCommand();
                         if (command != null) {
-                            BehaviorState state = command.execute();
-                            enemy.getBehavior().changeState(state);
-                            enemy.getBehavior().tick();
+                            command.execute();
                             if (command.checkFinished()) {
                                 enemy.setCommand(null);
-                                enemy.getBehavior().changeState(BehaviorState.IDLE);
                             }
                         }
                         //calcNewCommand(enemy);
@@ -155,9 +154,9 @@ public class EnemyCommander {
         } else if (isEndOfMove) {
             command = commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME);
         }
-//        if (command != null && !command.equals(enemy.getCommand())) {
+        if (command != null && !command.equals(enemy.getCommand())) {
             enemy.setCommand(command);
-//        }
+        }
     }
 
     private boolean isWaitingEnough(AbstractEnemy enemy) {

@@ -2,7 +2,6 @@ package neverless.model;
 
 import javafx.concurrent.Task;
 import neverless.model.domain.ViewContext;
-import neverless.service.command.factory.PlayerCommandFactory;
 import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
 import neverless.view.domain.Frame;
@@ -24,8 +23,6 @@ public class Model extends Task {
     @Autowired
     private FrameExchanger frameExchanger;
     @Autowired
-    private PlayerCommandFactory playerCommandFactory;
-    @Autowired
     private EventHandler eventHandler;
 
     private volatile boolean isWorking = true;
@@ -45,8 +42,8 @@ public class Model extends Task {
     /**
      * Sets information of mouse pointer coordinates.
      *
-     * @param screenX   horizontal coordinate.
-     * @param screenY   vertical coordinate.
+     * @param screenX horizontal coordinate.
+     * @param screenY vertical coordinate.
      */
     public void setScreenPoint(int screenX, int screenY) {
         viewContext.setScreenPoint(screenX, screenY);
@@ -56,24 +53,21 @@ public class Model extends Task {
     public Object call() {
         try {
             while (isWorking) {
-                long t = System.nanoTime();
+                long startTime = System.nanoTime();
 
                 // 1. Get command from queue
-                AbstractCommand command;
+                AbstractCommand command = null;
                 if (queue.size() != 0) {
                     command = queue.poll();
-                } else {
-                    command = playerCommandFactory.createPlayerContinueCommand();
                 }
+
                 // 2. Send command to engine + receive data from last one
-                if (command != null) {
-                    resolveCommand(command);
-                }
+                resolveCommand(command);
 
-                long t2 = System.nanoTime();
-                long dt = 10 - ((t2 - t) / 1000_000);
+                long finTime = System.nanoTime();
+                long dt = 10 - ((finTime - startTime) / 1000_000);
 
-                if (dt > 1) {
+                if (dt > 0) {
                     try {
                         Thread.sleep(dt);
                     } catch (InterruptedException e) {
@@ -102,17 +96,17 @@ public class Model extends Task {
      * @param command command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
-            // send command to backend and get response
-            resolver.resolve(command);
+        // send command to backend and get response
+        resolver.resolve(command);
 
-            // handle events
-            eventHandler.handleEvents(viewContext);
+        // handle events
+        eventHandler.handleEvents(viewContext);
 
-            // render frame for response
-            Frame frame = renderer.calcFrame(viewContext);
+        // render frame for response
+        Frame frame = renderer.calcFrame(viewContext);
 
-            // store frame and send acknowledge to Drawer
-            frameExchanger.setFrame(frame);
-            updateMessage(UUID.randomUUID().toString());
+        // store frame and send acknowledge to Drawer
+        frameExchanger.setFrame(frame);
+        updateMessage(UUID.randomUUID().toString());
     }
 }

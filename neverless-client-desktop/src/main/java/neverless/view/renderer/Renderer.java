@@ -8,6 +8,7 @@ import neverless.context.GameContext;
 import neverless.domain.entity.Game;
 import neverless.domain.entity.behavior.BehaviorState;
 import neverless.domain.entity.mapobject.AbstractPhysicalObject;
+import neverless.service.command.AbstractCommand;
 import neverless.util.Coordinate;
 import neverless.domain.entity.mapobject.Player;
 import neverless.domain.entity.mapobject.Profile;
@@ -248,7 +249,8 @@ public class Renderer {
             cache.put(object.getUniqueName(), phase);
         }
 
-        BehaviorState newState = object.getBehavior().getState();
+        AbstractCommand command = object.getCommand();
+        BehaviorState newState = command != null ? object.getCommand().getState() : BehaviorState.IDLE;
         if (phase.getState() != newState) {
             phase.defPhaseNumber();
             phase.setState(newState);

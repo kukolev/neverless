@@ -1,7 +1,6 @@
 package neverless.service.command.factory;
 
 import neverless.service.command.impl.PlayerAttackCommand;
-import neverless.service.command.impl.PlayerContinueCommand;
 import neverless.service.command.impl.PlayerMapGoCommand;
 import neverless.service.command.impl.PlayerPortalEnterCommand;
 import neverless.context.EventContext;
@@ -39,10 +38,6 @@ public class PlayerCommandFactory {
                 .setEventContext(eventContext)
                 .setLocalMapService(localMapService)
                 .setPlayer(player);
-    }
-
-    public PlayerContinueCommand createPlayerContinueCommand() {
-        return new PlayerContinueCommand();
     }
 
     public PlayerPortalEnterCommand createPlayerPortalEnterCommand(LocationPortal portal) {

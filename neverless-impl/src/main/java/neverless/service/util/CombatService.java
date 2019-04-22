@@ -55,9 +55,6 @@ public class CombatService {
      * @param defender      live object who has been attacked.
      */
     public void performAttack(AbstractLiveObject attacker, AbstractLiveObject defender) {
-        AbstractHandEquipment weapon = attacker.getInventory().getEquipment().getWeapon();
-        if (attacker.getBehavior().checkTime(weapon.getSpeed())) {
-            attacker.getBehavior().replay();
             if (calcToHit(defender)) {
 
                 // Player hits.
@@ -73,7 +70,7 @@ public class CombatService {
                 // Player misses.
                 eventContext.addCombatMissEvent(defender.getUniqueName());
             }
-        }
+//        }
     }
 
     /**

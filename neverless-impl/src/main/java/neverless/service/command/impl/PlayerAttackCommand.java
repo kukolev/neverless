@@ -2,6 +2,7 @@ package neverless.service.command.impl;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import neverless.domain.entity.item.weapon.AbstractHandEquipment;
 import neverless.service.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.entity.behavior.BehaviorState;
@@ -31,13 +32,16 @@ public class PlayerAttackCommand extends AbstractCommand {
 
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
 
         if (!combatService.isWeaponCouldAttack(player, enemy)) {
             localMapService.makeStep(player, enemy.getX(), enemy.getY());
             return BehaviorState.MOVE;
         } else {
-            combatService.performAttack(player, enemy);
+            AbstractHandEquipment weapon = player.getInventory().getEquipment().getWeapon();
+            if (checkTicks(weapon.getSpeed())) {
+                combatService.performAttack(player, enemy);
+            }
             if (enemy.getHitPoints() <= 0) {
                 enemy.getRespawnPoint().setEnemy(null);
             }

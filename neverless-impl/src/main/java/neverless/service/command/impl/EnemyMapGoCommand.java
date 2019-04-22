@@ -23,7 +23,7 @@ public class EnemyMapGoCommand extends AbstractCommand {
     private EventContext eventContext;
 
     @Override
-    public BehaviorState execute() {
+    public BehaviorState onExecute() {
         Coordinate coordinate = calcNextStep(enemy.getX(), enemy.getY(), x, y);
         if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
             enemy.setX(coordinate.getX());

@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 import neverless.Direction;
 import neverless.PlatformShape;
 import neverless.service.command.AbstractCommand;
-import neverless.domain.entity.behavior.Behavior;
 
 @Data
 @Accessors(chain = true)
@@ -16,7 +15,6 @@ public abstract class AbstractPhysicalObject extends AbstractMapObject {
     private Integer height = 32;
     private Integer width = 32;
     private Direction direction = Direction.NORTH;
-    private Behavior behavior = new Behavior();
     private AbstractCommand command;
     private Profile profile = new Profile();
 
