@@ -36,14 +36,23 @@ public class ControlHandler {
      * Evaluates a command that should be performed by clicking in some coordinates.
      * Puts the command in queue for further processing in Model.
      *
-     * @param screenX horizontal cell index
-     * @param screenY vertical cell index
+     * @param screenX screen horizontal coordinate.
+     * @param screenY screen vertical coordinate.
      */
     public void click(int screenX, int screenY) {
         model.setScreenPoint(screenX, screenY);
         Frame frame = frameExchanger.getFrame();
         Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
+
+        // Convert screen coordinates to game coordinates
         Player player = gameContext.getPlayer();
+        int dx = screenX - CANVAS_CENTER_X;
+        int dy = screenY - CANVAS_CENTER_Y;
+        int newGameX = player.getX() + dx;
+        int newGameY = player.getY() + dy;
+
+        // Updates destination marker
+        model.setDestinationMarker(newGameX, newGameY);
 
         if (sprite != null) {
             // Click on sprite
@@ -58,12 +67,6 @@ public class ControlHandler {
             }
         } else {
             // Click on background
-            int dx = screenX - CANVAS_CENTER_X;
-            int dy = screenY - CANVAS_CENTER_Y;
-
-            int newGameX = player.getX() + dx;
-            int newGameY = player.getY() + dy;
-
             model.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
         }
     }
@@ -82,5 +85,12 @@ public class ControlHandler {
 
     private void cmdFightingAttack(AbstractEnemy enemy) {
         model.putCommand(commandFactory.createPlayerAttackCommand(enemy));
+    }
+
+    /**
+     * Toggle active pause.
+     */
+    public void pause() {
+        model.pause();
     }
 }

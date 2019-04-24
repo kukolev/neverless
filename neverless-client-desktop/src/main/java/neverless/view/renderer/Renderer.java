@@ -51,10 +51,10 @@ public class Renderer {
     private EventContext eventContext;
 
     private Map<String, Phase> cache = new HashMap<>();
+    private boolean isPause;
 
     @Data
     private class Phase {
-        private String signature;
         private int phaseNumber = 0;
         private BehaviorState state = BehaviorState.IDLE;
 
@@ -96,6 +96,15 @@ public class Renderer {
         calcArea(frame, viewContext);
 
         return frame;
+    }
+
+    /**
+     * Toggles active setPause.
+     *
+     * @param isPause   active pause sign.
+     */
+    public void setPause(boolean isPause) {
+        this.isPause = isPause;
     }
 
     /**
@@ -245,17 +254,18 @@ public class Renderer {
         Phase phase = cache.get(object.getUniqueName());
         if (phase == null) {
             phase = new Phase();
-            phase.setSignature(object.getSignature());
             cache.put(object.getUniqueName(), phase);
         }
 
-        AbstractCommand command = object.getCommand();
-        BehaviorState newState = command != null ? object.getCommand().getState() : BehaviorState.IDLE;
-        if (phase.getState() != newState) {
-            phase.defPhaseNumber();
-            phase.setState(newState);
-        } else {
-            phase.incPhaseNumber();
+        if (!isPause) {
+            AbstractCommand command = object.getCommand();
+            BehaviorState newState = command != null ? object.getCommand().getState() : BehaviorState.IDLE;
+            if (phase.getState() != newState) {
+                phase.defPhaseNumber();
+                phase.setState(newState);
+            } else {
+                phase.incPhaseNumber();
+            }
         }
 
         int phaseNumber = 1 + (phase.getPhaseNumber() / ANIMATION_SLOW_FACTOR);

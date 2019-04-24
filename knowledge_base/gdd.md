@@ -64,6 +64,12 @@ This paragraph includes main features descriptions. Every feature related to one
 
 ### Location game screen UI
 
+#### Active pause
+* Active pause might be toggled by "Pause" button pressing
+* In active pause mode:
+  * Any game commands could not be processed
+  * User is able to order commands
+
 #### Objects high-light
 * All game objects high-lighted on mouse over.
 

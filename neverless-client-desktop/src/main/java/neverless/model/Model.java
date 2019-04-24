@@ -1,6 +1,7 @@
 package neverless.model;
 
 import javafx.concurrent.Task;
+import neverless.model.domain.DestinationMarkerData;
 import neverless.model.domain.ViewContext;
 import neverless.service.command.AbstractCommand;
 import neverless.util.FrameExchanger;
@@ -26,6 +27,8 @@ public class Model extends Task {
     private EventHandler eventHandler;
 
     private volatile boolean isWorking = true;
+    private volatile boolean isPause = false;
+
     private Queue<AbstractCommand> queue = new ConcurrentLinkedQueue<>();
     private ViewContext viewContext = new ViewContext();
 
@@ -49,6 +52,18 @@ public class Model extends Task {
         viewContext.setScreenPoint(screenX, screenY);
     }
 
+    /**
+     * Sets destination marker.
+     *
+     * @param markerX game horizontal coordinate for destination marker.
+     * @param markerY game vertical coordinate for destination marker.
+     */
+    public void setDestinationMarker(int markerX, int markerY) {
+        viewContext.setMarker(new DestinationMarkerData()
+                .setX(markerX)
+                .setY(markerY));
+    }
+
     @Override
     public Object call() {
         try {
@@ -57,7 +72,7 @@ public class Model extends Task {
 
                 // 1. Get command from queue
                 AbstractCommand command = null;
-                if (queue.size() != 0) {
+                if (!isPause && queue.size() != 0) {
                     command = queue.poll();
                 }
 
@@ -90,17 +105,27 @@ public class Model extends Task {
     }
 
     /**
+     * Toggles active setPause.
+     */
+    public void pause() {
+        isPause = !isPause;
+        renderer.setPause(isPause);
+    }
+
+    /**
      * Resolves command and updates current game state.
      * Sends actual game state to renderer.
      *
      * @param command command that should be resolved.
      */
     private void resolveCommand(AbstractCommand command) {
-        // send command to backend and get response
-        resolver.resolve(command);
+        if (!isPause) {
+            // send command to backend and get response
+            resolver.resolve(command);
 
-        // handle events
-        eventHandler.handleEvents(viewContext);
+            // handle events
+            eventHandler.handleEvents(viewContext);
+        }
 
         // render frame for response
         Frame frame = renderer.calcFrame(viewContext);

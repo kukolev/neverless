@@ -1,6 +1,7 @@
 package neverless.window;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -27,12 +28,14 @@ import static neverless.util.Constants.LOG_HEIGHT;
 import static neverless.util.Constants.LOG_LEFT;
 import static neverless.util.Constants.LOG_TOP;
 import static neverless.util.Constants.LOG_WIDTH;
+import static neverless.util.Constants.PAUSE_BTN_HEIGHT;
+import static neverless.util.Constants.PAUSE_BTN_LEFT;
+import static neverless.util.Constants.PAUSE_BTN_TOP;
+import static neverless.util.Constants.PAUSE_BTN_WIDTH;
 import static neverless.util.Constants.STATS_HEIGHT;
 import static neverless.util.Constants.STATS_LEFT;
 import static neverless.util.Constants.STATS_TOP;
 import static neverless.util.Constants.STATS_WIDTH;
-import static neverless.util.Constants.WINDOW_HEIGHT;
-import static neverless.util.Constants.WINDOW_WIDTH;
 
 @Component
 public class RootPane extends Pane {
@@ -71,8 +74,8 @@ public class RootPane extends Pane {
     private void initLocalMap() {
         localMapPane.setLayoutX(0);
         localMapPane.setLayoutY(0);
-        localMapPane.setPrefWidth(WINDOW_WIDTH);
-        localMapPane.setPrefHeight(WINDOW_HEIGHT);
+        localMapPane.setPrefWidth(Integer.MAX_VALUE);
+        localMapPane.setPrefHeight(Integer.MAX_VALUE);
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         canvas.setLayoutX(CANVAS_LEFT);
@@ -94,9 +97,20 @@ public class RootPane extends Pane {
         infoArea.setPrefWidth(LOG_WIDTH);
         infoArea.setPrefHeight(LOG_HEIGHT);
 
+        Button pauseBtn = new Button();
+        pauseBtn.setText("Pause");
+        pauseBtn.setLayoutX(PAUSE_BTN_LEFT);
+        pauseBtn.setLayoutY(PAUSE_BTN_TOP);
+        pauseBtn.setPrefWidth(PAUSE_BTN_WIDTH);
+        pauseBtn.setPrefHeight(PAUSE_BTN_HEIGHT);
+        pauseBtn.setOnMouseClicked(controller::onPauseBtnClick);
+
+
+
         localMapPane.getChildren().add(canvas);
         localMapPane.getChildren().add(infoArea);
         localMapPane.getChildren().add(statsArea);
+        localMapPane.getChildren().add(pauseBtn);
 
         DrawerContext drawerContext = new DrawerContext()
                 .setLocalMapCanvas(canvas)
@@ -110,8 +124,8 @@ public class RootPane extends Pane {
     private void initMainMenu() {
         menuPane.setLayoutX(0);
         menuPane.setLayoutY(0);
-        menuPane.setPrefWidth(WINDOW_WIDTH);
-        menuPane.setPrefHeight(WINDOW_HEIGHT);
+        menuPane.setPrefWidth(Integer.MAX_VALUE);
+        menuPane.setPrefHeight(Integer.MAX_VALUE);
 
         ImageButton imageButton = new ImageButton(menuPane,
                 new Image("buttons/btn_normal.png"),
@@ -125,8 +139,8 @@ public class RootPane extends Pane {
     private void initInventory() {
         inventoryPane.setLayoutX(0);
         inventoryPane.setLayoutY(0);
-        inventoryPane.setPrefWidth(WINDOW_WIDTH);
-        inventoryPane.setPrefHeight(WINDOW_HEIGHT);
+        inventoryPane.setPrefWidth(Integer.MAX_VALUE);
+        inventoryPane.setPrefHeight(Integer.MAX_VALUE);
     }
 
     public void setViewState(ViewState viewState) {

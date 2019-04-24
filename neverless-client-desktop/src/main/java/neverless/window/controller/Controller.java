@@ -21,4 +21,8 @@ public class Controller {
     public void startNewGameBtnClick(MouseEvent event) {
         controlHandler.cmdStartNewGame();
     }
+
+    public void onPauseBtnClick(MouseEvent event) {
+        controlHandler.pause();
+    }
 }

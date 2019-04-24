@@ -2,13 +2,15 @@ package neverless.util;
 
 public class Constants {
 
-    public static final int WINDOW_WIDTH = 1760;
-    public static final int WINDOW_HEIGHT = 880;
-
     public static final int CANVAS_WIDTH = 1200;
     public static final int CANVAS_HEIGHT = 800;
     public static final int CANVAS_LEFT = 20;
     public static final int CANVAS_TOP = 20;
+
+    public static final int PAUSE_BTN_WIDTH = 100;
+    public static final int PAUSE_BTN_HEIGHT = 60;
+    public static final int PAUSE_BTN_TOP = CANVAS_TOP + CANVAS_HEIGHT + 20;
+    public static final int PAUSE_BTN_LEFT = CANVAS_LEFT;
 
     public static final int STATS_WIDTH = 500;
     public static final int STATS_HEIGHT = 300;
