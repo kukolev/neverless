@@ -12,6 +12,7 @@ public abstract class AbstractLiveObject extends AbstractPhysicalObject {
 
     private int hitPoints;
     private Inventory inventory = new Inventory();
+    private int experience;
 
     /**
      * Decreases amount of hit points.

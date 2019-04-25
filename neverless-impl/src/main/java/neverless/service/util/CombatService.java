@@ -19,8 +19,8 @@ public class CombatService {
     /**
      * Returns true if attacked is able to attack with weapon.
      *
-     * @param attacker      live object who attacks.
-     * @param defender      live object who has been attacked.
+     * @param attacker live object who attacks.
+     * @param defender live object who has been attacked.
      */
     public boolean isWeaponCouldAttack(AbstractLiveObject attacker, AbstractLiveObject defender) {
         AbstractHandEquipment weapon = attacker.getInventory().getEquipment().getWeapon();
@@ -30,17 +30,18 @@ public class CombatService {
     /**
      * Calculates and returns damage, impacted by the attacker during attack to enemy.
      *
-     * @param attacker      live object who attacks.
-     * @param defender      live object who has been attacked.
+     * @param attacker live object who attacks.
+     * @param defender live object who has been attacked.
      */
     public int calcDamage(AbstractLiveObject attacker, AbstractLiveObject defender) {
         AbstractHandEquipment weapon = attacker.getInventory().getEquipment().getWeapon();
         return weapon != null ? weapon.getPower() : 0;
     }
+
     /**
      * Calculates and returns true if attacker impacted defender.
      *
-     * @param defender      live object who has been attacked.
+     * @param defender live object who has been attacked.
      */
     public boolean calcToHit(AbstractLiveObject defender) {
         // todo: implement real calculation.
@@ -51,34 +52,38 @@ public class CombatService {
     /**
      * Performs attack from one live object towards some other.
      *
-     * @param attacker      live object who attacks.
-     * @param defender      live object who has been attacked.
+     * @param attacker live object who attacks.
+     * @param defender live object who has been attacked.
      */
     public void performAttack(AbstractLiveObject attacker, AbstractLiveObject defender) {
-            if (calcToHit(defender)) {
+        if (calcToHit(defender)) {
 
-                // Player hits.
-                int damage = calcDamage(attacker, defender);
-                defender.decreaseHitPoints(damage);
-                if (defender.getHitPoints() <= 0) {
-                    kill(defender);
-                    eventContext.addCombatKillEvent(defender.getUniqueName());
-                } else {
-                    eventContext.addCombatHitEvent(defender.getUniqueName(), damage);
-                }
+            // Player hits.
+            int damage = calcDamage(attacker, defender);
+            defender.decreaseHitPoints(damage);
+            if (defender.getHitPoints() <= 0) {
+                kill(attacker, defender);
+                eventContext.addCombatKillEvent(defender.getUniqueName());
             } else {
-                // Player misses.
-                eventContext.addCombatMissEvent(defender.getUniqueName());
+                eventContext.addCombatHitEvent(defender.getUniqueName(), damage);
             }
-//        }
+        } else {
+            // Player misses.
+            eventContext.addCombatMissEvent(defender.getUniqueName());
+        }
     }
 
     /**
      * Kills a defender and performs needed actions.
+     * Increase attacker's  experience points.
      *
-     * @param defender      live object who has been attacked.
+     * @param attacker live object who attacks.
+     * @param defender live object who has been attacked.
      */
-    public void kill(AbstractLiveObject defender) {
+    public void kill(AbstractLiveObject attacker, AbstractLiveObject defender) {
+        int defenderExp = defender.getExperience();
+        int attackerExp = attacker.getProfile().getExperience();
         defender.getLocation().getObjects().remove(defender);
+        attacker.getProfile().setExperience(attackerExp + defenderExp);
     }
 }

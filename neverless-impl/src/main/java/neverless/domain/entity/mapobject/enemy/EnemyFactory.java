@@ -28,10 +28,10 @@ public class EnemyFactory {
 
         AbstractEnemy goblin = new AbstractEnemy();
         goblin
-                .setExperience(GOBLIN_EXPERIENCE)
                 .setSignature(IMG_GOBLIN)
                 .setSpeed(GOBLIN_SPEED)
                 .setHitPoints(GOBLIN_HP)
+                .setExperience(GOBLIN_EXPERIENCE)
                 .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
         goblin
                 .getInventory()

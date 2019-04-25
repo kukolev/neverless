@@ -16,7 +16,7 @@
    
 ## Overview
 
-Neverless is a offline RPG with 2D isometric graphics.
+Neverless is an offline RPG with 2D isometric graphics.
 
 ## Entities
 * Player - main hero of the game. Player is controlled by human who is playing the game
@@ -58,6 +58,10 @@ This paragraph includes main features descriptions. Every feature related to one
 
 #### Enemy respawn
 * Enemies respawn at respawn point position
+
+#### Experience points
+* Player gains experience points after successful game events:
+  * Enemy murder
 
 
 ## Interface

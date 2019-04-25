@@ -22,7 +22,6 @@ public class AbstractEnemy extends AbstractLiveObject {
     private Integer areaY;
     private String signature;
     private Integer agrRange = ENEMY_DEFAULT_AGGRESSIVE_RANGE;
-    private int experience;
 
     /**
      * Count of turns while enemy walks in one direction (walkDirection field)
