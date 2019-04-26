@@ -38,6 +38,6 @@ public class EnemyMapGoCommand extends AbstractCommand {
 
     @Override
     public boolean checkFinished() {
-        return false;
+        return x == enemy.getX() && y == enemy.getY();
     }
 }

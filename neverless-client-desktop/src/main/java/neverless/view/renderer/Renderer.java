@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static neverless.Constants.ANIMATION_SLOW_FACTOR;
+import static neverless.domain.entity.behavior.BehaviorState.IDLE;
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
 import static neverless.util.Constants.CANVAS_HEIGHT;
@@ -56,7 +57,7 @@ public class Renderer {
     @Data
     private class Phase {
         private int phaseNumber = 0;
-        private BehaviorState state = BehaviorState.IDLE;
+        private BehaviorState state = IDLE;
 
         public void incPhaseNumber() {
             phaseNumber++;
@@ -259,7 +260,7 @@ public class Renderer {
 
         if (!isPause) {
             AbstractCommand command = object.getCommand();
-            BehaviorState newState = command != null ? object.getCommand().getState() : BehaviorState.IDLE;
+            BehaviorState newState = command != null ? object.getCommand().getState() : IDLE;
             if (phase.getState() != newState) {
                 phase.defPhaseNumber();
                 phase.setState(newState);
@@ -269,10 +270,11 @@ public class Renderer {
         }
 
         int phaseNumber = 1 + (phase.getPhaseNumber() / ANIMATION_SLOW_FACTOR);
-        if (!resourceKeeper.isResourceExists(object.getSignature(), object.getDirection(), phaseNumber)) {
+        BehaviorState state = object.getCommand() != null ? object.getCommand().getState() : IDLE;
+        if (!resourceKeeper.isResourceExists(object.getSignature(), state, object.getDirection(), phaseNumber)) {
             phase.defPhaseNumber();
             phaseNumber = 1;
         }
-        return resourceKeeper.getResource(object.getSignature(), object.getDirection(), phaseNumber);
+        return resourceKeeper.getResource(object.getSignature(), state, object.getDirection(), phaseNumber);
     }
 }

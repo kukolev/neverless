@@ -78,9 +78,9 @@ public class LocalMapService {
     public void makeStep(AbstractLiveObject player, int destX, int destY) {
         Coordinate coordinate = calcNextStep(player.getX(), player.getY(), destX, destY);
         if (isPassable(player, coordinate.getX(), coordinate.getY())) {
+            player.setDirection(calcDirection(player.getX(), player.getY(), destX, destY));
             player.setX(coordinate.getX());
             player.setY(coordinate.getY());
-            player.setDirection(calcDirection(player.getX(), player.getY(), destX, destY));
             eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), destX, destY);
         } else {
             eventContext.addMapGoImpossibleEvent(player.getUniqueName());

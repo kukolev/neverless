@@ -112,7 +112,6 @@ public class EnemyCommander {
                                 enemy.setCommand(null);
                             }
                         }
-                        //calcNewCommand(enemy);
                     }
                 }));
     }
@@ -124,36 +123,42 @@ public class EnemyCommander {
      */
     private void calcNewCommand(AbstractEnemy enemy) {
         boolean isNeedToAttack = isAggressiveRange(enemy);
-        boolean isWaitingEnough = isWaitingEnough(enemy);
-        boolean isEndOfMove = isEndOfMove(enemy);
 
         AbstractCommand command = enemy.getCommand();
         if (isNeedToAttack) {
+            // Player is here. We should attack immediately
             command = commandFactory.createEnemyAttackCommand(enemy);
-        } else if (isWaitingEnough) {
+        } else {
+
+            // Player if far away. We should decide:  to walk or to wait
             Random random = new Random(System.currentTimeMillis());
+            if (command == null) {
+                boolean walking = random.nextBoolean();
+                if (walking) {
+                    double alfa = random.nextInt(628) / 100.0;
+                    int tryCount = 0;
+                    boolean canGo;
+                    int newX;
+                    int newY;
 
-            double alfa = random.nextInt(628) / 100.0;
-            int tryCount = 0;
-            boolean canGo;
-            int newX;
-            int newY;
+                    do {
+                        alfa = alfa + tryCount * 0.01;
+                        newX = enemy.getX() + (int) (ENEMY_DEFAULT_WALK_LENGTH * cos(alfa));
+                        newY = enemy.getY() + (int) (ENEMY_DEFAULT_WALK_LENGTH * sin(alfa));
 
-            do {
-                alfa = alfa + tryCount * 0.01;
-                newX = enemy.getX() + (int) (ENEMY_DEFAULT_WALK_LENGTH * cos(alfa));
-                newY = enemy.getY() + (int) (ENEMY_DEFAULT_WALK_LENGTH * sin(alfa));
+                        canGo = isCanGoNewPosition(enemy, newX, newY);
+                        tryCount++;
+                    } while (!(canGo || tryCount == 628));
 
-                canGo = isCanGoNewPosition(enemy, newX, newY);
-                tryCount++;
-            } while (!(canGo || tryCount == 628));
-
-            if (canGo) {
-                command = commandFactory.createEnemyMapGoCommand(enemy, newX, newY);
+                    if (canGo) {
+                        command = commandFactory.createEnemyMapGoCommand(enemy, newX, newY);
+                    }
+                } else {
+                    command = commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME);
+                }
             }
-        } else if (isEndOfMove) {
-            command = commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME);
         }
+
         if (command != null && !command.equals(enemy.getCommand())) {
             enemy.setCommand(command);
         }
