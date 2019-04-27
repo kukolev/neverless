@@ -24,15 +24,7 @@ public class EnemyMapGoCommand extends AbstractCommand {
 
     @Override
     public BehaviorState onExecute() {
-        Coordinate coordinate = calcNextStep(enemy.getX(), enemy.getY(), x, y);
-        if (localMapService.isPassable(enemy, coordinate.getX(), coordinate.getY())) {
-            enemy.setX(coordinate.getX());
-            enemy.setY(coordinate.getY());
-            enemy.setDirection(calcDirection(enemy.getX(), enemy.getY(), x, y));
-            eventContext.addMapGoEvent(enemy.getUniqueName(), enemy.getX(), enemy.getY(), x, y);
-        } else {
-            eventContext.addMapGoImpossibleEvent(enemy.getUniqueName());
-        }
+        localMapService.makeStep(enemy, x, y);
         return BehaviorState.MOVE;
     }
 

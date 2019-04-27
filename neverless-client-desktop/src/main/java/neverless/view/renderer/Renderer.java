@@ -214,7 +214,6 @@ public class Renderer {
     }
 
     private Sprite calcBackground(String signature, double playerX, double playerY) {
-        // todo: fix this hardcode!
         Resource resource = new Resource(signature, 0, 0, 0, 0);
         Image image = spriteRepository.getImage(resource);
 

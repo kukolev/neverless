@@ -213,7 +213,6 @@ public class EnemyCommander {
 
         EnemyFactory factory = getEnemyFactory(respawnPoint);
         AbstractEnemy newEnemy = factory.create();
-        // todo: position should be random
         newEnemy.setX(respawnPoint.getX());
         newEnemy.setY(respawnPoint.getY());
         newEnemy.setBornX(newEnemy.getX());

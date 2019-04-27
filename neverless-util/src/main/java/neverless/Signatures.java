@@ -10,4 +10,5 @@ public class Signatures {
     public static final String IMG_VILLAGE_BACKGROUND = "test-location.png";
     public static final String IMG_DUNGEON_BACKGROUND = "test-dungeon.png";
     public static final String IMG_TAVERN_SMALL = "tavern_1";
+    public static final String IMG_LOOT = "loot";
 }

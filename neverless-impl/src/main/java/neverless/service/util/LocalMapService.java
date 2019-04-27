@@ -2,7 +2,6 @@ package neverless.service.util;
 
 import neverless.PlatformShape;
 import neverless.context.EventContext;
-import neverless.context.GameContext;
 import neverless.domain.entity.mapobject.AbstractLiveObject;
 import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.util.Coordinate;
@@ -23,15 +22,13 @@ public class LocalMapService {
 
     @Autowired
     private EventContext eventContext;
-    @Autowired
-    private GameContext gameContext;
 
     /**
      * Returns true if walker can go to new coordinates.
      *
      * @param walker    walker.
-     * @param newX      new horizontal coordinate where walker wants to go to
-     * @param newY      new vertical coordinate where walker wants to go to
+     * @param newX      new horizontal coordinate where walker wants to go to.
+     * @param newY      new vertical coordinate where walker wants to go to.
      */
     public boolean isPassable(AbstractPhysicalObject walker, int newX, int newY) {
         boolean intersection = false;
@@ -75,18 +72,31 @@ public class LocalMapService {
         return !intersection;
     }
 
-    public void makeStep(AbstractLiveObject player, int destX, int destY) {
-        Coordinate coordinate = calcNextStep(player.getX(), player.getY(), destX, destY);
-        if (isPassable(player, coordinate.getX(), coordinate.getY())) {
-            player.setDirection(calcDirection(player.getX(), player.getY(), destX, destY));
-            player.setX(coordinate.getX());
-            player.setY(coordinate.getY());
-            eventContext.addMapGoEvent(player.getUniqueName(), player.getX(), player.getY(), destX, destY);
+    /**
+     * Performs moving step to destination coordinates.
+     *
+     * @param walker    walker.
+     * @param destX     horizontal destination coordinate where walker wants to go to.
+     * @param destY     vertical destination coordinate where walker wants to go to.
+     */
+    public void makeStep(AbstractLiveObject walker, int destX, int destY) {
+        Coordinate coordinate = calcNextStep(walker.getX(), walker.getY(), destX, destY);
+        if (isPassable(walker, coordinate.getX(), coordinate.getY())) {
+            walker.setDirection(calcDirection(walker.getX(), walker.getY(), destX, destY));
+            walker.setX(coordinate.getX());
+            walker.setY(coordinate.getY());
+            eventContext.addMapGoEvent(walker.getUniqueName(), walker.getX(), walker.getY(), destX, destY);
         } else {
-            eventContext.addMapGoImpossibleEvent(player.getUniqueName());
+            eventContext.addMapGoImpossibleEvent(walker.getUniqueName());
         }
     }
 
+    /**
+     * Performs player portal entering.
+     *
+     * @param player    player
+     * @param portal    portal which player enters.
+     */
     public void enterPortal(Player player, LocationPortal portal) {
         player.getLocation().getObjects().remove(player);
         portal.getDestination().getObjects().add(player);
