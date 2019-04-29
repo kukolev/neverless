@@ -1,4 +1,4 @@
-package neverless;
+package neverless.util;
 
 public enum PlatformShape {
     ELLIPSE,

@@ -3,10 +3,8 @@ package neverless.domain.entity.mapobject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.PlatformShape;
-import neverless.Signatures;
-import neverless.domain.entity.Location;
-import neverless.domain.entity.inventory.Inventory;
+import neverless.util.PlatformShape;
+import neverless.util.Signatures;
 
 @Data
 @Accessors(chain = true)

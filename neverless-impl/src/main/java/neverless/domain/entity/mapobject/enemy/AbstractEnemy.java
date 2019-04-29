@@ -4,11 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.behavior.BehaviorState;
-import neverless.PlatformShape;
+import neverless.util.PlatformShape;
 import neverless.domain.entity.mapobject.AbstractLiveObject;
 import neverless.domain.entity.mapobject.respawn.AbstractRespawnPoint;
 
-import static neverless.Constants.ENEMY_DEFAULT_AGGRESSIVE_RANGE;
+import static neverless.util.Constants.ENEMY_DEFAULT_AGGRESSIVE_RANGE;
 
 @Data
 @Accessors(chain = true)

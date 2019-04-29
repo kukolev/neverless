@@ -12,6 +12,7 @@ import neverless.domain.entity.behavior.BehaviorState;
 import neverless.service.util.CombatService;
 import neverless.service.util.LocalMapService;
 
+
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode

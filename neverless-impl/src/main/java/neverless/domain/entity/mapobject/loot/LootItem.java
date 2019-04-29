@@ -7,7 +7,7 @@ import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.Signatures.IMG_LOOT;
+import static neverless.util.Signatures.IMG_LOOT;
 
 @Data
 public class LootItem extends AbstractPhysicalObject {

@@ -1,24 +1,24 @@
 package neverless.view.resource;
 
-import neverless.Direction;
+import neverless.util.Direction;
 import neverless.domain.entity.behavior.BehaviorState;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static neverless.Direction.EAST;
-import static neverless.Direction.NORTH;
-import static neverless.Direction.NORTH_EAST;
-import static neverless.Direction.NORTH_WEST;
-import static neverless.Direction.SOUTH;
-import static neverless.Direction.SOUTH_EAST;
-import static neverless.Direction.SOUTH_WEST;
-import static neverless.Direction.WEST;
-import static neverless.Signatures.IMG_GOBLIN;
-import static neverless.Signatures.IMG_LOOT;
-import static neverless.Signatures.IMG_PLAYER;
-import static neverless.Signatures.IMG_TAVERN_SMALL;
+import static neverless.util.Direction.EAST;
+import static neverless.util.Direction.NORTH;
+import static neverless.util.Direction.NORTH_EAST;
+import static neverless.util.Direction.NORTH_WEST;
+import static neverless.util.Direction.SOUTH;
+import static neverless.util.Direction.SOUTH_EAST;
+import static neverless.util.Direction.SOUTH_WEST;
+import static neverless.util.Direction.WEST;
+import static neverless.util.Signatures.IMG_GOBLIN;
+import static neverless.util.Signatures.IMG_LOOT;
+import static neverless.util.Signatures.IMG_PLAYER;
+import static neverless.util.Signatures.IMG_TAVERN_SMALL;
 import static neverless.domain.entity.behavior.BehaviorState.ATTACK;
 import static neverless.domain.entity.behavior.BehaviorState.IDLE;
 import static neverless.domain.entity.behavior.BehaviorState.MOVE;

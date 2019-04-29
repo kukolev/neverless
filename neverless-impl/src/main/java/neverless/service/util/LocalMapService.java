@@ -1,6 +1,6 @@
 package neverless.service.util;
 
-import neverless.PlatformShape;
+import neverless.util.PlatformShape;
 import neverless.context.EventContext;
 import neverless.domain.entity.mapobject.AbstractLiveObject;
 import neverless.domain.entity.mapobject.AbstractPhysicalObject;

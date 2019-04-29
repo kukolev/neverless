@@ -27,8 +27,8 @@ import java.util.Random;
 
 import static java.lang.Math.sin;
 import static java.lang.StrictMath.cos;
-import static neverless.Constants.ENEMY_DEFAULT_WAIT_TIME;
-import static neverless.Constants.ENEMY_DEFAULT_WALK_LENGTH;
+import static neverless.util.Constants.ENEMY_DEFAULT_WAIT_TIME;
+import static neverless.util.Constants.ENEMY_DEFAULT_WALK_LENGTH;
 import static neverless.util.CoordinateUtils.isCoordinatesInRange;
 import static neverless.util.CoordinateUtils.isSegmentAndCurveIntersected;
 

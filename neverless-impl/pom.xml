@@ -16,12 +16,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- Internal -->
-        <dependency>
-            <groupId>stormborn.games</groupId>
-            <artifactId>neverless-util</artifactId>
-            <version>${neverless.constants.version}</version>
-        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

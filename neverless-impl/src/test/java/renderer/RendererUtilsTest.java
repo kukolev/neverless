@@ -1,7 +1,7 @@
-package neverless.view.renderer;
+package renderer;
 
 import neverless.util.Coordinate;
-import neverless.PlatformShape;
+import neverless.util.PlatformShape;
 import neverless.view.domain.Sprite;
 import org.testng.annotations.Test;
 

@@ -5,8 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.item.AbstractItem;
 
-import static neverless.Constants.WEAPON_DEFAULT_RANGE;
-import static neverless.Constants.WEAPON_DEFAULT_SPEED;
+import static neverless.util.Constants.WEAPON_DEFAULT_RANGE;
+import static neverless.util.Constants.WEAPON_DEFAULT_SPEED;
 
 @Data
 @Accessors(chain = true)

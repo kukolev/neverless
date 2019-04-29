@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static neverless.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
+import static neverless.util.Constants.DELTA_BETWEEN_NEAREST_PLATFORMS;
 import static neverless.util.CoordinateUtils.isCurvesIntersected;
 
 @Service

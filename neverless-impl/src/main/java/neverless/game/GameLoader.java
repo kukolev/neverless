@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import static neverless.Signatures.IMG_DUNGEON_BACKGROUND;
-import static neverless.Signatures.IMG_VILLAGE_BACKGROUND;
+import static neverless.util.Signatures.IMG_DUNGEON_BACKGROUND;
+import static neverless.util.Signatures.IMG_VILLAGE_BACKGROUND;
 
 @Component
 public class GameLoader {
@@ -100,7 +100,7 @@ public class GameLoader {
 
         // Loot
         LootItem lootItem = new LootItem();
-        lootItem.setX(600);
+        lootItem.setX(500);
         lootItem.setY(1100);
         village.getObjects().add(lootItem);
 

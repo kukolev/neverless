@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.entity.mapobject.AbstractPhysicalObject;
 import neverless.util.Coordinate;
-import neverless.PlatformShape;
+import neverless.util.PlatformShape;
 
 import java.util.ArrayList;
 import java.util.List;

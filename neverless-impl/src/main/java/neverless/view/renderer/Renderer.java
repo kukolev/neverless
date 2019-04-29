@@ -2,7 +2,7 @@ package neverless.view.renderer;
 
 import javafx.scene.image.Image;
 import lombok.Data;
-import neverless.PlatformShape;
+import neverless.util.PlatformShape;
 import neverless.context.EventContext;
 import neverless.context.GameContext;
 import neverless.domain.entity.Game;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static neverless.Constants.ANIMATION_SLOW_FACTOR;
+import static neverless.util.Constants.ANIMATION_SLOW_FACTOR;
 import static neverless.domain.entity.behavior.BehaviorState.IDLE;
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
