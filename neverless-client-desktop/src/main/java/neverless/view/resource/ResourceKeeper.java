@@ -16,6 +16,7 @@ import static neverless.Direction.SOUTH_EAST;
 import static neverless.Direction.SOUTH_WEST;
 import static neverless.Direction.WEST;
 import static neverless.Signatures.IMG_GOBLIN;
+import static neverless.Signatures.IMG_LOOT;
 import static neverless.Signatures.IMG_PLAYER;
 import static neverless.Signatures.IMG_TAVERN_SMALL;
 import static neverless.domain.entity.behavior.BehaviorState.ATTACK;
@@ -250,6 +251,9 @@ public class ResourceKeeper {
         map.put(IMG_GOBLIN + "_" + IDLE + "_" + NORTH_WEST + "_01", new Resource("wolf_idle_diag.png", 0, 96, 96, 96));
         map.put(IMG_GOBLIN + "_" + IDLE + "_" + SOUTH_WEST + "_01", new Resource("wolf_idle_diag.png", 0, 192, 96, 96));
         map.put(IMG_GOBLIN + "_" + IDLE + "_" + NORTH_EAST + "_01", new Resource("wolf_idle_diag.png", 0, 288, 96, 96));
+
+        // Loot
+        map.put(IMG_LOOT + "_" + IDLE + "_" + NORTH + "_01", new Resource("loot.png", 0, 0, 32, 32));
     }
 
     /**

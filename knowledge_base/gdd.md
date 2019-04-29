@@ -62,6 +62,10 @@ This paragraph includes main features descriptions. Every feature related to one
 #### Experience points
 * Player gains experience points after successful game events:
   * Enemy murder
+  
+#### Loot containers
+* Items are packaged in special "loot containers" that placed on locations
+
 
 
 ## Interface
@@ -96,9 +100,10 @@ This paragraph includes main features descriptions. Every feature related to one
 
 #### Test Game
 * Location "Village"
-  * Plain map with grass, road and cliffs.
+  * Plain map with grass, road and cliffs
   * One building - something like tavern
   * One portal to "Dungeon" at north-east
+  * One loot container placed near tavern
 * Location "Dungeon"
   * Simple dungeon with two branches
   * Dungeon contains two respawn points
