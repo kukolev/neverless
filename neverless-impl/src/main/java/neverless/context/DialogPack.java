@@ -2,8 +2,8 @@ package neverless.context;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import neverless.domain.dialog.Dialog;
-import neverless.domain.dialog.NpcPhrase;
+import neverless.domain.model.dialog.Dialog;
+import neverless.domain.model.dialog.NpcPhrase;
 
 @Data
 @Accessors(chain = true)

@@ -1,7 +1,7 @@
 package neverless.context;
 
-import neverless.domain.quest.AbstractQuest;
-import neverless.domain.quest.QuestContainer;
+import neverless.domain.model.quest.AbstractQuest;
+import neverless.domain.model.quest.QuestContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

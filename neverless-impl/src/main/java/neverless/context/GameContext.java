@@ -1,7 +1,7 @@
 package neverless.context;
 
-import neverless.domain.entity.Game;
-import neverless.domain.entity.mapobject.Player;
+import neverless.domain.model.entity.Game;
+import neverless.domain.model.entity.mapobject.Player;
 import org.springframework.stereotype.Repository;
 
 /**

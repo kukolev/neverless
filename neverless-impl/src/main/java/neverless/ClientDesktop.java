@@ -3,7 +3,7 @@ package neverless;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import neverless.window.RootPane;
+import neverless.core.RootPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,12 +1,12 @@
 package neverless.game.npc;
 
-import neverless.domain.dialog.Dialog;
-import neverless.domain.dialog.event.AbstractDialogEvent;
-import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
-import neverless.domain.quest.AbstractQuest;
-import neverless.domain.quest.QuestReward;
-import neverless.domain.quest.QuestStep;
-import neverless.domain.quest.QuestState;
+import neverless.domain.model.dialog.Dialog;
+import neverless.domain.model.dialog.event.AbstractDialogEvent;
+import neverless.domain.model.dialog.predicate.NpcStartingPhrasePredicate;
+import neverless.domain.model.quest.AbstractQuest;
+import neverless.domain.model.quest.QuestReward;
+import neverless.domain.model.quest.QuestStep;
+import neverless.domain.model.quest.QuestState;
 import neverless.util.DialogBuilder;
 import org.springframework.stereotype.Service;
 

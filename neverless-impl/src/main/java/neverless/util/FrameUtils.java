@@ -1,7 +1,7 @@
 package neverless.util;
 
-import neverless.view.domain.AreaHighlighted;
-import neverless.view.domain.Sprite;
+import neverless.domain.view.AreaHighlighted;
+import neverless.domain.view.Sprite;
 
 import java.util.List;
 

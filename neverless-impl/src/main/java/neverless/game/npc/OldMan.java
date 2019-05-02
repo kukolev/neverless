@@ -3,8 +3,8 @@ package neverless.game.npc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.util.Signatures;
-import neverless.domain.entity.mapobject.npc.AbstractNpc;
+import neverless.game.Signatures;
+import neverless.domain.model.entity.mapobject.npc.AbstractNpc;
 
 @Data
 @Accessors(chain = true)

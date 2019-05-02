@@ -1,19 +1,19 @@
 package neverless.context;
 
 import lombok.Getter;
-import neverless.domain.event.AbstractEvent;
-import neverless.domain.event.DialogSelectPhraseEvent;
-import neverless.domain.event.DialogStartEvent;
-import neverless.domain.event.CombatKillEvent;
-import neverless.domain.event.CombatHitEvent;
-import neverless.domain.event.CombatMissEvent;
-import neverless.domain.event.InventoryLeftHandEquipEvent;
-import neverless.domain.event.InventoryRightHandEquipEvent;
-import neverless.domain.event.JournalUpdateEvent;
-import neverless.domain.event.MapGoEvent;
-import neverless.domain.event.MapGoImpossibleEvent;
-import neverless.domain.event.PortalEnterEvent;
-import neverless.domain.quest.QuestState;
+import neverless.domain.model.event.AbstractEvent;
+import neverless.domain.model.event.DialogSelectPhraseEvent;
+import neverless.domain.model.event.DialogStartEvent;
+import neverless.domain.model.event.CombatKillEvent;
+import neverless.domain.model.event.CombatHitEvent;
+import neverless.domain.model.event.CombatMissEvent;
+import neverless.domain.model.event.InventoryLeftHandEquipEvent;
+import neverless.domain.model.event.InventoryRightHandEquipEvent;
+import neverless.domain.model.event.JournalUpdateEvent;
+import neverless.domain.model.event.MapGoEvent;
+import neverless.domain.model.event.MapGoImpossibleEvent;
+import neverless.domain.model.event.PortalEnterEvent;
+import neverless.domain.model.quest.QuestState;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

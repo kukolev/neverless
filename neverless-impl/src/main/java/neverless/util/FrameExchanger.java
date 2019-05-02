@@ -1,6 +1,6 @@
 package neverless.util;
 
-import neverless.view.domain.Frame;
+import neverless.domain.view.Frame;
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,11 +1,11 @@
 package neverless.util;
 
-import neverless.domain.dialog.Dialog;
-import neverless.domain.dialog.NpcPhrase;
-import neverless.domain.dialog.PlayerPhrase;
-import neverless.domain.dialog.event.AbstractDialogEvent;
-import neverless.domain.dialog.predicate.AvailablePlayerPhrasePredicate;
-import neverless.domain.dialog.predicate.NpcStartingPhrasePredicate;
+import neverless.domain.model.dialog.Dialog;
+import neverless.domain.model.dialog.NpcPhrase;
+import neverless.domain.model.dialog.PlayerPhrase;
+import neverless.domain.model.dialog.event.AbstractDialogEvent;
+import neverless.domain.model.dialog.predicate.AvailablePlayerPhrasePredicate;
+import neverless.domain.model.dialog.predicate.NpcStartingPhrasePredicate;
 
 import java.util.ArrayList;
 import java.util.List;

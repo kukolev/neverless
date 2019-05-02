@@ -2,13 +2,13 @@ package renderer;
 
 import neverless.util.Coordinate;
 import neverless.util.PlatformShape;
-import neverless.view.domain.Sprite;
+import neverless.domain.view.Sprite;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static neverless.view.drawer.DrawerUtils.calcRenderOrder;
+import static neverless.service.view.DrawerUtils.calcRenderOrder;
 import static org.testng.Assert.assertTrue;
 
 public class RendererUtilsTest {

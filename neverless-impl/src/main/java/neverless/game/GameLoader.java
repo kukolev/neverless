@@ -1,18 +1,18 @@
 package neverless.game;
 
-import neverless.domain.entity.Game;
-import neverless.domain.entity.Location;
-import neverless.domain.entity.inventory.Bag;
-import neverless.domain.entity.inventory.Equipment;
-import neverless.domain.entity.inventory.Inventory;
-import neverless.domain.entity.item.weapon.Sword;
-import neverless.domain.entity.mapobject.loot.LootItem;
+import neverless.domain.model.entity.Game;
+import neverless.domain.model.entity.Location;
+import neverless.domain.model.entity.inventory.Bag;
+import neverless.domain.model.entity.inventory.Equipment;
+import neverless.domain.model.entity.inventory.Inventory;
+import neverless.domain.model.entity.item.weapon.Sword;
+import neverless.domain.model.entity.mapobject.loot.LootItem;
 import neverless.util.Coordinate;
-import neverless.domain.entity.mapobject.Player;
-import neverless.domain.entity.mapobject.building.TavernSmall;
-import neverless.domain.entity.mapobject.portal.LocationPortal;
-import neverless.domain.entity.mapobject.respawn.GoblinRespawnPoint;
-import neverless.domain.quest.QuestContainer;
+import neverless.domain.model.entity.mapobject.Player;
+import neverless.domain.model.entity.mapobject.building.TavernSmall;
+import neverless.domain.model.entity.mapobject.portal.LocationPortal;
+import neverless.domain.model.entity.mapobject.respawn.GoblinRespawnPoint;
+import neverless.domain.model.quest.QuestContainer;
 import neverless.game.npc.OldMan;
 import neverless.game.npc.OldManQuestKillGoblins;
 import neverless.context.GameContext;
@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import static neverless.util.Signatures.IMG_DUNGEON_BACKGROUND;
-import static neverless.util.Signatures.IMG_VILLAGE_BACKGROUND;
+import static neverless.game.Signatures.IMG_DUNGEON_BACKGROUND;
+import static neverless.game.Signatures.IMG_VILLAGE_BACKGROUND;
 
 @Component
 public class GameLoader {
