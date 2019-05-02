@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.Location;
 import neverless.domain.model.entity.mapobject.AbstractMapArea;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 
 @Data
 @Accessors(chain = true)

@@ -15,7 +15,6 @@ import neverless.domain.model.entity.mapobject.enemy.EnemyFactory;
 import neverless.domain.model.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.domain.model.event.AbstractEvent;
 import neverless.domain.model.event.MapGoImpossibleEvent;
-import neverless.context.GameContext;
 import neverless.service.model.util.EnemyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +34,7 @@ import static neverless.util.CoordinateUtils.isSegmentAndCurveIntersected;
 public class EnemyCommander {
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private EventContext eventContext;
     @Autowired
@@ -59,7 +58,7 @@ public class EnemyCommander {
      * Respawn point is able to recreate an enemy if there no live enemy in the respawn point.
      */
     public void respawn() {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         game.getLocations()
                 .forEach(l -> {
                     List<AbstractRespawnPoint> points = l.getRespawnPoints();
@@ -88,7 +87,7 @@ public class EnemyCommander {
      * Decides if should be new command for all enemies in location.
      */
     public void orderNewCommand() {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         player.getLocation().getRespawnPoints()
                 .forEach(rp -> {
                     AbstractEnemy enemy = rp.getEnemy();
@@ -99,7 +98,7 @@ public class EnemyCommander {
     }
 
     private void performCommands() {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         game.getLocations().forEach(location ->
                 location.getRespawnPoints().forEach(rp -> {
                     AbstractEnemy enemy = rp.getEnemy();
@@ -192,7 +191,7 @@ public class EnemyCommander {
     }
 
     private boolean isAggressiveRange(AbstractEnemy enemy) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         return isCoordinatesInRange(player.getX(), player.getY(), enemy.getX(), enemy.getY(), enemy.getAgrRange());
     }
 

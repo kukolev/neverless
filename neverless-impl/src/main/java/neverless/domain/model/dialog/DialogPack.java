@@ -1,4 +1,4 @@
-package neverless.context;
+package neverless.domain.model.dialog;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

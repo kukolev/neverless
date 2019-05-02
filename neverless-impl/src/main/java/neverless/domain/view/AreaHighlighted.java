@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.mapobject.AbstractMapArea;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

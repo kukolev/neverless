@@ -1,11 +1,10 @@
 package neverless.service.model;
 
 import neverless.context.EventContext;
-import neverless.context.GameContext;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.event.AbstractEvent;
 import neverless.domain.model.event.MapGoEvent;
-import neverless.domain.view.ViewContext;
+import neverless.context.ViewContext;
 import neverless.domain.view.DestinationMarkerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,7 @@ import java.util.List;
 public class EventHandler {
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private EventContext eventContext;
 
@@ -40,7 +39,7 @@ public class EventHandler {
      * Returns MapGoEvent if present in list of events.
      */
     private MapGoEvent findMapGoEvent() {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         List<AbstractEvent> events = eventContext.getEvents();
         return events.stream()
                 .filter(e -> e instanceof MapGoEvent)

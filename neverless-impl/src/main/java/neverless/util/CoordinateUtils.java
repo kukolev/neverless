@@ -1,5 +1,8 @@
 package neverless.util;
 
+import neverless.domain.Coordinate;
+import neverless.domain.Direction;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +11,14 @@ import static java.lang.Math.pow;
 import static java.lang.Math.signum;
 import static java.lang.Math.sqrt;
 import static neverless.util.Constants.LOCAL_MAP_STEP_LENGTH;
-import static neverless.util.Direction.EAST;
-import static neverless.util.Direction.NORTH;
-import static neverless.util.Direction.NORTH_EAST;
-import static neverless.util.Direction.NORTH_WEST;
-import static neverless.util.Direction.SOUTH;
-import static neverless.util.Direction.SOUTH_EAST;
-import static neverless.util.Direction.SOUTH_WEST;
-import static neverless.util.Direction.WEST;
+import static neverless.domain.Direction.EAST;
+import static neverless.domain.Direction.NORTH;
+import static neverless.domain.Direction.NORTH_EAST;
+import static neverless.domain.Direction.NORTH_WEST;
+import static neverless.domain.Direction.SOUTH;
+import static neverless.domain.Direction.SOUTH_EAST;
+import static neverless.domain.Direction.SOUTH_WEST;
+import static neverless.domain.Direction.WEST;
 
 public class CoordinateUtils {
 

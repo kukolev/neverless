@@ -1,6 +1,7 @@
 package neverless.context;
 
 import neverless.domain.model.dialog.Dialog;
+import neverless.domain.model.dialog.DialogPack;
 import neverless.domain.model.dialog.NpcPhrase;
 import org.springframework.stereotype.Component;
 

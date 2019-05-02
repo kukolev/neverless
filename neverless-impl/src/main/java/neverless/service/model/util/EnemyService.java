@@ -1,10 +1,10 @@
 package neverless.service.model.util;
 
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 import neverless.context.EventContext;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.enemy.AbstractEnemy;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import neverless.util.CoordinateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class EnemyService {
     @Autowired
     private EventContext eventContext;
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
 
 
     /**
@@ -64,7 +64,7 @@ public class EnemyService {
      * @param enemy checked enemy.
      */
     public boolean isPlayerNear(AbstractEnemy enemy) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
 
         // calculate radiuses for player and enemy ellipses
         // new radiuses should be a bit wider by a little delta
@@ -92,7 +92,7 @@ public class EnemyService {
      * @param enemy enemy.
      */
     private Coordinate getNextCoordinatesForLos(AbstractEnemy enemy) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         int playerX = player.getX();
         int playerY = player.getY();
         int enemyX = enemy.getX();
@@ -109,7 +109,7 @@ public class EnemyService {
     private void attack(AbstractEnemy enemy) {
         if (calcToHit(enemy)) {
             int damage = calcDamage(enemy);
-            Player player = gameContext.getPlayer();
+            Player player = gameRepository.getPlayer();
             player.decreaseHitPoints(damage);
             eventContext.addCombatHitEvent(enemy.getUniqueName(), damage);
         } else {

@@ -1,14 +1,14 @@
 package neverless.service.controller;
 
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
+import neverless.core.GameLoop;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
-import neverless.core.Model;
 import neverless.service.model.command.factory.GameCommandFactory;
 import neverless.service.model.command.factory.PlayerCommandFactory;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.enemy.AbstractEnemy;
-import neverless.util.FrameExchanger;
-import neverless.util.FrameUtils;
+import neverless.service.FrameExchanger;
+import neverless.service.view.FrameUtils;
 import neverless.domain.view.Frame;
 import neverless.domain.view.Sprite;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
-import static neverless.util.FrameUtils.getSpriteAtScreenCoordinates;
+import static neverless.service.view.FrameUtils.getSpriteAtScreenCoordinates;
 
 @Component
 public class ControlHandler {
@@ -24,35 +24,35 @@ public class ControlHandler {
     @Autowired
     private FrameExchanger frameExchanger;
     @Autowired
-    private Model model;
+    private GameLoop gameLoop;
     @Autowired
     private PlayerCommandFactory commandFactory;
     @Autowired
     private GameCommandFactory gameCommandFactory;
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
 
     /**
      * Evaluates a command that should be performed by clicking in some coordinates.
-     * Puts the command in queue for further processing in Model.
+     * Puts the command in queue for further processing in GameLoop.
      *
      * @param screenX screen horizontal coordinate.
      * @param screenY screen vertical coordinate.
      */
     public void click(int screenX, int screenY) {
-        model.setScreenPoint(screenX, screenY);
+        gameLoop.setScreenPoint(screenX, screenY);
         Frame frame = frameExchanger.getFrame();
         Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
 
         // Convert screen coordinates to game coordinates
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         int dx = screenX - CANVAS_CENTER_X;
         int dy = screenY - CANVAS_CENTER_Y;
         int newGameX = player.getX() + dx;
         int newGameY = player.getY() + dy;
 
         // Updates destination marker
-        model.setDestinationMarker(newGameX, newGameY);
+        gameLoop.setDestinationMarker(newGameX, newGameY);
 
         if (sprite != null) {
             // Click on sprite
@@ -63,34 +63,34 @@ public class ControlHandler {
             // Click on area
             if (frame.getAreaHighlighted().getMapArea() instanceof LocationPortal) {
                 LocationPortal portal = (LocationPortal) frame.getAreaHighlighted().getMapArea();
-                model.putCommand(commandFactory.createPlayerPortalEnterCommand(portal));
+                gameLoop.putCommand(commandFactory.createPlayerPortalEnterCommand(portal));
             }
         } else {
             // Click on background
-            model.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
+            gameLoop.putCommand(commandFactory.createPlayerMapGoCommand(newGameX, newGameY));
         }
     }
 
     public void mouseMove(int screenX, int screenY) {
-        model.setScreenPoint(screenX, screenY);
+        gameLoop.setScreenPoint(screenX, screenY);
     }
 
     /**
      * Creates command for new game start.
      */
     public void cmdStartNewGame() {
-        model.putCommand(gameCommandFactory.createStartNewGameCommand());
-        new Thread(model).start();
+        gameLoop.putCommand(gameCommandFactory.createStartNewGameCommand());
+        new Thread(gameLoop).start();
     }
 
     private void cmdFightingAttack(AbstractEnemy enemy) {
-        model.putCommand(commandFactory.createPlayerAttackCommand(enemy));
+        gameLoop.putCommand(commandFactory.createPlayerAttackCommand(enemy));
     }
 
     /**
      * Toggle active pause.
      */
     public void pause() {
-        model.pause();
+        gameLoop.pause();
     }
 }

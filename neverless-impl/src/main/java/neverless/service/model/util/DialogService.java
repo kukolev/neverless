@@ -7,7 +7,7 @@ import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.npc.AbstractNpc;
 import neverless.context.DialogContext;
 import neverless.context.EventContext;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class DialogService {
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private NpcService npcService;
     @Autowired
@@ -24,7 +24,7 @@ public class DialogService {
     private DialogContext dialogContext;
 
     public void dialogStart(AbstractNpc npc) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
 
         // simpleGet NPC's dialog
         Dialog dialog = npc.getDialog();
@@ -62,7 +62,7 @@ public class DialogService {
             dialogContext.clearDialog();
             dialogContext.clearNpcPhrase();
         }
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         eventContext.addDialogSelectPhraseEvent(player.getUniqueName(), phraseNumber);
     }
 }

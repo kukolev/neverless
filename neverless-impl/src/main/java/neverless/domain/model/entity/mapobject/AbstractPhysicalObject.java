@@ -3,8 +3,8 @@ package neverless.domain.model.entity.mapobject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.util.Direction;
-import neverless.util.PlatformShape;
+import neverless.domain.Direction;
+import neverless.domain.PlatformShape;
 import neverless.service.model.command.AbstractCommand;
 
 @Data

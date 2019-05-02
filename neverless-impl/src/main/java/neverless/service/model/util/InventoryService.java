@@ -4,7 +4,7 @@ import neverless.domain.model.entity.inventory.Inventory;
 import neverless.domain.model.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.context.EventContext;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private EventContext eventContext;
 
@@ -29,7 +29,7 @@ public class InventoryService {
         AbstractHandEquipment newWeapon = inventory.getBag().getWeaponByNumber(itemNo);
         inventory.getEquipment().setWeapon(newWeapon);
         inventory.getBag().remove(newWeapon);
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         eventContext.addInventoryRightHandEquipEvent();
     }
 
@@ -51,7 +51,7 @@ public class InventoryService {
      * @return inventory.
      */
     private Inventory loadInventory() {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         return player.getInventory();
     }
 }

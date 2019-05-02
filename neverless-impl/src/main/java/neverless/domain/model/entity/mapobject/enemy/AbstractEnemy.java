@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.behavior.BehaviorState;
-import neverless.util.PlatformShape;
+import neverless.domain.PlatformShape;
 import neverless.domain.model.entity.mapobject.AbstractLiveObject;
 import neverless.domain.model.entity.mapobject.respawn.AbstractRespawnPoint;
 

@@ -10,7 +10,7 @@ import neverless.service.controller.Controller;
 import neverless.util.vcl.ImageButton;
 
 import neverless.service.view.Drawer;
-import neverless.service.view.DrawerContext;
+import neverless.domain.view.DrawerContext;
 import neverless.domain.view.ViewState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public class RootPane extends Pane {
     @Autowired
     private Controller controller;
     @Autowired
-    private Model model;
+    private GameLoop gameLoop;
     @Autowired
     private Drawer drawer;
 
@@ -118,7 +118,7 @@ public class RootPane extends Pane {
                 .setLogArea(infoArea);
 
         drawer.setDrawerContext(drawerContext);
-        model.messageProperty().addListener(drawer);
+        gameLoop.messageProperty().addListener(drawer);
     }
 
     private void initMainMenu() {

@@ -1,6 +1,5 @@
 package neverless.service.model;
 
-import neverless.context.GameContext;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.service.model.command.AbstractCommand;
 import neverless.context.EventContext;
@@ -20,7 +19,7 @@ public class BackendService {
     @Autowired
     private EventContext eventContext;
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private EnemyCommander enemyCommander;
 
@@ -44,7 +43,7 @@ public class BackendService {
             return;
         }
 
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         if (command != null && (!command.equals(player.getCommand()))) {
             player.setCommand(command);
         }

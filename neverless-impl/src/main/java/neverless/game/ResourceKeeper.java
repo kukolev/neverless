@@ -1,6 +1,6 @@
 package neverless.game;
 
-import neverless.util.Direction;
+import neverless.domain.Direction;
 import neverless.domain.model.entity.behavior.BehaviorState;
 import neverless.domain.view.Resource;
 import org.springframework.stereotype.Component;
@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import static neverless.util.Direction.EAST;
-import static neverless.util.Direction.NORTH;
-import static neverless.util.Direction.NORTH_EAST;
-import static neverless.util.Direction.NORTH_WEST;
-import static neverless.util.Direction.SOUTH;
-import static neverless.util.Direction.SOUTH_EAST;
-import static neverless.util.Direction.SOUTH_WEST;
-import static neverless.util.Direction.WEST;
+import static neverless.domain.Direction.EAST;
+import static neverless.domain.Direction.NORTH;
+import static neverless.domain.Direction.NORTH_EAST;
+import static neverless.domain.Direction.NORTH_WEST;
+import static neverless.domain.Direction.SOUTH;
+import static neverless.domain.Direction.SOUTH_EAST;
+import static neverless.domain.Direction.SOUTH_WEST;
+import static neverless.domain.Direction.WEST;
 import static neverless.game.Signatures.IMG_GOBLIN;
 import static neverless.game.Signatures.IMG_LOOT;
 import static neverless.game.Signatures.IMG_PLAYER;

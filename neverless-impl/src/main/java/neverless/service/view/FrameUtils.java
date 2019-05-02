@@ -1,7 +1,8 @@
-package neverless.util;
+package neverless.service.view;
 
 import neverless.domain.view.AreaHighlighted;
 import neverless.domain.view.Sprite;
+import neverless.util.CoordinateUtils;
 
 import java.util.List;
 

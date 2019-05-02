@@ -4,7 +4,7 @@ package neverless.domain.model.entity.mapobject.building;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.util.PlatformShape;
+import neverless.domain.PlatformShape;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
 
 

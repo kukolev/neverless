@@ -1,8 +1,9 @@
-package neverless.domain.view;
+package neverless.context;
 
 import lombok.Getter;
 import lombok.Setter;
-import neverless.util.Coordinate;
+import neverless.domain.view.DestinationMarkerData;
+import neverless.domain.Coordinate;
 
 import java.util.concurrent.locks.ReentrantLock;
 

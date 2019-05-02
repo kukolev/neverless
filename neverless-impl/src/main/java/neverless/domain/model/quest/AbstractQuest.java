@@ -1,7 +1,7 @@
 package neverless.domain.model.quest;
 
 import neverless.domain.model.entity.Game;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,7 +18,7 @@ public abstract class AbstractQuest {
     private static final String DEFAULT_INTEGER = "false";
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
 
     public abstract String getTitle();
 
@@ -72,7 +72,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     protected final Boolean getParamBool(String paramName) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_BOOL;
@@ -86,7 +86,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     public final Integer getParamInt(String paramName) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_INTEGER;
@@ -100,7 +100,7 @@ public abstract class AbstractQuest {
      * @param paramName     parameter name
      */
     public final String getParamStr(String paramName) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         String val = game.getParams().get(paramName);
         if (val == null) {
             val = DEFAULT_STRING;
@@ -115,7 +115,7 @@ public abstract class AbstractQuest {
      * @param val           parameter value.
      */
     protected final void setParam(String paramName, Object val) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         game.getParams().put(paramName, val.toString());
     }
 

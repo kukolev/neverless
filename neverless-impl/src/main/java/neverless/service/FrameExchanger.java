@@ -1,4 +1,4 @@
-package neverless.util;
+package neverless.service;
 
 import neverless.domain.view.Frame;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package neverless.context;
+package neverless.service.model;
 
 import neverless.domain.model.entity.Game;
 import neverless.domain.model.entity.mapobject.Player;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * Stores game after first load
  */
 @Repository
-public class GameContext {
+public class GameRepository {
 
     private Game game;
 

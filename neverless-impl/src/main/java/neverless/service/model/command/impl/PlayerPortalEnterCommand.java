@@ -1,6 +1,6 @@
 package neverless.service.model.command.impl;
 
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 import neverless.service.model.command.AbstractCommand;
 import neverless.context.EventContext;
 import neverless.domain.model.entity.behavior.BehaviorState;

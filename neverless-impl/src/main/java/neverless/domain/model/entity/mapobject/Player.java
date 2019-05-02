@@ -3,7 +3,7 @@ package neverless.domain.model.entity.mapobject;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import neverless.util.PlatformShape;
+import neverless.domain.PlatformShape;
 import neverless.game.Signatures;
 
 @Data

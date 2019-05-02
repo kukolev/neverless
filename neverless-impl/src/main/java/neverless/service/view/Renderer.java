@@ -2,14 +2,14 @@ package neverless.service.view;
 
 import javafx.scene.image.Image;
 import lombok.Data;
-import neverless.util.PlatformShape;
+import neverless.domain.PlatformShape;
 import neverless.context.EventContext;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import neverless.domain.model.entity.Game;
 import neverless.domain.model.entity.behavior.BehaviorState;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
 import neverless.service.model.command.AbstractCommand;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.Profile;
 import neverless.domain.view.DestinationMarkerData;
@@ -20,7 +20,7 @@ import neverless.domain.view.Frame;
 import neverless.domain.view.Sprite;
 import neverless.domain.view.Resource;
 import neverless.game.ResourceKeeper;
-import neverless.domain.view.ViewContext;
+import neverless.context.ViewContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +36,7 @@ import static neverless.util.Constants.CANVAS_CENTER_X;
 import static neverless.util.Constants.CANVAS_CENTER_Y;
 import static neverless.util.Constants.CANVAS_HEIGHT;
 import static neverless.util.Constants.CANVAS_WIDTH;
-import static neverless.util.FrameUtils.getSpriteAtScreenCoordinates;
+import static neverless.service.view.FrameUtils.getSpriteAtScreenCoordinates;
 import static neverless.service.view.DrawerUtils.calcRenderOrder;
 
 @Component
@@ -47,7 +47,7 @@ public class Renderer {
     @Autowired
     private ResourceKeeper resourceKeeper;
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private EventContext eventContext;
 
@@ -72,7 +72,7 @@ public class Renderer {
      * Calculates and returns frames should be painted on game screen.
      */
     public Frame calcFrame(ViewContext viewContext) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         double playerX = game.getPlayer().getX();
         double playerY = game.getPlayer().getY();
 
@@ -114,7 +114,7 @@ public class Renderer {
      * @param frame frame that contains all rendered information for drawing.
      */
     private void calcProfile(Frame frame) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         Profile profile = player.getProfile();
         frame.getProfileWidget().mapFromProfile(profile);
     }
@@ -183,7 +183,7 @@ public class Renderer {
      * @param viewContext view context that contains states of visual objects on game screen.
      */
     public void calcArea(Frame frame, ViewContext viewContext) {
-        Game game = gameContext.getGame();
+        Game game = gameRepository.getGame();
         Coordinate mousePoint = viewContext.getScreenPoint();
         int screenX = mousePoint.getX();
         int screenY = mousePoint.getY();

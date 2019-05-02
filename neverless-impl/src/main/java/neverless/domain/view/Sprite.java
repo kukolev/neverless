@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
-import neverless.util.Coordinate;
-import neverless.util.PlatformShape;
+import neverless.domain.Coordinate;
+import neverless.domain.PlatformShape;
 
 import java.util.ArrayList;
 import java.util.List;

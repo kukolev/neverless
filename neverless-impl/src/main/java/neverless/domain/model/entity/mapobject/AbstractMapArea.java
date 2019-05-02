@@ -3,7 +3,7 @@ package neverless.domain.model.entity.mapobject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.AbstractGameObject;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

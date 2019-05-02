@@ -7,7 +7,7 @@ import neverless.domain.model.entity.inventory.Equipment;
 import neverless.domain.model.entity.inventory.Inventory;
 import neverless.domain.model.entity.item.weapon.Sword;
 import neverless.domain.model.entity.mapobject.loot.LootItem;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.building.TavernSmall;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
@@ -15,7 +15,7 @@ import neverless.domain.model.entity.mapobject.respawn.GoblinRespawnPoint;
 import neverless.domain.model.quest.QuestContainer;
 import neverless.game.npc.OldMan;
 import neverless.game.npc.OldManQuestKillGoblins;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,10 +25,10 @@ import static neverless.game.Signatures.IMG_DUNGEON_BACKGROUND;
 import static neverless.game.Signatures.IMG_VILLAGE_BACKGROUND;
 
 @Component
-public class GameLoader {
+public class GameBuilder {
 
     @Autowired
-    private GameContext cache;
+    private GameRepository cache;
     @Autowired
     private QuestContainer questContainer;
     @Autowired

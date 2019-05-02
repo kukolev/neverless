@@ -1,10 +1,10 @@
 package neverless.service.model.util;
 
-import neverless.util.PlatformShape;
+import neverless.domain.PlatformShape;
 import neverless.context.EventContext;
 import neverless.domain.model.entity.mapobject.AbstractLiveObject;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
-import neverless.util.Coordinate;
+import neverless.domain.Coordinate;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
 import org.springframework.beans.factory.annotation.Autowired;

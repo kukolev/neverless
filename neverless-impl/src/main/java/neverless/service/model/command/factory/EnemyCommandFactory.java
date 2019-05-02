@@ -1,7 +1,7 @@
 package neverless.service.model.command.factory;
 
 import neverless.context.EventContext;
-import neverless.context.GameContext;
+import neverless.service.model.GameRepository;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.service.model.command.impl.EnemyAttackCommand;
 import neverless.service.model.command.impl.EnemyMapGoCommand;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class EnemyCommandFactory {
 
     @Autowired
-    private GameContext gameContext;
+    private GameRepository gameRepository;
     @Autowired
     private LocalMapService localMapService;
     @Autowired
@@ -39,7 +39,7 @@ public class EnemyCommandFactory {
     }
 
     public EnemyAttackCommand createEnemyAttackCommand(AbstractEnemy enemy) {
-        Player player = gameContext.getPlayer();
+        Player player = gameRepository.getPlayer();
         return new EnemyAttackCommand(enemy, player, localMapService, eventContext, combatService);
     }
 }

@@ -3,7 +3,6 @@ package neverless.domain.view;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.mapobject.Profile;
-import neverless.service.view.DrawerContext;
 
 @Data
 @Accessors(chain = true)

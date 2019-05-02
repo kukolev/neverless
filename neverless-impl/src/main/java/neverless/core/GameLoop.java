@@ -2,10 +2,10 @@ package neverless.core;
 
 import javafx.concurrent.Task;
 import neverless.domain.view.DestinationMarkerData;
-import neverless.domain.view.ViewContext;
+import neverless.context.ViewContext;
 import neverless.service.model.EventHandler;
 import neverless.service.model.command.AbstractCommand;
-import neverless.util.FrameExchanger;
+import neverless.service.FrameExchanger;
 import neverless.domain.view.Frame;
 import neverless.service.view.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Component
-public class Model extends Task {
+public class GameLoop extends Task {
 
     @Autowired
     private CommandResolver resolver;
