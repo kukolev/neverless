@@ -3,6 +3,7 @@ package neverless;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import neverless.core.MenuPane;
 import neverless.core.RootPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +21,8 @@ public class ClientDesktop extends Application {
 
     @Autowired
     private RootPane rootPane;
+    @Autowired
+    private MenuPane menuPane;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -27,7 +30,7 @@ public class ClientDesktop extends Application {
         stage.setResizable(true);
         stage.centerOnScreen();
         stage.setMaximized(true);
-
+        menuPane.show();
         stage.show();
     }
 

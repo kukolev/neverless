@@ -1,5 +1,6 @@
 package neverless.domain.view;
 
+import javafx.scene.control.TextArea;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.mapobject.Profile;
@@ -27,13 +28,8 @@ public class ProfileWidget {
         experience = "    Experience - " + profile.getExperience();
     }
 
-    /**
-     * Draws profile.
-     *
-     * @param context   Context that contains drawing containers and tools.
-     */
-    public void draw(DrawerContext context) {
-        context.getStatesArea().setText("Player stats:\n\n" +
+    public void draw(TextArea textArea) {
+        textArea.setText("Player stats:\n\n" +
                 strength + "\n"
                 + speed + "\n"
                 + intelligence + "\n"

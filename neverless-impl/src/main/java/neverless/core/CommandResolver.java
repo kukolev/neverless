@@ -3,7 +3,6 @@ package neverless.core;
 import neverless.service.model.BackendService;
 import neverless.service.model.command.impl.GameStartNewGameCommand;
 import neverless.service.model.command.AbstractCommand;
-import neverless.domain.view.ViewState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ public class CommandResolver {
     @Autowired
     private BackendService backendService;
     @Autowired
-    private RootPane rootPane;
+    private LocalMapPane localMapPane;
 
     /**
      * Resolves command via mapped resolver.
@@ -23,7 +22,7 @@ public class CommandResolver {
     public void resolve(AbstractCommand command) {
         // Start New Game command
         if (command instanceof GameStartNewGameCommand) {
-            rootPane.setViewState(ViewState.LOCAL_MAP);
+            localMapPane.show();
         }
         backendService.resolveCommand(command);
     }

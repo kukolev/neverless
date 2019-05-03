@@ -4,7 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import neverless.domain.view.DrawerContext;
+import neverless.core.LocalMapPane;
 import neverless.service.FrameExchanger;
 import neverless.domain.view.AreaHighlighted;
 import neverless.domain.view.Frame;
@@ -24,17 +24,8 @@ public class Drawer implements ChangeListener<String> {
 
     @Autowired
     private FrameExchanger frameExchanger;
-
-    private DrawerContext context;
-
-    /**
-     * Sets drawer context.
-     *
-     * @param context Context that contains drawing containers and tools.
-     */
-    public void setDrawerContext(DrawerContext context) {
-        this.context = context;
-    }
+    @Autowired
+    private LocalMapPane localMapPane;
 
     /**
      * Receives message from renderer and invokes other methods for displaying information.
@@ -60,7 +51,7 @@ public class Drawer implements ChangeListener<String> {
      * @param background special sprite for background.
      */
     private void displayBackground(Sprite background) {
-        GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+        GraphicsContext gc = localMapPane.getCanvas().getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         background.draw(gc);
@@ -73,7 +64,7 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayLocalMap(List<Sprite> sprites) {
         if (sprites.size() > 0) {
-            GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+            GraphicsContext gc = localMapPane.getCanvas().getGraphicsContext2D();
             sprites.forEach(s -> s.draw(gc));
         }
     }
@@ -85,7 +76,7 @@ public class Drawer implements ChangeListener<String> {
      * @param ids     list of sprites ids.
      */
     private void displayHighLights(List<Sprite> sprites, List<String> ids) {
-        GraphicsContext gc = context.getLocalMapCanvas().getGraphicsContext2D();
+        GraphicsContext gc = localMapPane.getCanvas().getGraphicsContext2D();
         sprites.stream()
                 .filter(s -> ids.contains(s.getId()))
                 .forEach(s -> s.drawHighLight(gc));
@@ -95,7 +86,7 @@ public class Drawer implements ChangeListener<String> {
      * Displays details from game state on panes.
      */
     private void displayGameState(ProfileWidget profileWidget) {
-        profileWidget.draw(context);
+        profileWidget.draw(localMapPane.getStatsArea());
     }
 
     /**
@@ -105,7 +96,7 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayMarker(DestinationMarkerEffect markerEffect) {
         if (markerEffect != null) {
-            markerEffect.draw(context.getLocalMapCanvas().getGraphicsContext2D());
+            markerEffect.draw(localMapPane.getCanvas().getGraphicsContext2D());
         }
     }
 
@@ -116,7 +107,7 @@ public class Drawer implements ChangeListener<String> {
      */
     private void displayHighLighedArea(AreaHighlighted areaHighlighted) {
         if (areaHighlighted != null) {
-            areaHighlighted.draw(context.getLocalMapCanvas().getGraphicsContext2D());
+            areaHighlighted.draw(localMapPane.getCanvas().getGraphicsContext2D());
         }
     }
 
@@ -126,8 +117,6 @@ public class Drawer implements ChangeListener<String> {
      * @param log   list of log items.
      */
     private void displayLog(List<String> log) {
-        log.forEach(s -> {
-            context.getLogArea().appendText("\n" + s);
-        });
+        log.forEach(s -> localMapPane.getInfoArea().appendText("\n" + s));
     }
 }

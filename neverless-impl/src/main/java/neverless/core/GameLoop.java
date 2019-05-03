@@ -7,10 +7,12 @@ import neverless.service.model.EventHandler;
 import neverless.service.model.command.AbstractCommand;
 import neverless.service.FrameExchanger;
 import neverless.domain.view.Frame;
+import neverless.service.view.Drawer;
 import neverless.service.view.Renderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -26,6 +28,13 @@ public class GameLoop extends Task {
     private FrameExchanger frameExchanger;
     @Autowired
     private EventHandler eventHandler;
+    @Autowired
+    private Drawer drawer;
+
+    @PostConstruct
+    private void init() {
+        messageProperty().addListener(drawer);
+    }
 
     private volatile boolean isWorking = true;
     private volatile boolean isPause = false;
