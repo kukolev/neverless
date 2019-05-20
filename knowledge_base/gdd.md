@@ -65,6 +65,7 @@ This paragraph includes main features descriptions. Every feature related to one
   
 #### Loot containers
 * Items are packaged in special "loot containers" that placed on locations
+* Player is able to take loot container if it's placed near the player
 
 
 

@@ -100,7 +100,7 @@ public class GameBuilder {
 
         // Loot
         LootItem lootItem = new LootItem();
-        lootItem.setX(500);
+        lootItem.setX(700);
         lootItem.setY(1100);
         village.getObjects().add(lootItem);
 

@@ -1,5 +1,6 @@
 package neverless.service.controller;
 
+import neverless.domain.model.entity.mapobject.loot.LootItem;
 import neverless.service.model.GameRepository;
 import neverless.core.GameLoop;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
@@ -59,6 +60,9 @@ public class ControlHandler {
             if (sprite.getMapObject() instanceof AbstractEnemy) {
                 cmdFightingAttack((AbstractEnemy) sprite.getMapObject());
             }
+            if (sprite.getMapObject() instanceof LootItem) {
+                cmdTakeLootItem((LootItem) sprite.getMapObject());
+            }
         } else if (FrameUtils.isAreaAtScreenCoordinates(frame.getAreaHighlighted(), screenX, screenY)) {
             // Click on area
             if (frame.getAreaHighlighted().getMapArea() instanceof LocationPortal) {
@@ -85,6 +89,10 @@ public class ControlHandler {
 
     private void cmdFightingAttack(AbstractEnemy enemy) {
         gameLoop.putCommand(commandFactory.createPlayerAttackCommand(enemy));
+    }
+
+    private void cmdTakeLootItem(LootItem lootItem) {
+        gameLoop.putCommand(commandFactory.createPlayerTakeLootCommand(lootItem));
     }
 
     /**

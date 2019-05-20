@@ -1,5 +1,6 @@
 package neverless.service.model.command.factory;
 
+import neverless.domain.model.entity.mapobject.loot.LootItem;
 import neverless.service.model.command.impl.PlayerAttackCommand;
 import neverless.service.model.command.impl.PlayerMapGoCommand;
 import neverless.service.model.command.impl.PlayerPortalEnterCommand;
@@ -8,6 +9,7 @@ import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.enemy.AbstractEnemy;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
 import neverless.service.model.GameRepository;
+import neverless.service.model.command.impl.PlayerTakeLootCommand;
 import neverless.service.model.util.CombatService;
 import neverless.service.model.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +45,10 @@ public class PlayerCommandFactory {
     public PlayerPortalEnterCommand createPlayerPortalEnterCommand(LocationPortal portal) {
         Player player = gameRepository.getPlayer();
         return new PlayerPortalEnterCommand(player, eventContext, portal, localMapService);
+    }
+
+    public PlayerTakeLootCommand createPlayerTakeLootCommand(LootItem lootItem) {
+        Player player = gameRepository.getPlayer();
+        return new PlayerTakeLootCommand(player, lootItem, localMapService);
     }
 }
