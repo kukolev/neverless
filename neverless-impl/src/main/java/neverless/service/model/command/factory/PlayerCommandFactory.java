@@ -1,6 +1,6 @@
 package neverless.service.model.command.factory;
 
-import neverless.domain.model.entity.mapobject.loot.LootItem;
+import neverless.domain.model.entity.mapobject.loot.LootContainer;
 import neverless.service.model.command.impl.PlayerAttackCommand;
 import neverless.service.model.command.impl.PlayerMapGoCommand;
 import neverless.service.model.command.impl.PlayerPortalEnterCommand;
@@ -47,8 +47,8 @@ public class PlayerCommandFactory {
         return new PlayerPortalEnterCommand(player, eventContext, portal, localMapService);
     }
 
-    public PlayerTakeLootCommand createPlayerTakeLootCommand(LootItem lootItem) {
+    public PlayerTakeLootCommand createPlayerTakeLootCommand(LootContainer lootContainer) {
         Player player = gameRepository.getPlayer();
-        return new PlayerTakeLootCommand(player, lootItem, localMapService);
+        return new PlayerTakeLootCommand(player, lootContainer, localMapService);
     }
 }

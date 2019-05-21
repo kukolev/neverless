@@ -10,7 +10,7 @@ import java.util.List;
 import static neverless.game.Signatures.IMG_LOOT;
 
 @Data
-public class LootItem extends AbstractPhysicalObject {
+public class LootContainer extends AbstractPhysicalObject {
 
     private List<AbstractItem> items = new ArrayList<>();
 

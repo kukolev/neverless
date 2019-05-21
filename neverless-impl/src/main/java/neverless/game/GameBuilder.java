@@ -6,7 +6,7 @@ import neverless.domain.model.entity.inventory.Bag;
 import neverless.domain.model.entity.inventory.Equipment;
 import neverless.domain.model.entity.inventory.Inventory;
 import neverless.domain.model.entity.item.weapon.Sword;
-import neverless.domain.model.entity.mapobject.loot.LootItem;
+import neverless.domain.model.entity.mapobject.loot.LootContainer;
 import neverless.domain.Coordinate;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.building.TavernSmall;
@@ -99,10 +99,10 @@ public class GameBuilder {
         village.getObjects().add(tavern);
 
         // Loot
-        LootItem lootItem = new LootItem();
-        lootItem.setX(700);
-        lootItem.setY(1100);
-        village.getObjects().add(lootItem);
+        LootContainer lootContainer = new LootContainer();
+        lootContainer.setX(700);
+        lootContainer.setY(1100);
+        village.getObjects().add(lootContainer);
 
         return village;
     }
