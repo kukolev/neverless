@@ -9,6 +9,7 @@ import java.util.List;
 public class RootPane extends Pane {
 
     private List<Pane> paneList = new ArrayList<>();
+    private AbstractPane currentPane;
 
     /**
      * Registers pane in local list.
@@ -31,6 +32,11 @@ public class RootPane extends Pane {
      * @param pane  pane that should be showed.
      */
     public void show(AbstractPane pane) {
+        currentPane = pane;
         paneList.forEach(p -> p.setVisible(p == pane));
+    }
+
+    public AbstractPane getCurrentPane() {
+        return currentPane;
     }
 }

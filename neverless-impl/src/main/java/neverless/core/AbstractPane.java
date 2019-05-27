@@ -12,6 +12,9 @@ public abstract class AbstractPane extends Pane {
     @Autowired
     private RootPane rootPane;
 
+    private volatile boolean showing = false;
+    private AbstractPane prevPane;
+
     @PostConstruct
     private void init() {
         rootPane.register(this);
@@ -29,6 +32,26 @@ public abstract class AbstractPane extends Pane {
      * Method calls rootPane for showing.
      */
     public void show() {
+        prevPane = rootPane.getCurrentPane();
         rootPane.show(this);
+        showing = true;
+    }
+
+    public void showModal() {
+        show();
+        while (showing) {
+            try {
+                Thread.currentThread().sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    public void close() {
+        showing = false;
+        if (prevPane != null) {
+            prevPane.show();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package neverless.service.model.command.impl;
 
+import neverless.core.inventory.InventoryPane;
 import neverless.domain.model.entity.behavior.BehaviorState;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.loot.LootContainer;
@@ -14,11 +15,14 @@ public class PlayerTakeLootCommand extends AbstractCommand {
     private Player player;
     private LootContainer lootContainer;
     private LocalMapService localMapService;
+    private InventoryPane inventoryPane;
 
-    public PlayerTakeLootCommand(Player player, LootContainer lootContainer, LocalMapService localMapService) {
+    public PlayerTakeLootCommand(Player player, LootContainer lootContainer, LocalMapService localMapService,
+                                 InventoryPane inventoryPane) {
         this.player = player;
         this.lootContainer = lootContainer;
         this.localMapService = localMapService;
+        this.inventoryPane = inventoryPane;
     }
 
     @Override
@@ -26,7 +30,13 @@ public class PlayerTakeLootCommand extends AbstractCommand {
         if (!isCoordinatesInRange(player.getX(), player.getY(), lootContainer.getX(), lootContainer.getY(), LOOT_ITEM_DESTINATION)) {
             localMapService.makeStep(player, lootContainer.getX(), lootContainer.getY());
         }
-        return BehaviorState.MOVE;
+        if (checkFinished()) {
+            inventoryPane.init(lootContainer.getItems());
+            inventoryPane.showModal();
+            return BehaviorState.IDLE;
+        } else {
+            return BehaviorState.MOVE;
+        }
     }
 
     @Override

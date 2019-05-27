@@ -100,9 +100,12 @@ public class GameBuilder {
 
         // Loot
         LootContainer lootContainer = new LootContainer();
-        lootContainer.setX(700);
-        lootContainer.setY(1100);
+        lootContainer.setX(300);
+        lootContainer.setY(1200);
         village.getObjects().add(lootContainer);
+
+        lootContainer.getItems().add(new Sword().setTitle("Rust sword"));
+        lootContainer.getItems().add(new Sword().setTitle("Silver sword"));
 
         return village;
     }
