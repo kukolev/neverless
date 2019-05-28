@@ -5,7 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import neverless.core.AbstractPane;
+import neverless.domain.model.entity.inventory.Inventory;
 import neverless.domain.model.entity.item.AbstractItem;
+import neverless.domain.model.entity.item.weapon.AbstractHandEquipment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +22,10 @@ public class InventoryPane extends AbstractPane {
     private InventoryPaneController controller;
 
     private VBox content = new VBox();
-    private List<ItemPane> lootItemPanes = new ArrayList<>();
 
+    private List<ItemPane> lootItemPanes = new ArrayList<>();
     private List<AbstractItem> lootItems = new ArrayList<>();
+    private Inventory inventory = new Inventory();
 
     @Override
     protected void setup() {
@@ -57,8 +60,17 @@ public class InventoryPane extends AbstractPane {
         this.getChildren().add(equipmentPane);
     }
 
-    public void init(List<AbstractItem> lootItems) {
+    public void init(List<AbstractItem> lootItems, Inventory inventory) {
         this.lootItems = lootItems;
+        // Copy items from bag
+        inventory.getBag()
+                .getItems()
+                .stream()
+                .forEach(it -> this.inventory.getBag().addLast(it));
+        // Copy equipment
+        AbstractHandEquipment handEquipment = inventory.getEquipment().getWeapon();
+        inventory.getEquipment().setWeapon(handEquipment);
+
         refresh();
     }
 

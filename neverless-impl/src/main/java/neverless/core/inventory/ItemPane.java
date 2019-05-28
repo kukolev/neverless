@@ -1,5 +1,6 @@
 package neverless.core.inventory;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
@@ -59,11 +60,10 @@ public class ItemPane extends HBox {
         if (item == null) {
             return;
         }
-        areaBtn.setText(item.getTitle());
+        Platform.runLater(() -> areaBtn.setText(item.getTitle()));
     }
 
     public void showContextMenu(double screenX, double screenY) {
         actionBtn.getContextMenu().show(actionBtn, screenX, screenY);
     }
-
 }

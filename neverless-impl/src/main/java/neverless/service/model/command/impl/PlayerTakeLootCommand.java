@@ -31,7 +31,7 @@ public class PlayerTakeLootCommand extends AbstractCommand {
             localMapService.makeStep(player, lootContainer.getX(), lootContainer.getY());
         }
         if (checkFinished()) {
-            inventoryPane.init(lootContainer.getItems());
+            inventoryPane.init(lootContainer.getItems(), player.getInventory());
             inventoryPane.showModal();
             return BehaviorState.IDLE;
         } else {
