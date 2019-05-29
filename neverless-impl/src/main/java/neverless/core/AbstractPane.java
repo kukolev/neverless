@@ -13,6 +13,7 @@ public abstract class AbstractPane extends Pane {
     private RootPane rootPane;
 
     private volatile boolean showing = false;
+    private volatile boolean accept = false;
     private AbstractPane prevPane;
 
     @PostConstruct
@@ -37,7 +38,7 @@ public abstract class AbstractPane extends Pane {
         showing = true;
     }
 
-    public void showModal() {
+    public boolean showModal() {
         show();
         while (showing) {
             try {
@@ -46,10 +47,12 @@ public abstract class AbstractPane extends Pane {
                 Thread.currentThread().interrupt();
             }
         }
+        return accept;
     }
 
-    public void close() {
+    public void close(boolean accept) {
         showing = false;
+        this.accept = accept;
         if (prevPane != null) {
             prevPane.show();
         }

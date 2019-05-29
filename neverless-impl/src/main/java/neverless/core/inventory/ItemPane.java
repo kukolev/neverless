@@ -21,6 +21,8 @@ public class ItemPane extends HBox {
         this.setPadding(new Insets(5));
         this.setPrefWidth(Integer.MAX_VALUE);
 
+        this.item = item;
+
         actionBtn.setPrefWidth(20);
         actionBtn.setPrefHeight(20);
         actionBtn.setLayoutX(5);
@@ -47,7 +49,6 @@ public class ItemPane extends HBox {
             this.getChildren().add(areaBtn);
             actionBtn.setText("<");
         }
-
         refresh();
     }
 
@@ -56,7 +57,7 @@ public class ItemPane extends HBox {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         if (item == null) {
             return;
         }

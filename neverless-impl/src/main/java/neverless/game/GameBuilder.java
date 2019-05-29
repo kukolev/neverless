@@ -133,14 +133,19 @@ public class GameBuilder {
     }
 
     private Player createPlayer(Location location) {
-        Bag bag = new Bag();
-
         Sword sword = new Sword();
         sword.setPower(5);
         sword.setTitle("Mega Sword of Ultra Power");
 
+        Sword flameSword = new Sword();
+        flameSword.setPower(50);
+        flameSword.setTitle("Flame Sword");
+
         Equipment equipment = new Equipment();
         equipment.setWeapon(sword);
+
+        Bag bag = new Bag();
+        bag.addLast(flameSword);
 
         Inventory inventory = new Inventory();
         inventory.setBag(bag);

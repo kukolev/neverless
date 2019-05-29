@@ -1,5 +1,6 @@
 package neverless.core.inventory;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -21,48 +22,66 @@ public class InventoryPane extends AbstractPane {
     @Autowired
     private InventoryPaneController controller;
 
-    private VBox content = new VBox();
-
+    private VBox lootItemBox = new VBox();
     private List<ItemPane> lootItemPanes = new ArrayList<>();
     private List<AbstractItem> lootItems = new ArrayList<>();
+
+    private VBox bagItemBox = new VBox();
+    private List<ItemPane> bagItemPanes = new ArrayList<>();
+
     private Inventory inventory = new Inventory();
 
     @Override
     protected void setup() {
-        Button closeBtn = new Button();
-        closeBtn.setLayoutX(1000);
-        closeBtn.setLayoutY(800);
-        closeBtn.setText("Close");
-        closeBtn.setOnMouseClicked(controller::closeBtnOnClick);
+        Button acceptBtn = new Button();
+        acceptBtn.setLayoutX(100);
+        acceptBtn.setLayoutY(800);
+        acceptBtn.setText("Accept");
+        acceptBtn.setOnMouseClicked(controller::acceptBtnOnClick);
+
+        Button cancelBtn = new Button();
+        cancelBtn.setLayoutX(1000);
+        cancelBtn.setLayoutY(800);
+        cancelBtn.setText("Cancel");
+        cancelBtn.setOnMouseClicked(controller::cancelBtnOnClick);
 
         EquipmentPane equipmentPane = new EquipmentPane();
         equipmentPane.setLayoutX(100);
         equipmentPane.setLayoutY(100);
 
-        content.setSpacing(10);
-        content.setPadding(new Insets(10));
+        // Bag items
+        bagItemBox.setSpacing(10);
+        bagItemBox.setPadding(new Insets(10));
+        ScrollPane bagScroll = new ScrollPane(bagItemBox);
+        bagScroll.setFitToWidth(true);
+        bagScroll.setLayoutX(500);
+        bagScroll.setLayoutY(100);
+        bagScroll.setPrefWidth(400);
+        bagScroll.setMaxHeight(200);
+        bagScroll.setPannable(true);
 
-        for (int i = 0; i < 100; i++) {
-            ItemPane itemPane = new ItemPane(null, true);
-            lootItemPanes.add(itemPane);
-            content.getChildren().add(itemPane);
-        }
+        // Loot items
+        lootItemBox.setSpacing(10);
+        lootItemBox.setPadding(new Insets(10));
+        ScrollPane lootScroll = new ScrollPane(lootItemBox);
+        lootScroll.setFitToWidth(true);
+        lootScroll.setLayoutX(1000);
+        lootScroll.setLayoutY(100);
+        lootScroll.setPrefWidth(400);
+        lootScroll.setMaxHeight(200);
+        lootScroll.setPannable(true);
 
-        ScrollPane scrollPane = new ScrollPane(content);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setLayoutX(1000);
-        scrollPane.setLayoutY(100);
-        scrollPane.setPrefWidth(400);
-        scrollPane.setMaxHeight(200);
-        scrollPane.setPannable(true);
-        this.getChildren().add(closeBtn);
-        this.getChildren().add(scrollPane);
+        this.getChildren().add(cancelBtn);
+        this.getChildren().add(acceptBtn);
+        this.getChildren().add(bagScroll);
+        this.getChildren().add(lootScroll);
         this.getChildren().add(equipmentPane);
     }
 
     public void init(List<AbstractItem> lootItems, Inventory inventory) {
         this.lootItems = lootItems;
         // Copy items from bag
+        this.inventory.getBag().getItems().clear();
         inventory.getBag()
                 .getItems()
                 .stream()
@@ -75,11 +94,24 @@ public class InventoryPane extends AbstractPane {
     }
 
     private void refresh() {
-        if (lootItems == null) {
+        initScrollBox(inventory.getBag().getItems(), bagItemBox, bagItemPanes);
+        initScrollBox(lootItems, lootItemBox, lootItemPanes);
+    }
+
+    private void initScrollBox(List<AbstractItem> items, VBox vbox, List<ItemPane> panes) {
+        if (items == null) {
             return;
         }
-        for (int i = 0; i < lootItems.size(); i++) {
-            lootItemPanes.get(i).setItem(lootItems.get(i));
-        }
+        Platform.runLater(() -> {
+                    vbox.getChildren().clear();
+                    panes.clear();
+                    for (int i = 0; i < items.size(); i++) {
+                        ItemPane itemPane = new ItemPane(items.get(i), false);
+                        panes.add(itemPane);
+                        vbox.getChildren().add(itemPane);
+                        itemPane.refresh();
+                    }
+                }
+        );
     }
 }

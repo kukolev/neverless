@@ -10,7 +10,11 @@ public class InventoryPaneController {
     @Autowired
     private InventoryPane inventoryPane;
 
-    void closeBtnOnClick(MouseEvent event) {
-        inventoryPane.close();
+    void cancelBtnOnClick(MouseEvent event) {
+        inventoryPane.close(false);
+    }
+
+    void acceptBtnOnClick(MouseEvent event) {
+        inventoryPane.close(true);
     }
 }
