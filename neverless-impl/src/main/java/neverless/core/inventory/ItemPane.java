@@ -3,54 +3,83 @@ package neverless.core.inventory;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import neverless.domain.model.entity.item.AbstractItem;
 
 public class ItemPane extends HBox {
 
-    private Button actionBtn = new Button();
-    private ItemPaneController controller = new ItemPaneController(this);
-    private AbstractItem item;
-
+    private Button takeBtn = new Button();
+    private Button dropBtn = new Button();
+    private Button equipBtn = new Button();
     private Button areaBtn;
 
-    ItemPane(AbstractItem item, boolean buttonRight) {
+    private ItemPaneController controller = new ItemPaneController(this);
+
+    private AbstractItem item;
+    private InventoryPane inventoryPane;
+
+    ItemPane(AbstractItem item, InventoryPane inventoryPane, boolean buttonRight) {
         this.setSpacing(5);
         this.setPadding(new Insets(5));
         this.setPrefWidth(Integer.MAX_VALUE);
 
         this.item = item;
+        this.inventoryPane = inventoryPane;
 
-        actionBtn.setPrefWidth(20);
-        actionBtn.setPrefHeight(20);
-        actionBtn.setLayoutX(5);
-        actionBtn.setLayoutY(5);
+        takeBtn.setMinWidth(40);
+        takeBtn.setPrefHeight(20);
+        takeBtn.setLayoutX(5);
+        takeBtn.setLayoutY(5);
+        takeBtn.setOnMouseClicked(controller::takeBtnOnClick);
+
+        dropBtn.setMinWidth(40);
+        dropBtn.setPrefHeight(20);
+        dropBtn.setLayoutX(5);
+        dropBtn.setLayoutY(5);
+        dropBtn.setOnMouseClicked(controller::dropBtnOnClick);
+
+        equipBtn.setMinWidth(40);
+        equipBtn.setPrefHeight(20);
+        equipBtn.setLayoutX(5);
+        equipBtn.setLayoutY(5);
+        equipBtn.setOnMouseClicked(controller::equipBtnOnClick);
 
         areaBtn = new Button();
         areaBtn.setPrefWidth(Integer.MAX_VALUE);
         areaBtn.setPrefHeight(20);
         areaBtn.setLayoutX(5);
         areaBtn.setLayoutY(5);
-        areaBtn.setOnMouseClicked(controller::areaBtnOnClick);
 
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.getItems().add(new MenuItem("Equip"));
-        contextMenu.getItems().add(new MenuItem("Drop"));
-        areaBtn.setContextMenu(contextMenu);
+        equipBtn.setText("E");
+        takeBtn.setText("T");
+        dropBtn.setText("D");
 
         if (buttonRight) {
             this.getChildren().add(areaBtn);
-            this.getChildren().add(actionBtn);
-            actionBtn.setText(">");
+            this.getChildren().add(equipBtn);
+            this.getChildren().add(takeBtn);
+            this.getChildren().add(dropBtn);
         } else {
-            this.getChildren().add(actionBtn);
+            this.getChildren().add(equipBtn);
+            this.getChildren().add(takeBtn);
+            this.getChildren().add(dropBtn);
             this.getChildren().add(areaBtn);
-            actionBtn.setText("<");
         }
         refresh();
     }
+
+    public void drop() {
+        inventoryPane.drop(item);
+    }
+
+    public void take() {
+        inventoryPane.take(item);
+    }
+
+    public void equip() {
+        inventoryPane.equip(item);
+    }
+
 
     public void setItem(AbstractItem item) {
         this.item = item;
@@ -62,9 +91,5 @@ public class ItemPane extends HBox {
             return;
         }
         Platform.runLater(() -> areaBtn.setText(item.getTitle()));
-    }
-
-    public void showContextMenu(double screenX, double screenY) {
-        actionBtn.getContextMenu().show(actionBtn, screenX, screenY);
     }
 }

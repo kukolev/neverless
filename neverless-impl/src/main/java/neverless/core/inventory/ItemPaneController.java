@@ -10,7 +10,15 @@ public class ItemPaneController {
         this.pane = pane;
     }
 
-    public void areaBtnOnClick(MouseEvent event) {
-        pane.showContextMenu(event.getScreenX(), event.getScreenY());
+    public void takeBtnOnClick(MouseEvent event) {
+        pane.take();
+    }
+
+    public void dropBtnOnClick(MouseEvent event) {
+        pane.drop();
+    }
+
+    public void equipBtnOnClick(MouseEvent event) {
+        pane.equip();
     }
 }

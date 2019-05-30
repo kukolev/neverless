@@ -141,11 +141,17 @@ public class GameBuilder {
         flameSword.setPower(50);
         flameSword.setTitle("Flame Sword");
 
+        Sword iceSword = new Sword();
+        iceSword.setPower(70);
+        iceSword.setTitle("Ice Sword");
+
+
         Equipment equipment = new Equipment();
         equipment.setWeapon(sword);
 
         Bag bag = new Bag();
         bag.addLast(flameSword);
+        bag.addLast(iceSword);
 
         Inventory inventory = new Inventory();
         inventory.setBag(bag);

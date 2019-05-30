@@ -17,4 +17,6 @@ public class InventoryPaneController {
     void acceptBtnOnClick(MouseEvent event) {
         inventoryPane.close(true);
     }
+
+
 }

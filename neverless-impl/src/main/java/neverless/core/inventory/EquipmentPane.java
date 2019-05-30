@@ -12,7 +12,7 @@ public class EquipmentPane extends Pane {
         titleLab.setLayoutY(20);
 
         this.setPrefWidth(300);
-        this.setPrefWidth(600);
+        this.setPrefWidth(300);
         this.getChildren().add(titleLab);
     }
 }

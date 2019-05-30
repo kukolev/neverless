@@ -54,7 +54,7 @@ public class InventoryPane extends AbstractPane {
         bagItemBox.setPadding(new Insets(10));
         ScrollPane bagScroll = new ScrollPane(bagItemBox);
         bagScroll.setFitToWidth(true);
-        bagScroll.setLayoutX(500);
+        bagScroll.setLayoutX(600);
         bagScroll.setLayoutY(100);
         bagScroll.setPrefWidth(400);
         bagScroll.setMaxHeight(200);
@@ -79,7 +79,8 @@ public class InventoryPane extends AbstractPane {
     }
 
     public void init(List<AbstractItem> lootItems, Inventory inventory) {
-        this.lootItems = lootItems;
+        this.lootItems.clear();
+        this.lootItems.addAll(lootItems);
         // Copy items from bag
         this.inventory.getBag().getItems().clear();
         inventory.getBag()
@@ -91,6 +92,26 @@ public class InventoryPane extends AbstractPane {
         inventory.getEquipment().setWeapon(handEquipment);
 
         refresh();
+    }
+
+    public void take(AbstractItem item) {
+        if (lootItems.contains(item)) {
+            lootItems.remove(item);
+            inventory.getBag().addLast(item);
+            refresh();
+        }
+    }
+
+    public void drop(AbstractItem item) {
+        if (inventory.getBag().getItems().contains(item)) {
+            lootItems.add(item);
+            inventory.getBag().getItems().remove(item);
+            refresh();
+        }
+    }
+
+    public void equip(AbstractItem item) {
+
     }
 
     private void refresh() {
@@ -106,7 +127,7 @@ public class InventoryPane extends AbstractPane {
                     vbox.getChildren().clear();
                     panes.clear();
                     for (int i = 0; i < items.size(); i++) {
-                        ItemPane itemPane = new ItemPane(items.get(i), false);
+                        ItemPane itemPane = new ItemPane(items.get(i), this, false);
                         panes.add(itemPane);
                         vbox.getChildren().add(itemPane);
                         itemPane.refresh();
