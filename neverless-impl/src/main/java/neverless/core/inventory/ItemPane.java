@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import neverless.domain.model.entity.item.AbstractItem;
+import org.apache.logging.log4j.util.Strings;
 
 public class ItemPane extends HBox {
 
@@ -86,10 +87,15 @@ public class ItemPane extends HBox {
         refresh();
     }
 
+    public AbstractItem getItem() {
+        return item;
+    }
+
     public void refresh() {
-        if (item == null) {
-            return;
+        if (item != null) {
+            Platform.runLater(() -> areaBtn.setText(item.getTitle()));
+        } else {
+            Platform.runLater(() -> areaBtn.setText(Strings.EMPTY));
         }
-        Platform.runLater(() -> areaBtn.setText(item.getTitle()));
     }
 }

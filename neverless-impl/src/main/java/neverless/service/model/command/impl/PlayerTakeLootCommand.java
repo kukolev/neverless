@@ -33,7 +33,7 @@ public class PlayerTakeLootCommand extends AbstractCommand {
         if (checkFinished()) {
             inventoryPane.init(lootContainer.getItems(), player.getInventory());
             if (inventoryPane.showModal()) {
-                // todo: implement inventory reorganization
+                inventoryPane.copyToInventory(player.getInventory());
             }
             return BehaviorState.IDLE;
         } else {

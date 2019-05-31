@@ -29,6 +29,8 @@ public class InventoryPane extends AbstractPane {
     private VBox bagItemBox = new VBox();
     private List<ItemPane> bagItemPanes = new ArrayList<>();
 
+    private EquipmentPane equipmentPane = new EquipmentPane(this);
+
     private Inventory inventory = new Inventory();
 
     @Override
@@ -45,7 +47,6 @@ public class InventoryPane extends AbstractPane {
         cancelBtn.setText("Cancel");
         cancelBtn.setOnMouseClicked(controller::cancelBtnOnClick);
 
-        EquipmentPane equipmentPane = new EquipmentPane();
         equipmentPane.setLayoutX(100);
         equipmentPane.setLayoutY(100);
 
@@ -81,16 +82,7 @@ public class InventoryPane extends AbstractPane {
     public void init(List<AbstractItem> lootItems, Inventory inventory) {
         this.lootItems.clear();
         this.lootItems.addAll(lootItems);
-        // Copy items from bag
-        this.inventory.getBag().getItems().clear();
-        inventory.getBag()
-                .getItems()
-                .stream()
-                .forEach(it -> this.inventory.getBag().addLast(it));
-        // Copy equipment
-        AbstractHandEquipment handEquipment = inventory.getEquipment().getWeapon();
-        inventory.getEquipment().setWeapon(handEquipment);
-
+        copyInventories(inventory, this.inventory);
         refresh();
     }
 
@@ -106,17 +98,38 @@ public class InventoryPane extends AbstractPane {
         if (inventory.getBag().getItems().contains(item)) {
             lootItems.add(item);
             inventory.getBag().getItems().remove(item);
-            refresh();
+        } else if (item == equipmentPane.getWeapon()) {
+            inventory.getBag().addLast(item);
+            equipmentPane.setWeapon(null);
         }
+        refresh();
     }
 
     public void equip(AbstractItem item) {
 
+        // Define list where item stored
+        List<AbstractItem> itemList;
+        if (inventory.getBag().getItems().contains(item)) {
+            itemList = inventory.getBag().getItems();
+        } else if (lootItems.contains(item)) {
+            itemList = lootItems;
+        } else {
+            return;
+        }
+
+        if (item instanceof AbstractHandEquipment) {
+            AbstractHandEquipment weapon = inventory.getEquipment().getWeapon();
+            inventory.getEquipment().setWeapon((AbstractHandEquipment) item);
+            inventory.getBag().addLast(weapon);
+            itemList.remove(item);
+        }
+        refresh();
     }
 
     private void refresh() {
         initScrollBox(inventory.getBag().getItems(), bagItemBox, bagItemPanes);
         initScrollBox(lootItems, lootItemBox, lootItemPanes);
+        equipmentPane.setWeapon(inventory.getEquipment().getWeapon());
     }
 
     private void initScrollBox(List<AbstractItem> items, VBox vbox, List<ItemPane> panes) {
@@ -134,5 +147,21 @@ public class InventoryPane extends AbstractPane {
                     }
                 }
         );
+    }
+
+    public void copyToInventory(Inventory inventory) {
+        copyInventories(this.inventory, inventory);
+    }
+
+    private void copyInventories(Inventory source, Inventory dest) {
+        // Copy items from bag
+        dest.getBag().getItems().clear();
+        source.getBag()
+                .getItems()
+                .stream()
+                .forEach(it -> dest.getBag().addLast(it));
+        // Copy equipment
+        AbstractHandEquipment handEquipment = source.getEquipment().getWeapon();
+        dest.getEquipment().setWeapon(handEquipment);
     }
 }
