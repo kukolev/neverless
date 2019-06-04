@@ -48,6 +48,13 @@ public abstract class AbstractPhysicalObject extends AbstractMapObject {
     }
 
     /**
+     * Returns true if object under cursor should be highlighted.
+     */
+    public boolean isHighlightable() {
+        return true;
+    }
+
+    /**
      * Returns identifier, specified for graphic render.
      */
     public abstract String getSignature();

@@ -21,4 +21,8 @@ public class Player extends AbstractLiveObject {
         return PlatformShape.ELLIPSE;
     }
 
+    @Override
+    public boolean isHighlightable() {
+        return false;
+    }
 }

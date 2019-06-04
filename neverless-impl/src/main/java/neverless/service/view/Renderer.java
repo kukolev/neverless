@@ -170,7 +170,7 @@ public class Renderer {
 
         if (frame != null) {
             Sprite sprite = getSpriteAtScreenCoordinates(frame.getSprites(), screenX, screenY);
-            if (sprite != null) {
+            if (sprite != null && sprite.getMapObject().isHighlightable()) {
                 frame.addHighLighted(sprite.getId(), true);
             }
         }

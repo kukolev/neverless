@@ -44,7 +44,7 @@ public class InventoryPane extends AbstractPane {
         equipmentPane.setLayoutX(200);
         equipmentPane.setLayoutY(220);
         equipmentPane.setPrefWidth(300);
-        equipmentPane.setPrefHeight(500);
+        equipmentPane.setPrefHeight(450);
 
         // Bag items
         Label bagLab = new Label();
@@ -59,7 +59,7 @@ public class InventoryPane extends AbstractPane {
         bagScroll.setLayoutX(520);
         bagScroll.setLayoutY(220);
         bagScroll.setPrefWidth(300);
-        bagScroll.setMaxHeight(500);
+        bagScroll.setMaxHeight(450);
         bagScroll.setPannable(true);
 
         // Loot items
@@ -75,7 +75,7 @@ public class InventoryPane extends AbstractPane {
         lootScroll.setLayoutX(840);
         lootScroll.setLayoutY(220);
         lootScroll.setPrefWidth(300);
-        lootScroll.setMaxHeight(500);
+        lootScroll.setMaxHeight(450);
         lootScroll.setPannable(true);
 
         Button acceptBtn = new Button();

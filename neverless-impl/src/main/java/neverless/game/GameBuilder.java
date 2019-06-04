@@ -17,6 +17,7 @@ import neverless.game.npc.OldMan;
 import neverless.game.npc.OldManQuestKillGoblins;
 import neverless.service.model.GameRepository;
 
+import neverless.service.model.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -28,15 +29,12 @@ import static neverless.game.Signatures.IMG_VILLAGE_BACKGROUND;
 public class GameBuilder {
 
     @Autowired
-    private GameRepository cache;
-    @Autowired
     private QuestContainer questContainer;
     @Autowired
     private ApplicationContext context;
 
-    public void createNewGame() {
+    public Game createNewGame() {
         Game game = new Game();
-        cache.save(game);
 
         // Create locations
         Location village = createLocationVillage();
@@ -68,9 +66,20 @@ public class GameBuilder {
         dungeonVillagePortal.getCoordinates().add(new Coordinate().setX(0).setY(600));
         dungeonVillagePortal.setEnterPoint(new Coordinate().setX(50).setY(500));
 
+        LocationPortal housePortal = new LocationPortal();
+        housePortal.getCoordinates().add(new Coordinate().setX(420).setY(1040));
+        housePortal.getCoordinates().add(new Coordinate().setX(420).setY(940));
+        housePortal.getCoordinates().add(new Coordinate().setX(470).setY(900));
+        housePortal.getCoordinates().add(new Coordinate().setX(470).setY(1000));
+
+        housePortal.setEnterPoint(new Coordinate().setX(400).setY(100));
+
+
         // Bind portals
         village.getAreas().add(vilageDungeonPortal);
+        village.getAreas().add(housePortal);
         dungeon.getAreas().add(dungeonVillagePortal);
+
 
         // Create player
         Player player = createPlayer(village);
@@ -78,6 +87,7 @@ public class GameBuilder {
 
         // Create quests
         createQuests();
+        return game;
     }
 
     private Location createLocationVillage() {

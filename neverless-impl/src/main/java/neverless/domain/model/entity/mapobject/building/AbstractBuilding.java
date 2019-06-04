@@ -17,4 +17,9 @@ public abstract class AbstractBuilding extends AbstractPhysicalObject {
     public PlatformShape getPlatformShape() {
         return PlatformShape.CUSTOM;
     }
+
+    @Override
+    public boolean isHighlightable() {
+        return false;
+    }
 }
