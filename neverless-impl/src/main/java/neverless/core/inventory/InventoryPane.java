@@ -3,6 +3,7 @@ package neverless.core.inventory;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import neverless.core.AbstractPane;
@@ -35,48 +36,78 @@ public class InventoryPane extends AbstractPane {
 
     @Override
     protected void setup() {
-        Button acceptBtn = new Button();
-        acceptBtn.setLayoutX(100);
-        acceptBtn.setLayoutY(800);
-        acceptBtn.setText("Accept");
-        acceptBtn.setOnMouseClicked(controller::acceptBtnOnClick);
+        Label equipmentLab = new Label();
+        equipmentLab.setText("Equipment");
+        equipmentLab.setLayoutX(200);
+        equipmentLab.setLayoutY(200);
 
-        Button cancelBtn = new Button();
-        cancelBtn.setLayoutX(1000);
-        cancelBtn.setLayoutY(800);
-        cancelBtn.setText("Cancel");
-        cancelBtn.setOnMouseClicked(controller::cancelBtnOnClick);
-
-        equipmentPane.setLayoutX(100);
-        equipmentPane.setLayoutY(100);
+        equipmentPane.setLayoutX(200);
+        equipmentPane.setLayoutY(220);
+        equipmentPane.setPrefWidth(300);
+        equipmentPane.setPrefHeight(500);
 
         // Bag items
+        Label bagLab = new Label();
+        bagLab.setText("Bag");
+        bagLab.setLayoutX(520);
+        bagLab.setLayoutY(200);
+
         bagItemBox.setSpacing(10);
         bagItemBox.setPadding(new Insets(10));
         ScrollPane bagScroll = new ScrollPane(bagItemBox);
         bagScroll.setFitToWidth(true);
-        bagScroll.setLayoutX(600);
-        bagScroll.setLayoutY(100);
-        bagScroll.setPrefWidth(400);
-        bagScroll.setMaxHeight(200);
+        bagScroll.setLayoutX(520);
+        bagScroll.setLayoutY(220);
+        bagScroll.setPrefWidth(300);
+        bagScroll.setMaxHeight(500);
         bagScroll.setPannable(true);
 
         // Loot items
+        Label lootLab = new Label();
+        lootLab.setText("Loot");
+        lootLab.setLayoutX(840);
+        lootLab.setLayoutY(200);
+
         lootItemBox.setSpacing(10);
         lootItemBox.setPadding(new Insets(10));
         ScrollPane lootScroll = new ScrollPane(lootItemBox);
         lootScroll.setFitToWidth(true);
-        lootScroll.setLayoutX(1000);
-        lootScroll.setLayoutY(100);
-        lootScroll.setPrefWidth(400);
-        lootScroll.setMaxHeight(200);
+        lootScroll.setLayoutX(840);
+        lootScroll.setLayoutY(220);
+        lootScroll.setPrefWidth(300);
+        lootScroll.setMaxHeight(500);
         lootScroll.setPannable(true);
+
+        Button acceptBtn = new Button();
+        acceptBtn.setLayoutX(200);
+        acceptBtn.setLayoutY(700);
+        acceptBtn.setPrefWidth(200);
+        acceptBtn.setText("Accept");
+        acceptBtn.setOnMouseClicked(controller::acceptBtnOnClick);
+
+        Button takeAllBtn = new Button();
+        takeAllBtn.setLayoutX(420);
+        takeAllBtn.setLayoutY(700);
+        takeAllBtn.setPrefWidth(200);
+        takeAllBtn.setText("Take All");
+        takeAllBtn.setOnMouseClicked(controller::takeAllBtnOnClick);
+
+        Button cancelBtn = new Button();
+        cancelBtn.setLayoutX(640);
+        cancelBtn.setLayoutY(700);
+        cancelBtn.setPrefWidth(100);
+        cancelBtn.setText("Cancel");
+        cancelBtn.setOnMouseClicked(controller::cancelBtnOnClick);
 
         this.getChildren().add(cancelBtn);
         this.getChildren().add(acceptBtn);
+        this.getChildren().add(takeAllBtn);
         this.getChildren().add(bagScroll);
         this.getChildren().add(lootScroll);
         this.getChildren().add(equipmentPane);
+        this.getChildren().add(equipmentLab);
+        this.getChildren().add(bagLab);
+        this.getChildren().add(lootLab);
     }
 
     public void init(List<AbstractItem> lootItems, Inventory inventory) {
@@ -87,6 +118,9 @@ public class InventoryPane extends AbstractPane {
     }
 
     public void take(AbstractItem item) {
+        if (item == null) {
+            return;
+        }
         if (lootItems.contains(item)) {
             lootItems.remove(item);
             inventory.getBag().addLast(item);
@@ -94,19 +128,34 @@ public class InventoryPane extends AbstractPane {
         }
     }
 
+    public void takeAll() {
+        if (!lootItems.isEmpty()) {
+            lootItems.forEach(item -> {
+                inventory.getBag().addLast(item);
+            });
+            lootItems.clear();
+            refresh();
+        }
+    }
+
     public void drop(AbstractItem item) {
+        if (item == null) {
+            return;
+        }
         if (inventory.getBag().getItems().contains(item)) {
             lootItems.add(item);
             inventory.getBag().getItems().remove(item);
         } else if (item == equipmentPane.getWeapon()) {
             inventory.getBag().addLast(item);
-            equipmentPane.setWeapon(null);
+            inventory.getEquipment().setWeapon(null);
         }
         refresh();
     }
 
     public void equip(AbstractItem item) {
-
+        if (item == null) {
+            return;
+        }
         // Define list where item stored
         List<AbstractItem> itemList;
         if (inventory.getBag().getItems().contains(item)) {
@@ -120,7 +169,9 @@ public class InventoryPane extends AbstractPane {
         if (item instanceof AbstractHandEquipment) {
             AbstractHandEquipment weapon = inventory.getEquipment().getWeapon();
             inventory.getEquipment().setWeapon((AbstractHandEquipment) item);
-            inventory.getBag().addLast(weapon);
+            if (weapon != null) {
+                inventory.getBag().addLast(weapon);
+            }
             itemList.remove(item);
         }
         refresh();
@@ -151,6 +202,11 @@ public class InventoryPane extends AbstractPane {
 
     public void copyToInventory(Inventory inventory) {
         copyInventories(this.inventory, inventory);
+    }
+
+    public void copyToLootItems(List<AbstractItem> lootItems) {
+        lootItems.clear();
+        lootItems.addAll(this.lootItems);
     }
 
     private void copyInventories(Inventory source, Inventory dest) {

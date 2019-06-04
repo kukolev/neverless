@@ -41,6 +41,13 @@ public abstract class AbstractPhysicalObject extends AbstractMapObject {
     }
 
     /**
+     * Returns true if it's able to walk through the object
+     */
+    public boolean isPassable() {
+        return false;
+    }
+
+    /**
      * Returns identifier, specified for graphic render.
      */
     public abstract String getSignature();

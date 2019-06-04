@@ -34,6 +34,7 @@ public class PlayerTakeLootCommand extends AbstractCommand {
             inventoryPane.init(lootContainer.getItems(), player.getInventory());
             if (inventoryPane.showModal()) {
                 inventoryPane.copyToInventory(player.getInventory());
+                inventoryPane.copyToLootItems(lootContainer.getItems());
             }
             return BehaviorState.IDLE;
         } else {

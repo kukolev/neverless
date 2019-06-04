@@ -18,5 +18,9 @@ public class InventoryPaneController {
         inventoryPane.close(true);
     }
 
+    void takeAllBtnOnClick(MouseEvent event) {
+        inventoryPane.takeAll();
+    }
+
 
 }

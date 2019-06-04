@@ -37,6 +37,9 @@ public class LocalMapService {
             if (walker.equals(object)) {
                 continue;
             }
+            if (object.isPassable()) {
+                continue;
+            }
 
             if (object.getPlatformShape() == PlatformShape.CUSTOM) {
                 if (walker.getPlatformShape() == PlatformShape.ELLIPSE) {

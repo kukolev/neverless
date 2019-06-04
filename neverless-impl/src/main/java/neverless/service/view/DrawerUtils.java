@@ -32,7 +32,7 @@ public class DrawerUtils {
      * Returns list of sprites, sorted by draw priority.
      * First element of the list should be drawn first.
      *
-     * @param sprites   list of sprites for sorting.
+     * @param sprites list of sprites for sorting.
      */
     public static List<Sprite> calcRenderOrder(List<Sprite> sprites) {
 
@@ -43,13 +43,17 @@ public class DrawerUtils {
         sprites.forEach(sprite -> graph.put(sprite, new RelationGraphNode().setSprite(sprite)));
 
         // fill map (x -> (y -> sprite))
+        // here it's considered that passable objects lays on ground
+        // and for these objects we should not calculate render priority
         sprites.forEach(sprite -> {
-            List<Coordinate> coordinates = calcAllPerimeterCoordinates(sprite);
-            if (coordinates != null) {
-                coordinates.forEach(c -> {
-                    Map<Integer, Sprite> locMap = xySpriteMap.computeIfAbsent(c.getX(), k -> new TreeMap<>());
-                    locMap.put(c.getY(), sprite);
-                });
+            if (!sprite.getMapObject().isPassable()) {
+                List<Coordinate> coordinates = calcAllPerimeterCoordinates(sprite);
+                if (coordinates != null) {
+                    coordinates.forEach(c -> {
+                        Map<Integer, Sprite> locMap = xySpriteMap.computeIfAbsent(c.getX(), k -> new TreeMap<>());
+                        locMap.put(c.getY(), sprite);
+                    });
+                }
             }
         });
 
@@ -112,8 +116,8 @@ public class DrawerUtils {
     /**
      * Links parent and child nodes on relation graph.
      *
-     * @param child     child node.
-     * @param parent    parent node.
+     * @param child  child node.
+     * @param parent parent node.
      */
     private static void addSpriteToParent(RelationGraphNode child, RelationGraphNode parent) {
         if (!parent.getChildren().contains(child)) {
@@ -125,7 +129,7 @@ public class DrawerUtils {
     /**
      * Calculates and returns list of points for sprite's platform.
      *
-     * @param sprite    sprite for calculation
+     * @param sprite sprite for calculation
      */
     private static List<Coordinate> calcAllPerimeterCoordinates(Sprite sprite) {
         switch (sprite.getPlatformShape()) {
@@ -148,8 +152,8 @@ public class DrawerUtils {
         double radX = (double) (width / 2);
         double radY = (double) (height / 2);
 
-        for(int x = 0; x < radX; x++) {
-            int y = (int) sqrt ((radY * radY * (1 - (x * x) / (radX * radX))));
+        for (int x = 0; x < radX; x++) {
+            int y = (int) sqrt((radY * radY * (1 - (x * x) / (radX * radX))));
             coordinates.add(new Coordinate().setX(objectX + x).setY(objectY + y));
             coordinates.add(new Coordinate().setX(objectX - x).setY(objectY + y));
         }

@@ -18,4 +18,9 @@ public class LootContainer extends AbstractPhysicalObject {
     public String getSignature() {
         return IMG_LOOT;
     }
+
+    @Override
+    public boolean isPassable() {
+        return true;
+    }
 }
