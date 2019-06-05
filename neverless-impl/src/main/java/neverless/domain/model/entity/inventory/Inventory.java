@@ -9,4 +9,5 @@ public class Inventory {
 
     private Bag bag = new Bag();
     private Equipment equipment = new Equipment();
+    private Money money = new Money();
 }

@@ -4,6 +4,7 @@ import neverless.core.inventory.InventoryPane;
 import neverless.domain.model.entity.behavior.BehaviorState;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.loot.LootContainer;
+import neverless.service.model.GameRepository;
 import neverless.service.model.command.AbstractCommand;
 import neverless.service.model.util.LocalMapService;
 
@@ -16,13 +17,15 @@ public class PlayerTakeLootCommand extends AbstractCommand {
     private LootContainer lootContainer;
     private LocalMapService localMapService;
     private InventoryPane inventoryPane;
+    private GameRepository cache;
 
     public PlayerTakeLootCommand(Player player, LootContainer lootContainer, LocalMapService localMapService,
-                                 InventoryPane inventoryPane) {
+                                 InventoryPane inventoryPane, GameRepository cache) {
         this.player = player;
         this.lootContainer = lootContainer;
         this.localMapService = localMapService;
         this.inventoryPane = inventoryPane;
+        this.cache = cache;
     }
 
     @Override
@@ -35,6 +38,9 @@ public class PlayerTakeLootCommand extends AbstractCommand {
             if (inventoryPane.showModal()) {
                 inventoryPane.copyToInventory(player.getInventory());
                 inventoryPane.copyToLootItems(lootContainer.getItems());
+                if (lootContainer.getItems().isEmpty()) {
+                    cache.removePhysicalObject(lootContainer);
+                }
             }
             return BehaviorState.IDLE;
         } else {

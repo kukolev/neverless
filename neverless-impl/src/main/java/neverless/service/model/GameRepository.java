@@ -1,6 +1,7 @@
 package neverless.service.model;
 
 import neverless.domain.model.entity.Game;
+import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.model.entity.mapobject.Player;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,18 @@ public class GameRepository {
 
     public void save(Game game) {
        this.game = game;
+    }
+
+    /**
+     * Removes object from game
+     *
+     * @param object
+     */
+    public void removePhysicalObject(AbstractPhysicalObject object) {
+        game.getLocations()
+                .forEach(location -> {
+                    location.getObjects().remove(object);
+                    object.setLocation(null);
+                });
     }
 }

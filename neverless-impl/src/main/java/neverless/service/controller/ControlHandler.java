@@ -55,7 +55,7 @@ public class ControlHandler {
         // Updates destination marker
         gameLoop.setDestinationMarker(newGameX, newGameY);
 
-        if (sprite != null) {
+        if (sprite != null && sprite.getMapObject().isHighlightable()) {
             // Click on sprite
             if (sprite.getMapObject() instanceof AbstractEnemy) {
                 cmdFightingAttack((AbstractEnemy) sprite.getMapObject());

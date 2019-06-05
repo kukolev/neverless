@@ -116,7 +116,7 @@ public class Renderer {
     private void calcProfile(Frame frame) {
         Player player = gameRepository.getPlayer();
         Profile profile = player.getProfile();
-        frame.getProfileWidget().mapFromProfile(profile);
+        frame.getProfileWidget().mapFromProfile(profile, player.getInventory());
     }
 
     /**

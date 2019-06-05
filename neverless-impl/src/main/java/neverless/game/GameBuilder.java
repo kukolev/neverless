@@ -5,6 +5,7 @@ import neverless.domain.model.entity.Location;
 import neverless.domain.model.entity.inventory.Bag;
 import neverless.domain.model.entity.inventory.Equipment;
 import neverless.domain.model.entity.inventory.Inventory;
+import neverless.domain.model.entity.inventory.Money;
 import neverless.domain.model.entity.item.weapon.Sword;
 import neverless.domain.model.entity.mapobject.loot.LootContainer;
 import neverless.domain.Coordinate;
@@ -69,11 +70,10 @@ public class GameBuilder {
         LocationPortal housePortal = new LocationPortal();
         housePortal.getCoordinates().add(new Coordinate().setX(420).setY(1040));
         housePortal.getCoordinates().add(new Coordinate().setX(420).setY(940));
+
         housePortal.getCoordinates().add(new Coordinate().setX(470).setY(900));
         housePortal.getCoordinates().add(new Coordinate().setX(470).setY(1000));
-
-        housePortal.setEnterPoint(new Coordinate().setX(400).setY(100));
-
+        housePortal.setEnterPoint(new Coordinate().setX(450).setY(1000));
 
         // Bind portals
         village.getAreas().add(vilageDungeonPortal);
@@ -114,6 +114,9 @@ public class GameBuilder {
         lootContainer.setY(1200);
         village.getObjects().add(lootContainer);
 
+        Money money = new Money();
+        money.inc(1000);
+        lootContainer.getItems().add(money);
         lootContainer.getItems().add(new Sword().setTitle("Rust sword"));
         lootContainer.getItems().add(new Sword().setTitle("Silver sword"));
 
@@ -155,7 +158,6 @@ public class GameBuilder {
         iceSword.setPower(70);
         iceSword.setTitle("Ice Sword");
 
-
         Equipment equipment = new Equipment();
         equipment.setWeapon(sword);
 
@@ -166,6 +168,7 @@ public class GameBuilder {
         Inventory inventory = new Inventory();
         inventory.setBag(bag);
         inventory.setEquipment(equipment);
+        inventory.getMoney().inc(500);
 
         Player player = new Player();
         player.setInventory(inventory);

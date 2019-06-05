@@ -24,19 +24,19 @@ public class PlayerCommandFactory {
     @Autowired
     private LocalMapService localMapService;
     @Autowired
-    private GameRepository gameRepository;
+    private GameRepository cache;
     @Autowired
     private CombatService combatService;
     @Autowired
     private InventoryPane inventoryPane;
 
     public PlayerAttackCommand createPlayerAttackCommand(AbstractEnemy enemy) {
-        Player player = gameRepository.getPlayer();
+        Player player = cache.getPlayer();
         return new PlayerAttackCommand(enemy, player, localMapService, eventContext, combatService);
     }
 
     public PlayerMapGoCommand createPlayerMapGoCommand(int x, int y) {
-        Player player = gameRepository.getPlayer();
+        Player player = cache.getPlayer();
         return new PlayerMapGoCommand()
                 .setX(x)
                 .setY(y)
@@ -46,12 +46,12 @@ public class PlayerCommandFactory {
     }
 
     public PlayerPortalEnterCommand createPlayerPortalEnterCommand(LocationPortal portal) {
-        Player player = gameRepository.getPlayer();
+        Player player = cache.getPlayer();
         return new PlayerPortalEnterCommand(player, eventContext, portal, localMapService);
     }
 
     public PlayerTakeLootCommand createPlayerTakeLootCommand(LootContainer lootContainer) {
-        Player player = gameRepository.getPlayer();
-        return new PlayerTakeLootCommand(player, lootContainer, localMapService, inventoryPane);
+        Player player = cache.getPlayer();
+        return new PlayerTakeLootCommand(player, lootContainer, localMapService, inventoryPane, cache);
     }
 }

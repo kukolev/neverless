@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import neverless.core.AbstractPane;
 import neverless.domain.model.entity.inventory.Inventory;
+import neverless.domain.model.entity.inventory.Money;
 import neverless.domain.model.entity.item.AbstractItem;
 import neverless.domain.model.entity.item.weapon.AbstractHandEquipment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -29,6 +31,7 @@ public class InventoryPane extends AbstractPane {
 
     private VBox bagItemBox = new VBox();
     private List<ItemPane> bagItemPanes = new ArrayList<>();
+    private Label moneyLab = new Label();
 
     private EquipmentPane equipmentPane = new EquipmentPane(this);
 
@@ -36,11 +39,17 @@ public class InventoryPane extends AbstractPane {
 
     @Override
     protected void setup() {
+        // Money label
+        moneyLab.setLayoutX(200);
+        moneyLab.setLayoutY(160);
+
+        // Equipment label
         Label equipmentLab = new Label();
         equipmentLab.setText("Equipment");
         equipmentLab.setLayoutX(200);
         equipmentLab.setLayoutY(200);
 
+        // Equipment pane
         equipmentPane.setLayoutX(200);
         equipmentPane.setLayoutY(220);
         equipmentPane.setPrefWidth(300);
@@ -78,6 +87,7 @@ public class InventoryPane extends AbstractPane {
         lootScroll.setMaxHeight(450);
         lootScroll.setPannable(true);
 
+        // Accept button
         Button acceptBtn = new Button();
         acceptBtn.setLayoutX(200);
         acceptBtn.setLayoutY(700);
@@ -85,6 +95,7 @@ public class InventoryPane extends AbstractPane {
         acceptBtn.setText("Accept");
         acceptBtn.setOnMouseClicked(controller::acceptBtnOnClick);
 
+        // Take All button
         Button takeAllBtn = new Button();
         takeAllBtn.setLayoutX(420);
         takeAllBtn.setLayoutY(700);
@@ -92,6 +103,7 @@ public class InventoryPane extends AbstractPane {
         takeAllBtn.setText("Take All");
         takeAllBtn.setOnMouseClicked(controller::takeAllBtnOnClick);
 
+        // Cancel button
         Button cancelBtn = new Button();
         cancelBtn.setLayoutX(640);
         cancelBtn.setLayoutY(700);
@@ -108,6 +120,7 @@ public class InventoryPane extends AbstractPane {
         this.getChildren().add(equipmentLab);
         this.getChildren().add(bagLab);
         this.getChildren().add(lootLab);
+        this.getChildren().add(moneyLab);
     }
 
     public void init(List<AbstractItem> lootItems, Inventory inventory) {
@@ -121,6 +134,13 @@ public class InventoryPane extends AbstractPane {
         if (item == null) {
             return;
         }
+        if (item instanceof Money) {
+            Money lootMoney = (Money) item;
+            takeMoney(lootMoney);
+            lootItems.remove(lootMoney);
+            refresh();
+            return;
+        }
         if (lootItems.contains(item)) {
             lootItems.remove(item);
             inventory.getBag().addLast(item);
@@ -128,10 +148,26 @@ public class InventoryPane extends AbstractPane {
         }
     }
 
+    private void takeMoney(Money money) {
+        inventory.getMoney().inc(money.getAmount());
+    }
+
     public void takeAll() {
         if (!lootItems.isEmpty()) {
-            lootItems.forEach(item -> {
-                inventory.getBag().addLast(item);
+            lootItems.stream()
+                    .filter(item -> item instanceof Money)
+                    .forEach(item -> takeMoney((Money) item));
+
+            List<AbstractItem> trueItems = lootItems.stream()
+                    .filter(item -> !(item instanceof Money))
+                    .collect(Collectors.toList());
+
+            trueItems.forEach(item -> {
+                if (item instanceof  Money) {
+                    takeMoney((Money) item);
+                } else {
+                    inventory.getBag().addLast(item);
+                }
             });
             lootItems.clear();
             refresh();
@@ -181,6 +217,7 @@ public class InventoryPane extends AbstractPane {
         initScrollBox(inventory.getBag().getItems(), bagItemBox, bagItemPanes);
         initScrollBox(lootItems, lootItemBox, lootItemPanes);
         equipmentPane.setWeapon(inventory.getEquipment().getWeapon());
+        Platform.runLater(() -> moneyLab.setText(inventory.getMoney().getTitle()));
     }
 
     private void initScrollBox(List<AbstractItem> items, VBox vbox, List<ItemPane> panes) {
@@ -219,5 +256,8 @@ public class InventoryPane extends AbstractPane {
         // Copy equipment
         AbstractHandEquipment handEquipment = source.getEquipment().getWeapon();
         dest.getEquipment().setWeapon(handEquipment);
+        // Copy money
+        dest.getMoney().clear();
+        dest.getMoney().inc(source.getMoney().getAmount());
     }
 }
