@@ -1,9 +1,12 @@
 package neverless.service.model;
 
 import neverless.domain.model.entity.Game;
+import neverless.domain.model.entity.Location;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.model.entity.mapobject.Player;
 import org.springframework.stereotype.Repository;
+
+import java.util.Random;
 
 /**
  * Cache for game object.
@@ -42,4 +45,29 @@ public class GameRepository {
                     object.setLocation(null);
                 });
     }
+
+    /**
+     * Adds object to location.
+     *
+     * @param object        object that should be added.
+     * @param location      location where object should appears.
+     */
+    public void addPhysicalObject(AbstractPhysicalObject object, Location location) {
+        location.getObjects().add(object);
+        object.setLocation(location);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

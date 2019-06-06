@@ -1,5 +1,6 @@
 package neverless.service.model;
 
+import neverless.domain.model.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.service.model.command.AbstractCommand;
 import neverless.service.model.command.factory.EnemyCommandFactory;
 import neverless.service.model.command.impl.EnemyMapGoCommand;
@@ -11,7 +12,6 @@ import neverless.domain.model.entity.Location;
 import neverless.domain.model.entity.mapobject.AbstractPhysicalObject;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.enemy.AbstractEnemy;
-import neverless.domain.model.entity.mapobject.enemy.EnemyFactory;
 import neverless.domain.model.entity.mapobject.respawn.AbstractRespawnPoint;
 import neverless.domain.model.event.AbstractEvent;
 import neverless.domain.model.event.MapGoImpossibleEvent;
@@ -209,7 +209,7 @@ public class EnemyCommander {
      */
     private AbstractEnemy respawn(AbstractRespawnPoint respawnPoint, Location location) {
 
-        EnemyFactory factory = getEnemyFactory(respawnPoint);
+        AbstractEnemyFactory factory = respawnPoint.getEnemyFactory();
         AbstractEnemy newEnemy = factory.create();
         newEnemy.setX(respawnPoint.getX());
         newEnemy.setY(respawnPoint.getY());
@@ -223,15 +223,4 @@ public class EnemyCommander {
         location.getObjects().add(newEnemy);
         return newEnemy;
     }
-
-    /**
-     * Returns an enemy factory, specified for a particular respawn point from application context.
-     *
-     * @param respawnPoint respawn point for which enemy factory should be returned.
-     */
-    private EnemyFactory getEnemyFactory(AbstractRespawnPoint respawnPoint) {
-        Class<? extends EnemyFactory> factoryClass = respawnPoint.getEnemyFactory();
-        return applicationContext.getBean(factoryClass);
-    }
-
 }

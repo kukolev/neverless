@@ -1,15 +1,14 @@
-package neverless.domain.model.entity.mapobject.enemy;
+package neverless.game.enemy;
 
-import neverless.service.model.command.factory.EnemyCommandFactory;
+import neverless.domain.model.entity.mapobject.enemy.AbstractEnemy;
+import neverless.domain.model.entity.mapobject.enemy.AbstractEnemyFactory;
 import neverless.domain.model.entity.item.weapon.Sword;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static neverless.util.Constants.ENEMY_DEFAULT_WAIT_TIME;
 import static neverless.game.Signatures.IMG_GOBLIN;
 
 @Component
-public class EnemyFactory {
+public class GoblinFactory extends AbstractEnemyFactory {
 
     private static final int GOBLIN_HP = 20;
     private static final int GOBLIN_SPEED = 1;
@@ -17,22 +16,19 @@ public class EnemyFactory {
     private static final int GOBLIN_RUST_SWORD_POWER = 1;
     private static final int GOBLIN_EXPERIENCE = 10;
 
-    @Autowired
-    private EnemyCommandFactory commandFactory;
-
     /**
      * Creates and returns Goblin with weapon.
      */
+    @Override
     public AbstractEnemy create() {
         Sword sword = createGoblinSword();
 
-        AbstractEnemy goblin = new AbstractEnemy();
+        AbstractEnemy goblin = new Goblin();
         goblin
                 .setSignature(IMG_GOBLIN)
                 .setSpeed(GOBLIN_SPEED)
                 .setHitPoints(GOBLIN_HP)
-                .setExperience(GOBLIN_EXPERIENCE)
-                .setCommand(commandFactory.createEnemyWaitCommand(ENEMY_DEFAULT_WAIT_TIME));
+                .setExperience(GOBLIN_EXPERIENCE);
         goblin
                 .getInventory()
                 .getEquipment()

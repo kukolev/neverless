@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import neverless.domain.model.entity.inventory.Inventory;
+import neverless.domain.model.entity.mapobject.loot.AbstractLootFactory;
+import neverless.domain.model.entity.mapobject.loot.LootContainer;
 
 @Data
 @Accessors(chain = true)
@@ -23,4 +25,18 @@ public abstract class AbstractLiveObject extends AbstractPhysicalObject {
     public void decreaseHitPoints(int damage) {
         hitPoints -= damage;
     }
+
+    /**
+     * Generates and returns loot container.
+     */
+    public LootContainer getLoot() {
+        return getLootFactory().createLoot();
+    }
+
+    /**
+     * Returns factory for loot creation.
+     * Method should be overwritten in implementations.
+     */
+    protected abstract AbstractLootFactory getLootFactory();
+
 }

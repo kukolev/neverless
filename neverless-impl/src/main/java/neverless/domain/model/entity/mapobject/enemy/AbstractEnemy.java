@@ -13,7 +13,7 @@ import static neverless.util.Constants.ENEMY_DEFAULT_AGGRESSIVE_RANGE;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbstractEnemy extends AbstractLiveObject {
+public abstract class AbstractEnemy extends AbstractLiveObject {
 
     private AbstractRespawnPoint respawnPoint;
     private Integer bornX;

@@ -3,6 +3,8 @@ package neverless.service.model.util;
 import neverless.context.EventContext;
 import neverless.domain.model.entity.item.weapon.AbstractHandEquipment;
 import neverless.domain.model.entity.mapobject.AbstractLiveObject;
+import neverless.domain.model.entity.mapobject.loot.LootContainer;
+import neverless.service.model.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class CombatService {
 
     @Autowired
     private EventContext eventContext;
+    @Autowired
+    private GameRepository cache;
 
     /**
      * Returns true if attacked is able to attack with weapon.
@@ -83,7 +87,11 @@ public class CombatService {
     public void kill(AbstractLiveObject attacker, AbstractLiveObject defender) {
         int defenderExp = defender.getExperience();
         int attackerExp = attacker.getProfile().getExperience();
-        defender.getLocation().getObjects().remove(defender);
+        LootContainer lootContainer = defender.getLoot();
+        lootContainer.setX(defender.getX());
+        lootContainer.setY(defender.getY());
+        cache.addPhysicalObject(lootContainer, defender.getLocation());
+        cache.removePhysicalObject(defender);
         attacker.getProfile().setExperience(attackerExp + defenderExp);
     }
 }

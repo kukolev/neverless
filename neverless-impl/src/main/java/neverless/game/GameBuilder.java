@@ -12,13 +12,12 @@ import neverless.domain.Coordinate;
 import neverless.domain.model.entity.mapobject.Player;
 import neverless.domain.model.entity.mapobject.building.TavernSmall;
 import neverless.domain.model.entity.mapobject.portal.LocationPortal;
-import neverless.domain.model.entity.mapobject.respawn.GoblinRespawnPoint;
 import neverless.domain.model.quest.QuestContainer;
+import neverless.game.enemy.GoblinLootFactory;
+import neverless.game.enemy.GoblinRespawnPoint;
 import neverless.game.npc.OldMan;
 import neverless.game.npc.OldManQuestKillGoblins;
-import neverless.service.model.GameRepository;
 
-import neverless.service.model.util.LocalMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -33,6 +32,9 @@ public class GameBuilder {
     private QuestContainer questContainer;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private GoblinLootFactory goblinLootFactory;
+
 
     public Game createNewGame() {
         Game game = new Game();
@@ -129,12 +131,12 @@ public class GameBuilder {
                 .setSignature(IMG_DUNGEON_BACKGROUND);
 
         // Respawn points in dungeon
-        GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint();
+        GoblinRespawnPoint respawnPoint1 = new GoblinRespawnPoint(goblinLootFactory);
         respawnPoint1.setX(1900);
         respawnPoint1.setY(1300);
         respawnPoint1.setLocation(dungeon);
 
-        GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint();
+        GoblinRespawnPoint respawnPoint2 = new GoblinRespawnPoint(goblinLootFactory);
         respawnPoint2.setX(1280);
         respawnPoint2.setY(1728);
         respawnPoint2.setLocation(dungeon);

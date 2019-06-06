@@ -102,22 +102,6 @@ public class EnemyService {
     }
 
     /**
-     * Attacks the player
-     *
-     * @param enemy enemy that should attack the player.
-     */
-    private void attack(AbstractEnemy enemy) {
-        if (calcToHit(enemy)) {
-            int damage = calcDamage(enemy);
-            Player player = gameRepository.getPlayer();
-            player.decreaseHitPoints(damage);
-            eventContext.addCombatHitEvent(enemy.getUniqueName(), damage);
-        } else {
-            eventContext.addCombatMissEvent(enemy.getUniqueName());
-        }
-    }
-
-    /**
      * Calculates and returns if enemy hits the player.
      *
      * @param enemy enemy that tries tu hit the player.
